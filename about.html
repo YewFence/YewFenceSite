@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关于我 | YewFenceSite</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a class="active" href="about.html">关于我</a></li>
+                    <li><a href="interest.html">我的兴趣</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+<main>
+    <section class="page-hero mini">
+        <div class="container">
+            <h1>关于我</h1>
+            <p class="subtitle">一点背景 · 一些技能 · 一点展望</p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container narrow">
+            <h2>简介</h2>
+            <p id="about-me">特别鸣谢：Gemini 2.5pro，GPT 5。即使我没html+css+javascript基础也能写出自己的个人网站。<br>
+                懂一些python，很遗憾快忘完了。<br>
+                慢悠悠开始学cpp，希望我不要学混。<br>
+                以后还想学点后端，不急<br>
+                研究AI画图ing，以后想画啥画啥<br>
+                正在认真思考本地部署大模型的可能性<br>
+                所以谁来和我玩<a href="interest.html#p1">游戏</a>啊！那我问你!<br>
+                </p>
+            <h2>技能图谱</h2>
+            <ul class="tag-list large">
+                <li>宅家大王，死不出门</li>
+                <li>抱着电脑不松手</li>
+                <li>刷一天短视频(下次一定戒掉)</li>
+                <li>想多做少</li>
+                <li>AI绘图</li>
+                <li>AI api调用怎么整啊谁教教</li>
+                <li>前端开发</li>
+                <li>买一大堆史低游戏来吃灰</li>
+            </ul>
+            <h2>时间线</h2>
+            <ul class="timeline">
+                <li><span class="time">2025.10</span><div class="event">摸摸前端，YewFence's Site的伊始，希望还有未来</div></li>
+                <li><span class="time">2025.8</span><div class="event">看看AI绘图是个啥</div></li>
+                <li><span class="time">2025.6</span><div class="event">买一大堆steam游戏</div></li>
+                <li><span class="time">2022</span><div class="event">来点二次元游戏<s>黑暗降临</s></div></li>
+                <li><span class="time">2021</span><div class="event">学习python</div></li>
+                <li><span class="time">2020</span><div class="event">看点番剧，好看爱看</div></li>
+            </ul>
+        </div>
+    </section>
+</main>
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p>© <span id="year"></span> YewFence.</p>
+    </div>
+</footer>
+<button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>

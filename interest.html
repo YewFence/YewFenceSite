@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>兴趣 | YewFenceSite</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a class="active" href="interest.html">我的兴趣</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+<main>
+    <section class="page-hero mini">
+        <div class="container">
+            <h1>兴趣</h1>
+            <p class="subtitle">爱打游戏 · 喜欢编程 · 二次元</p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="projects-list">
+                <article id="p1" class="project-item">
+                    <h2>游戏成分</h2>
+                    <p class="meta">包括但不限于Steam单机游戏和二次元手游
+                    </p>
+                    <ul class="bullets">
+                        <li>鸣潮</li>
+                        <li>战双</li>
+                        <li>卡拉彼丘</li>
+                        <li>第五人格</li>
+                        <li>星露谷物语</li>
+                        <li>剑星</li>
+                        <li>地平线4</li>
+                        <li>主播女孩重度依赖</li>
+                        <li>Far：LoneSail</li>
+                        <li>饥荒</li>
+                        <li>异形工厂</li>
+                        <li>人类一败涂地</li>
+                    </ul>
+                </article>
+                <article id="p2" class="project-item">
+                    <h2>兴趣编程</h2>
+                    <p class="meta">前端，后端，算法，AI</p>
+                    <ul class="bullets">
+                        <li>前端：HTML CSS JavaScript <p class="future">Vue</p></li>
+                        <li>后端：<p class="future">flask MySQL</p></li>
+                        <li>算法：<p class="future">C++</p></li>
+                        <li>AI：Stable Diffusion <p class="future">Qwen本地部署，SillyTavern</p></li>
+                    </ul>
+                </article>
+                <article id="p3" class="project-item">
+                    <h2>二次元</h2>
+                    <p class="meta">番剧，轻小说</p>
+                    <ul class="bullets">
+                        <li>鬼灭之刃</li>
+                        <li>刀剑神域</li>
+                        <li>Re:从零开始的异世界生活</li>
+                        <li>间谍过家家</li>
+                        <li>86</li>
+                        <li>青之箱</li>
+                        <li>我推的孩子</li>
+                        <li>义妹生活</li>
+                        <li>游戏人生</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p>© <span id="year"></span> YewFence.</p>
+    </div>
+</footer>
+<button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>

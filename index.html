@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>主页 | YewFenceSite</title>
+    <meta name="description" content="个人简介、成分查询与联系信息" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a class="active" href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="interest.html">我的兴趣</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero scroller" id="hero">
+            <div class="container hero-inner">
+                <h1>你好，我是 <span class="accent">YewFence</span></h1>
+                <p class="subtitle">一名前端初学者</p>
+                <div class="hero-actions">
+                </div>
+            </div>
+            <div class="scroll-indicator" aria-hidden="true">↓ Scroll</div>
+        </section>
+
+        <section class="section scroller about-preview" id="about">
+            <div class="container">
+                <h2 class="section-title">关于我</h2>
+                <p>这里是YewFence，华南师范大学的2025级学生<br>
+                    热爱编程与游戏<br>
+                    爱刷b站但是不常更新<br>
+                    爱看github，但也不常push代码<br>
+                    偶尔看看番和轻小说，是个浓度不算高的二次元<br>
+                    超绝死宅<br>
+                    想要了解与计算机有关的一切<br>
+                    很高兴认识你</p>
+                <ul class="tag-list">
+                    <li>编程</li>
+                    <li>游戏</li>
+                    <li>二次元</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section scroller projects-preview" id="projects">
+            <div class="container">
+                <h2 class="section-title">个人成分</h2>
+                <div class="grid projects-grid">
+                    <article class="card">
+                        <h3>游戏成分</h3>
+                        <p>啥都玩点，来者不拒</p>
+                        <a class="card_link" href="interest.html#p1"></a>
+                    </article>
+                    <article class="card">
+                        <h3>兴趣编程</h3>
+                        <p>想研究一堆AI</p>
+                        <a class="card_link" href="interest.html#p2"></a>
+                    </article>
+                    <article class="card">                     
+                        <h3>二次元</h3>
+                        <p>不知不觉也是看了很多番和小说了，虽然不多，但是也很多了<s>废话</s></p>
+                        <a class="card_link" href="interest.html#p3"></a>
+                    </article>
+                </div>
+                <div class="center mt">
+                    <a href="interest.html" class="btn small">查询成分</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section scroller contact-cta" id="contact">
+            <div class="container narrow">
+                <h2 class="section-title">个人账号</h2>
+                <p>想找我聊天？欢迎联系我</p>
+                <a href="contact.html" class="btn primary">前往联系页面</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>© <span id="year"></span> YewFence,保留所有权利。</p>
+            <p class="small">由 HTML + CSS + JS 构建。</p>
+        </div>
+    </footer>
+
+    <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

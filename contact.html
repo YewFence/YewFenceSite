@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>联系我 | YewFenceSite</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="interest.html">我的兴趣</a></li>
+                    <li><a class="active" href="contact.html">联系我</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+<main>
+    <section class="page-hero mini">
+        <div class="container">
+            <h1>联系我</h1>
+            <p class="subtitle">欢迎交流 · 闲聊 · 学习</p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="title-wrapper">
+                <h2 class="section-title" id="contact-title">联系渠道</h2>
+                <div id="prompt-message">
+                    <p>点击以复制</p>
+                </div>
+            </div>
+            <div class="grid projects-grid">
+                <article class="card">
+                    <h3>Email</h3>
+                    <p class="text-to-copy">cloudmapleleaf@qq.com</p>
+                    <button class="copy-btn" aria-label="copy my email"></button>
+                </article>
+                <article class="card">
+                    <h3>GitHub</h3>
+                    <p class="text-to-copy">https://github.com/YewFence</p>
+                    <button class="copy-btn" aria-label="copy my github page"></button>
+                </article>
+                <article class="card">
+                    <h3>bilibili</h3>
+                    <p class="text-to-copy">https://space.bilibili.com/616535137</p>
+                    <button class="copy-btn" aria-label="copy my bili"></button>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p>© <span id="year"></span> YewFence</p>
+    </div>
+</footer>
+<button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+<script src="js/main.js"></script>
+</body>
+</html>
