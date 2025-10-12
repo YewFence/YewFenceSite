@@ -530,8 +530,8 @@ html[data-theme="dark"] .tag-list li {
     color: var(--color-text);
 }
 
-/* Projects page */
-.project-item {
+/* large Cards theme */
+.large-card {
     /* 基础布局 */
     position: relative;
     padding: 1.65rem 1.45rem 1.9rem;
@@ -547,14 +547,14 @@ html[data-theme="dark"] .tag-list li {
                 background .6s ease;
 }
 
-.project-item h2 {
+.large-card h2 {
     margin-top: 0;
     font-size: 1.25rem;
     line-height: 1.25;
     position: relative;
 }
 
-.project-item h2:after {
+.large-card h2:after {
     content: "";
     position: absolute;
     left: 0;
@@ -566,12 +566,12 @@ html[data-theme="dark"] .tag-list li {
     box-shadow: 0 0 0 2px rgba(0,0,0,.02);
 }
 
-.project-item:hover {
+.large-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 8px 28px -6px rgba(0,0,0,.18), 0 2px 8px -2px rgba(0,0,0,.12);
 }
 
-.project-item:before {
+.large-card:before {
     content: "";
     position: absolute;
     inset: 0;
@@ -582,13 +582,13 @@ html[data-theme="dark"] .tag-list li {
     pointer-events: none;
 }
 
-.project-item:hover:before { opacity: 1; }
+.large-card:hover:before { opacity: 1; }
 
-.project-item .meta { letter-spacing: 1.5px; }
+.large-card .meta { letter-spacing: 1.5px; }
 
-.project-item .bullets { list-style: none; padding-left: 0; margin: .75rem 0 0; }
-.project-item .bullets li { position: relative; padding-left: 1.15rem; margin: .4rem 0; }
-.project-item .bullets li:before {
+.large-card .bullets { list-style: none; padding-left: 0; margin: .75rem 0 0; }
+.large-card .bullets li { position: relative; padding-left: 1.15rem; margin: .4rem 0; }
+.large-card .bullets li:before {
     content: "";
     position: absolute;
     left: 0;
@@ -628,6 +628,12 @@ html[data-theme="dark"] .tag-list li {
     --btn-bg: var(--color-accent);
     --btn-color: #fff;
     --btn-border: var(--color-accent);
+}
+
+.btn.back {
+    position: fixed;
+    left: 5%;
+    top: 15%;
 }
 
 .btn.small {
