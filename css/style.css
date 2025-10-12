@@ -471,7 +471,7 @@ html[data-theme="dark"] .tag-list li {
     font-size: 1.15rem;
 }
 
-.card_link {
+.card-link {
   /* 步骤 2: 让 a 标签绝对定位 */
   position: absolute;
   /* 步骤 3: 将 a 标签的四边拉伸，贴紧父元素的四边 */
