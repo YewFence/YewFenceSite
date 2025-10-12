@@ -601,7 +601,13 @@ html[data-theme="dark"] .tag-list li {
 }
 
 /* Blog */
+/* 文章列表样式(感觉都没有什么要整的) */
 
+.blog-list-item-artistic-character {
+    color: var(--color-accent);
+}
+
+/* 文章样式 */
 .blog-container {
     position: relative;
     padding: 4rem 4rem 3.5rem;

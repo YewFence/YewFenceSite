@@ -35,12 +35,11 @@
         </section>
         <section class="section">
             <div class="container">
-                <div class="large-cards-list">
+                <div id="blogs-list" class="large-cards-list">
                     <article class="large-card">
-                        <h2>欢迎来到我的个人博客</h2>
-                        <p class="blog-meta">posted on 2025-10-01 by YewFence</p>
-                        <p class="brief-summary">这里是YewFence的第一个个人博客，记录我在编程学习和生活中的点滴。</p>
-                        <a class="card-link" href="single_blog.html"></a>
+                        <h2>加载中...</h2>
+                        <p class="meta">请稍候</p>
+                        <p>如果长时间未加载，请检查网络连接或刷新页面。</p>
                     </article>
                 </div>
             </div>
@@ -52,7 +51,21 @@
         </div>
     </footer>
     <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+    <template id="blog-card-template">
+        <article class="large-card">
+            <h2 class="blog-list-item-title"></h2>
+            <p class="blog-list-item-meta">
+                <span class="blog-list-item-artistic-character">Posted on </span>
+                <span class="blog-list-item-date"></span>
+                <span class="blog-list-item-artistic-character"> By </span>
+                <span class="blog-list-item-author"></span>
+            </p>
+            <p class="blog-list-item-brief-summary"></p>
+            <a class="card-link blog-list-item-link"></a>
+        </article>
+    </template>
     <script src="js/main.js"></script>
+    <script src="js/blogs_list_load.js"></script>
 </body>
 
 </html>
