@@ -21,7 +21,6 @@
     --radius-md: 8px;
     --transition: .25s cubic-bezier(.4, .2, .2, 1);
     --header--height: 64px;
-    /* 统一“页面块”背景（可统一调色） */
     --surface-bg: var(--color-bg);
     --surface-bg-alt: var(--color-bg-alt);
 }
@@ -31,21 +30,21 @@ html[data-theme="dark"] {
     --color-bg-alt: #1e293b;
     --color-text: #f1f5f9;
     --color-text-light: #94a3b8;
-    --color-text-alt: #b6c4d6; /* 补充：在深色模式下用于次级正文/提示 */
-    --color-text-withbg: #e2ecf8; /* 补充：在深色背景图上仍清晰的标题色 */
+    --color-text-alt: #b6c4d6;
+    --color-text-withbg: #e2ecf8;
     --color-border: #334155;
     --color-accent: #3b82f6;
     --color-accent-hover: #60a5fa;
     --color-accent-decorate: #143285;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
     --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, .55);
-    /* 深色模式下内容块的统一背景（略亮于页面主背景，提高对比） */
     --surface-bg: var(--color-bg-night);
     --surface-bg-alt: #243045;
 }
 
 /* ===============
    全局重置 & 基础
+   Global Reset & Base
    =============== */
 * {
     box-sizing: border-box;
@@ -69,7 +68,7 @@ body {
 }
 
 body::before {
-  /* 伪元素必须有 content 属性 */
+  /* 伪元素必须有 content 属性，但可以是空的 */
     content: '';
     top: 0;
     left: 0;
@@ -77,12 +76,11 @@ body::before {
     height: 100%;
     z-index: -1; /* 确保背景在内容后面 */
     background-image: url('../images/Gemini_YewFence.png');
-    /* 让背景图尺寸覆盖整个屏幕，可能会裁剪图片以适应比例 */
+    /* 让背景图尺寸覆盖整个屏幕*/
     background-size: cover;
     /* 让背景图居中显示 */
     background-position: center center;
-
-    /* 【核心】让背景相对于视口固定，不随页面滚动而滚动 */
+    /* 固定*/
     position: fixed;
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;/
@@ -116,6 +114,7 @@ a {
 }
 
 /* ===============
+   页面头部 / 导航栏
    Header / Nav
    =============== */
 .site-header {
@@ -180,27 +179,30 @@ a {
     color: var(--color-text);
     transition: background 0.6s ease;
 }
+
 .nav-menu a {
-    position: relative; /* 1. 让 a 标签成为定位上下文 */
+    position: relative; /* 让 a 标签成为定位的标准 */
 }
+
 .nav-menu li a::after{
     content: "";
     position: absolute;
+    /* 直接算出中间，免得再用transfrom造成干扰 */
     left: 10%;
     bottom: 10%;
     width: 80%;
     height: 3px;
     border-radius: var(--radius-sm);
     background: var(--color-accent);
-    /* 2.4 【动画核心】默认情况下，让它在视觉层水平方向上缩放为 0  */
+    /* 默认情况下，让它在视觉层水平方向上缩放为 0  */
     transform: scaleX(0);
-    /* 2.5 【动画核心】设置变换的原点为中心。这样缩放就会从中间开始 */
+    /* 设置变换的原点为中心。这样缩放就会从中间开始 */
     transform-origin: center;
-    /* 2.6 【动画核心】为 transform 属性添加过渡效果 */
+    /* 为 transform 属性添加过渡效果 */
     transition: transform 0.3s ease;
 }
 .nav-menu a:hover::after{
-    /* 2.7 【动画核心】鼠标悬停时，水平缩放到 1 (完整显示) */
+    /* 鼠标悬停时，水平缩放到 1*/
     transform: scaleX(1);
 }
 
@@ -259,6 +261,7 @@ a {
 }
 
 /* ===============
+   主页大块地方
    Hero Section
    =============== */
 .hero {
@@ -266,11 +269,9 @@ a {
     height: 100vh;
     margin-top: 0;
     padding: 4.5rem 0 3.5rem;
-    /* 上方为文字留空间 */
     display: flex;
     align-items: center;
     scroll-snap-align: start;
-    /* 还原为透明，显示 body 背景图 */
     background: transparent;
 }
 
@@ -310,7 +311,11 @@ a {
     flex-wrap: wrap;
 }
 
-/* 底部渐变：让图片自然过渡到白色（浅色模式） */
+.hero-actions .btn {
+    font-size: 1rem;
+    padding: .65rem 1.15rem;
+}
+
 .hero::after {
   content: "";
   position: absolute;
@@ -319,11 +324,6 @@ a {
   pointer-events: none;
 }
 
-html[data-theme="dark"] .hero::after {
-  background: linear-gradient(to bottom, rgba(15,23,42,0) 0%, var(--color-bg) 75%);
-}
-
-/* Scroll 指示器改为深色（保持可读性） */
 .scroll-indicator {
     position: absolute;
     left: 50%;
@@ -337,16 +337,12 @@ html[data-theme="dark"] .hero::after {
     z-index: 2;
 }
 
-html[data-theme="dark"] .scroll-indicator {
-    color: #f1f5f9;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
-}
-
 @media (max-width: 760px) {
   .hero { padding: 4rem 0 3rem; }
 }
 
 /* ===============
+   原型      / 布局
    Sections / Layout
    =============== */
 
@@ -356,18 +352,18 @@ html[data-theme="dark"] .scroll-indicator {
 }
 
 .scroller{
-    /* 让每个面板的高度都等于浏览器窗口的高度 */
+    /* 高度都等于浏览器窗口的高度 */
     height: calc(100vh - var(--header--height));
-    /* 让每个面板的宽度都等于浏览器窗口的宽度 */
+    /* 宽度都等于浏览器窗口的宽度 */
     width: 100%;
-    /* 【核心代码】设置面板的吸附对齐点为顶部 (start) */
+    /* 设置面板的吸附对齐点为顶部 */
     scroll-snap-align: start;
 }
 .contact-cta{
     height: calc(100vh - var(--header--height) - 170px)
 }
 
-/* 统一给主要“内容块”设置背景，便于日后整体调色 */
+/* 大块的背景 */
 .section,
 .about-preview,
 .projects-preview,
@@ -375,7 +371,6 @@ html[data-theme="dark"] .scroll-indicator {
     background: var(--surface-bg);
 }
 
-/* 若需要浅一点的交替区块，可给某些块添加 .alt 类 */
 .section.alt { background: var(--surface-bg-alt); }
 
 .section-title {
@@ -410,7 +405,7 @@ html[data-theme="dark"] .scroll-indicator {
     margin-top: 2rem;
 }
 
-/* Tag list */
+/* 标签列表 Tag list */
 .tag-list {
     list-style: none;
     padding: 0;
@@ -428,16 +423,12 @@ html[data-theme="dark"] .scroll-indicator {
     letter-spacing: .5px;
 }
 
-html[data-theme="dark"] .tag-list li {
-    background: #243045;
-}
-
 .tag-list.large li {
     font-size: .9rem;
     padding: .5rem .85rem;
 }
 
-/* Cards / Grid */
+/* 小卡片 Cards */
 .grid {
     display: grid;
     gap: 1.5rem;
@@ -471,17 +462,16 @@ html[data-theme="dark"] .tag-list li {
     font-size: 1.15rem;
 }
 
-.card_link {
-  /* 步骤 2: 让 a 标签绝对定位 */
+.card-link {
   position: absolute;
-  /* 步骤 3: 将 a 标签的四边拉伸，贴紧父元素的四边 */
+  /* 和父元素一样大 */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 }
 
-/* Page hero small */
+/* 页面小标题 Page hero small */
 .page-hero.mini {
     padding: 4rem 0 2rem;
     background: transparent;
@@ -494,7 +484,7 @@ html[data-theme="dark"] .tag-list li {
     color: var(--color-text-withbg);
 }
 
-/* Timeline */
+/* 时间轴 Timeline */
 .timeline {
     list-style: none;
     margin: 1.5rem 0 0;
@@ -530,14 +520,13 @@ html[data-theme="dark"] .tag-list li {
     color: var(--color-text);
 }
 
-/* Projects page */
+/* 大卡片 Large Cards */
 .project-item {
-    /* 基础布局 */
     position: relative;
     padding: 1.65rem 1.45rem 1.9rem;
     background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
                linear-gradient(135deg, var(--color-border), var(--color-accent) 70%) border-box;
-    border: 1px solid transparent; /* 与上方渐变叠加形成彩色描边 */
+    border: 1px solid transparent; /* 与上方渐变叠加形成彩色描边，神奇的AI */
     border-radius: calc(var(--radius-md) + 2px);
     box-shadow: var(--shadow-sm);
     margin-bottom: 1.65rem;
@@ -601,8 +590,7 @@ html[data-theme="dark"] .tag-list li {
 }
 
 
-
-/* Buttons */
+/* 按钮 Buttons */
 .btn {
     --btn-bg: var(--color-bg-alt);
     --btn-color: var(--color-text);
@@ -646,18 +634,16 @@ html[data-theme="dark"] .tag-list li {
 }
 
 .copy-btn {
-    position: absolute; /* 关键：让按钮脱离正常文档流 */
+    position: absolute;
     width: 100%;
     height: 100%;
-    
-    /* 让按钮完全透明，看不见 */
     background: transparent;
     border: none;
     padding: 0;
-    cursor: pointer; /* 确保在按钮上也有小手图标 */
+    cursor: pointer;
 }
 
-/* Prompts message */
+/* 提示信息 Prompt message */
 .title-wrapper {
     display: flex;
     gap:12px;
@@ -667,24 +653,19 @@ html[data-theme="dark"] .tag-list li {
     margin: 0;
 }
 #prompt-message {
-    /* 设置提示信息外观 */
     align-items: center;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 2px 10px;
     box-shadow: var(--shadow-md);
-
-    /* 设置文字样式 */
-    font-size: 14px; /* 让标签文字比标题小一点 */
+    font-size: 14px;
     color: var(--color-accent-hover);
     font-weight: 1000;
-    white-space: nowrap; /* (可选) 防止标签文字换行 */
-
+    white-space: nowrap;
     /* 初始不可见 */
     opacity: 0;
     /* 不可点击 */
     pointer-events: none; 
-    /* 平滑过渡效果 */
     transition: opacity 0.4s ease-in-out, transform .4s ease-in-out;
     transform: translateY(0);
 }
@@ -692,10 +673,9 @@ html[data-theme="dark"] .tag-list li {
     opacity: 1;
     transform: translateY(-3px);
 }
-/* Footer */
+/* 页脚 Footer */
 .site-footer {
     padding: 2.5rem 0 2.25rem;
-    /* 透明以露出整体背景图；若需可读性可改为 rgba 白/黑半透明 */
     background: transparent;
     margin-top: 2rem;
 }
@@ -707,7 +687,7 @@ html[data-theme="dark"] .tag-list li {
 }
 
 
-/* Back to top */
+/* 返回顶部按钮 Back to top */
 .back-to-top {
     position: fixed;
     right: 1rem;
@@ -727,33 +707,41 @@ html[data-theme="dark"] .tag-list li {
     opacity: 1;
 }
 
-/* Utilities */
+/* 公用样式 Utilities */
 .accent {
     color: var(--color-accent);
 }
 
-/* Dark mode adjustments if needed */
-/* 深色模式下微调背景及描边对比 */
+/* ========= 深色模式适配 Dark mode adjustments ======== */
+html[data-theme="dark"] .tag-list li {
+    background: #243045;
+}
+
+html[data-theme="dark"] .scroll-indicator {
+    color: #f1f5f9;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
 html[data-theme="dark"] .project-item {
     background: linear-gradient(var(--color-bg-night),var(--color-bg-night)) padding-box,
                linear-gradient(135deg, #304660, var(--color-accent) 70%) border-box;
     box-shadow: 0 2px 6px -1px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;
 }
-html[data-theme="dark"] .project-item:before { filter: brightness(1.15); }
 
-/* =====================
-   深色模式文本适配（除 h1）
-   ===================== */
+html[data-theme="dark"] .project-item:before { filter: brightness(1.15); }
+html[data-theme="dark"] .hero::after {
+  background: linear-gradient(to bottom, rgba(15,23,42,0) 0%, var(--color-bg) 75%);
+}
+
+/* 深色模式文本适配 */
 html[data-theme="dark"] body {
-    color: var(--color-text); /* 基础正文 */
+    color: var(--color-text);
 }
 html[data-theme="dark"] .future { color: var(--color-text-alt); }
 html[data-theme="dark"] .subtitle { color: var(--color-text-alt); }
 html[data-theme="dark"] .section-title { color: var(--color-text); }
-/* 段落与列表文字继承 body，可对比度不足时单独提升 */
 html[data-theme="dark"] p, 
 html[data-theme="dark"] li { color: var(--color-text); }
-/* 次要说明（meta / 提示） */
 html[data-theme="dark"] .meta,
 html[data-theme="dark"] .project-item .meta,
 html[data-theme="dark"] .tag-list li { color: var(--color-text-alt); }
@@ -772,7 +760,7 @@ html[data-theme="dark"] textarea {
     background: var(--color-bg-night);
 }
 
-/* Animations */
+/* 动画 Animations */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation: none !important;
@@ -780,10 +768,8 @@ html[data-theme="dark"] textarea {
     }
 }
 
-/* =====================
-     主题切换渐变动画支持
-     使用步骤：在切换 data-theme 前后给 <html> 添加 .theme-transition 类
-     ===================== */
+/* =============主题切换渐变动画支持============ */
+/* 在切换 data-theme 前后给 <html> 添加 .theme-transition 类, 而不是直接给所有元素添加该类 */
 .theme-transition, .theme-transition body,
 .theme-transition .site-header,
 .theme-transition .section,
@@ -804,17 +790,8 @@ html[data-theme="dark"] textarea {
 }
 
 
-@keyframes day_to_night_bg {
-    from { background: var(--color-bg); }
-    to { background: var(--color-bg-night); }
-}
-
-@keyframes night_to_day_bg {
-    from { background: var(--color-bg-night); }
-    to { background: var(--color-bg); }
-}
-
 /* 避免用户偏好减少动态时造成干扰 */
+/* AI真好使吧 */
 @media (prefers-reduced-motion: reduce) {
     .theme-transition, .theme-transition * { transition: none !important; }
 }
