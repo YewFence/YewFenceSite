@@ -127,7 +127,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; gap:.75rem;">
           <h3 style="margin:0; display:flex; align-items:center; gap:.5rem;">
             <span>${blog.title}</span>
-            <span class="future" style="font-size:.8rem; border:1px solid var(--color-border); padding:.1rem .4rem; border-radius:6px;">${(blog.status||'published')==='published'?'已发布':'草稿'}</span>
+            <span class="future" style="font-size:.8rem; border:1px solid var(--color-border); padding:.1rem .4rem; border-radius:6px;">${(blog.status||'published')==='published'?'已发布':'隐藏'}</span>
           </h3>
           <div class="future">ID: ${blog.id}</div>
         </div>

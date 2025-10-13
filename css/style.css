@@ -843,6 +843,73 @@ a {
     color: #fff;
 }
 
+/* =====================
+   管理页面输入样式（仅作用于 .mgmt-wrapper 内）
+   ===================== */
+.mgmt-wrapper .grid label {
+    display: grid;
+    gap: .35rem;
+    font-size: .9rem;
+    color: var(--color-text-alt);
+}
+
+.mgmt-wrapper input[type="text"],
+.mgmt-wrapper input[type="password"],
+.mgmt-wrapper input[type="date"],
+.mgmt-wrapper textarea,
+.mgmt-wrapper select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+    padding: .55rem .65rem;
+    line-height: 1.4;
+    transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+
+.mgmt-wrapper input[type="text"]:hover,
+.mgmt-wrapper input[type="password"]:hover,
+.mgmt-wrapper input[type="date"]:hover,
+.mgmt-wrapper textarea:hover,
+.mgmt-wrapper select:hover {
+    border-color: var(--color-accent-hover);
+}
+
+.mgmt-wrapper input[type="text"]:focus,
+.mgmt-wrapper input[type="password"]:focus,
+.mgmt-wrapper input[type="date"]:focus,
+.mgmt-wrapper textarea:focus,
+.mgmt-wrapper select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+.mgmt-wrapper input::placeholder,
+.mgmt-wrapper textarea::placeholder {
+    color: var(--color-text-alt);
+    opacity: .8;
+}
+
+.mgmt-wrapper input:disabled,
+.mgmt-wrapper textarea:disabled,
+.mgmt-wrapper select:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+/* 深色模式下输入背景与描边对比 */
+html[data-theme="dark"] .mgmt-wrapper input[type="text"],
+html[data-theme="dark"] .mgmt-wrapper input[type="password"],
+html[data-theme="dark"] .mgmt-wrapper input[type="date"],
+html[data-theme="dark"] .mgmt-wrapper textarea,
+html[data-theme="dark"] .mgmt-wrapper select {
+    background: var(--color-bg-night);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
 .blog-meta {
     margin-top: 2rem;
     font-size: .85rem;
