@@ -15,21 +15,6 @@
   // 设置当前年份（页脚版权）
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
-  // ============== 移动端导航开合 ==============
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      const open = navMenu.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', String(open));
-    });
-    // 点击导航区域外时关闭（仅在菜单已展开时）
-    document.addEventListener('click', (e) => {
-      if (!navMenu.contains(e.target) && e.target !== navToggle && navMenu.classList.contains('open')) {
-        navMenu.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-
   // ============== 主题切换（深/浅色） ==============
   // c查询localStorage中有没有主题存储
   const THEME_KEY = 'mysite-theme';
@@ -74,16 +59,6 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   if (backToTop) backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  // ============== 可访问性：Esc 关闭菜单（简化版焦点管理） ==============
-  if (navMenu && navToggle) {
-    navMenu.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navMenu.classList.contains('open')) {
-        navMenu.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        navToggle.focus();
-      }
-    });
-  }
   // ===============复制按钮代码================
   // 复制按钮功能
   const copyTexts = document.querySelectorAll('.text-to-copy');
@@ -146,91 +121,4 @@
       });
     });
   }
-/* 太困难了，多平台适配如同地狱，我还是选择css吧
-  //============== 全屏切片滚动控制 =================
-  // 1. 获取所有的全屏切片
-  const scrollers = document.querySelectorAll('.scroller');
-  const totalScrollers = scrollers.length;
-
-  // 2. 初始化当前切片的索引和滚动状态
-  let currentScrollerIndex = 0;
-  let isScrolling = false; // 用于控制“冷却时间”的标志
-
-  // 3. 监听鼠标滚轮事件
-  // 'wheel' 事件会在鼠标滚轮滚动时触发
-  if (scrollers) {
-    function scrollToCurrentSection(Index) {
-      // 设置正在滚动标志，防止连续触发
-      isScrolling = true;
-
-      // 使用 scrollIntoView 平滑滚动到当前索引对应的切片
-      console.log(scrollers[Index]);
-      scrollers[Index].scrollIntoView({
-        behavior: 'smooth'
-      });
-
-      // 设置一个“冷却时间”，时长约等于滚动动画的时间。
-      // 在这段时间内，所有新的滚动事件都会被忽略。
-      setTimeout(() => {
-        isScrolling = false;
-      }, 700); // 700毫秒 = 0.7秒
-    }
-
-    function handleScrollEvent(event) {
-      // 如果正在滚动中，则忽略本次事件，直接返回
-      event.preventDefault(); // 阻止默认滚动行为
-      if (isScrolling) {
-        console.log('正在滚动，忽略本次事件');
-        return;
-      }
-      const isLastScroller = currentScrollerIndex === totalScrollers - 1;
-      const isScrollingDown = event.deltaY > 0;
-
-      if (currentScrollerIndex === totalScrollers && !isScrollingDown) {
-        // 如果在最底部，并且用户向上滚动
-        console.log('最底部时向上滚动');
-        currentScrollerIndex = totalScrollers - 1;
-        scrollToCurrentSection(currentScrollerIndex);
-        return;
-      }
-      if (currentScrollerIndex === totalScrollers && isScrollingDown) {
-        // 如果在最底部，并且用户继续向下滚动，忽略事件
-        console.log('最底部时继续向下滚动，忽略事件');
-        return;
-      }
-      if (isLastScroller && isScrollingDown) {
-        // 如果已经在最后一个切片，并且用户继续向下滚动，直接滚动至页面底部
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        console.log('已经在最后一个切片，直接滚动至最低端');
-        currentScrollerIndex = totalScrollers; // 标记为超过最后一个切片
-        return;
-      }
-      //不在最下面，也不在最后一个画面且向下滚动，正常逻辑
-      // event.deltaY > 0 表示向下滚动
-      // event.deltaY < 0 表示向上滚动
-      if (isScrollingDown) {
-        // 向下滚动
-        console.log('向下滚动');
-        console.log(currentScrollerIndex);
-        if (!isLastScroller) {
-          currentScrollerIndex++;
-          scrollToCurrentSection(currentScrollerIndex);
-          return;
-        }
-      } else {
-        // 向上滚动
-        console.log('向上滚动');
-        console.log(currentScrollerIndex);
-        if (currentScrollerIndex > 0) {
-          currentScrollerIndex--;
-          scrollToCurrentSection(currentScrollerIndex);
-          return;
-        }
-        
-      }
-    }
-    //增加核心侦测器
-    window.addEventListener('wheel', handleScrollEvent, { passive: false });
-  }
-*/
 })();
