@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Management</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .mgmt-wrapper { min-height: calc(100vh - var(--header--height)); padding: 2rem 0; background: var(--surface-bg); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+      <nav id="mainNav" class="nav" aria-label="主导航">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+        <ul id="navMenu" class="nav-menu">
+          <li><a href="index.html">首页</a></li>
+          <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mgmt-wrapper">
+    <div class="container">
+      <h1>管理页面</h1>
+      <p class="future">这是一个占位页面，仅在前端进行最小认证。</p>
+      <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap;">
+        <button class="btn" id="btnLogout">退出登录</button>
+        <a class="btn" href="index.html">返回首页</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> YewFence.</p>
+    </div>
+  </footer>
+
+  <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function(){
+      // 简单访问守卫：若非当前会话认证，则回到登录
+      if (!Auth.isAuthenticated()) {
+        window.location.replace('login.html');
+        return;
+      }
+      const btnLogout = document.getElementById('btnLogout');
+      btnLogout?.addEventListener('click', () => {
+        Auth.setAuthenticated(false);
+        window.location.href = 'index.html';
+      });
+    })();
+  </script>
+</body>
+</html>
