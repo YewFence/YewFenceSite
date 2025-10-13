@@ -28,6 +28,13 @@
     }
   }
 
+  async function changePassword(oldPassword, newPassword) {
+    const ok = await checkPassword(oldPassword);
+    if (!ok) return false;
+    await savePassword(newPassword);
+    return true;
+  }
+
   function isAuthenticated() {
     // A very naive auth flag: set when login succeeded for this session
     return sessionStorage.getItem(STORAGE_KEY + ':session') === '1';
@@ -45,5 +52,5 @@
     }
   }
 
-  global.Auth = { savePassword, checkPassword, isAuthenticated, setAuthenticated, ensurePasswordInitialized };
+  global.Auth = { savePassword, checkPassword, isAuthenticated, setAuthenticated, ensurePasswordInitialized, changePassword };
 })(window);
