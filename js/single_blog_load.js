@@ -32,11 +32,19 @@
             const data = await response.json();
             blogsInfo.push(...data);
             const blogId = getQueryParam('blog_id');
-            console.log('Find Blog ID:', blogId);
+            console.log('Get Blog ID:', blogId);
             const blog = blogsInfo.find(b => b.id === blogId);
             if (blog) {
-                renderSingleBlog(blog);
+                if (blog.status === 'hidden' && blog.id !== '0') {
+                    console.error('Blog is hidden');
+                    const hidden_blog = blogsInfo.find(b => b.id === '0');
+                    renderSingleBlog(hidden_blog);
+                } else {
+                    renderSingleBlog(blog);
+                }
             } else {
+                const hidden_blog = blogsInfo.find(b => b.id === '0');
+                renderSingleBlog(hidden_blog);
                 console.error('Blog not found');
             }
         } catch (error) {

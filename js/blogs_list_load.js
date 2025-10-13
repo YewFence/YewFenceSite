@@ -13,6 +13,9 @@
         }
         blogsList.innerHTML = ''; // 清空现有内容
         blogsInfo.forEach(blog => {
+            if (blog.status === 'hidden') {
+                return; // 跳过隐藏的博客
+            }
             const blogItem = template.content.cloneNode(true);
             blogItem.querySelector('.blog-list-item-title').textContent = blog.title;
             blogItem.querySelector('.blog-list-item-meta').querySelector('.blog-list-item-date').textContent = blog.date;

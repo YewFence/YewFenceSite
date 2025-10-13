@@ -50,6 +50,46 @@
     return val.slice(0,10);
   }
 
+  // ==== 确认对话框（Promise 版） ====
+  function injectConfirmStylesOnce() {
+    if (document.getElementById('confirmStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'confirmStyles';
+    style.textContent = `
+    .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; z-index: 2000; }
+    .modal-card { width: min(420px, 92vw); background: var(--color-bg); border:1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+    .modal-head { padding: .9rem 1rem; border-bottom: 1px solid var(--color-border); font-weight: 600; }
+    .modal-body { padding: 1rem; color: var(--color-text); }
+    .modal-foot { padding: .75rem 1rem; border-top: 1px solid var(--color-border); display:flex; gap:.5rem; justify-content:flex-end; }
+    .modal-danger { color: var(--color-danger); }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function showConfirm({ title = '确认操作', message = '是否继续？', danger = false, okText = '确定', cancelText = '取消' } = {}) {
+    injectConfirmStylesOnce();
+    return new Promise((resolve) => {
+      const node = el(`
+        <div class="modal-mask" role="dialog" aria-modal="true">
+          <div class="modal-card" role="document">
+            <div class="modal-head ${danger ? 'modal-danger' : ''}">${title}</div>
+            <div class="modal-body">${message}</div>
+            <div class="modal-foot">
+              <button class="btn" data-act="cancel">${cancelText}</button>
+              <button class="btn primary" data-act="ok">${okText}</button>
+            </div>
+          </div>
+        </div>
+      `);
+      document.body.appendChild(node);
+      const cleanup = () => node.remove();
+      node.querySelector('[data-act="cancel"]').addEventListener('click', () => { cleanup(); resolve(false); });
+      node.querySelector('[data-act="ok"]').addEventListener('click', () => { cleanup(); resolve(true); });
+      const onKey = (e) => { if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); cleanup(); resolve(false);} };
+      document.addEventListener('keydown', onKey);
+    });
+  }
+
   // ==== Password panel ====
   function mountPasswordPanel(container) {
     const node = el(`
@@ -85,7 +125,10 @@
     const node = el(`
       <article class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:.75rem;">
-          <h3 style="margin:0;">${blog.title}</h3>
+          <h3 style="margin:0; display:flex; align-items:center; gap:.5rem;">
+            <span>${blog.title}</span>
+            <span class="future" style="font-size:.8rem; border:1px solid var(--color-border); padding:.1rem .4rem; border-radius:6px;">${(blog.status||'published')==='published'?'已发布':'草稿'}</span>
+          </h3>
           <div class="future">ID: ${blog.id}</div>
         </div>
         <div class="grid" style="grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:.6rem;">
@@ -94,6 +137,12 @@
           <label>日期<input class="in-date" type="date" value="${fmtDateInput(blog.date)}"></label>
           <label>摘要<input class="in-summary" type="text" value="${blog.summary ?? ''}"></label>
           <label>MD 文件名<input class="in-md" type="text" value="${blog.md_file}"></label>
+          <label>状态
+            <select class="in-status">
+              <option value="published" ${((blog.status||'published')==='published')?'selected':''}>已发布</option>
+              <option value="draft" ${((blog.status||'published')==='draft')?'selected':''}>草稿</option>
+            </select>
+          </label>
         </div>
         <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem;">
           <button class="btn" data-act="preview">预览 MD</button>
@@ -125,23 +174,30 @@
 
     node.querySelector('[data-act="upload-md"]').addEventListener('change', async (e) => {
       const file = e.target.files[0]; if (!file) return;
+      const ok = await showConfirm({ title: '替换 MD', message: '将用所选文件内容替换 ' + blog.md_file + '，并生成下载，请手动更新 posts 文件。继续？', okText:'替换' });
+      if (!ok) { e.target.value = ''; return; }
       const text = await file.text();
-      // 提供一个带新内容的本地下载，开发者可手动替换 posts 目录中的文件
       downloadFile(blog.md_file, text);
       alert('已生成下载，请替换 posts/' + blog.md_file + ' 文件');
     });
 
-    node.querySelector('[data-act="save-row"]').addEventListener('click', () => {
+    node.querySelector('[data-act="save-row"]').addEventListener('click', async () => {
+      const ok = await showConfirm({ title:'更新条目', message:'保存当前行的更改到列表（内存），仍需“保存全部更改”来导出 blogs.json。是否继续？', okText:'更新' });
+      if (!ok) return;
       blog.title = node.querySelector('.in-title').value.trim();
       blog.author = node.querySelector('.in-author').value.trim();
       blog.date = node.querySelector('.in-date').value;
       blog.summary = node.querySelector('.in-summary').value.trim();
       blog.md_file = node.querySelector('.in-md').value.trim();
-      node.querySelector('h3').textContent = blog.title || '(未命名)';
+      blog.status = node.querySelector('.in-status').value;
+      node.querySelector('h3 span:first-child').textContent = blog.title || '(未命名)';
+      node.querySelector('h3 .future').textContent = (blog.status==='published')?'已发布':'草稿';
       alert('已更新到内存列表，记得点“保存全部更改”导出 blogs.json');
     });
 
-    node.querySelector('[data-act="remove"]').addEventListener('click', () => {
+    node.querySelector('[data-act="remove"]').addEventListener('click', async () => {
+      const ok = await showConfirm({ title:'移除博客', message:`确定从列表中移除《${blog.title}》？此操作只影响内存，仍需保存全部更改以导出。`, okText:'移除', danger:true });
+      if (!ok) return;
       node.dispatchEvent(new CustomEvent('remove-blog', { bubbles: true, detail: { id: blog.id } }));
     });
 
@@ -197,13 +253,15 @@
     panel.querySelector('#btnAdd').addEventListener('click', () => {
       const id = 'id_' + Math.random().toString(36).slice(2, 8);
       const now = new Date().toISOString();
-      const item = { id, title: '新文章', author: 'YewFence', date: now, summary: '', md_file: 'new.md' };
+      const item = { id, title: '新文章', author: 'YewFence', date: now, summary: '', md_file: 'new.md', status: 'draft' };
       list.unshift(item);
       redraw();
     });
 
     // Save all -> download blogs.json
     panel.querySelector('#btnSaveAll').addEventListener('click', async () => {
+      const ok = await showConfirm({ title:'导出 blogs.json', message:'将导出当前列表为 blogs.json 文件，请手动替换 data/blogs.json。是否继续？', okText:'导出' });
+      if (!ok) return;
       await saveBlogs(list);
       alert('已导出 blogs.json，请手动替换 data/blogs.json');
     });
