@@ -44,6 +44,21 @@
     themeBtn.textContent = current === 'dark' ? '☀️' : '🌙';
   }
 
+  // ============== 移动端导航开合 ==============
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      const open = navMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(open));
+    });
+    // 点击导航区域外时关闭（仅在菜单已展开时）
+    document.addEventListener('click', (e) => {
+      if (!navMenu.contains(e.target) && e.target !== navToggle && navMenu.classList.contains('open')) {
+        navMenu.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
   // ============== 返回顶部按钮显示/隐藏逻辑 ==============
   const showAt = 480; // 滚动超过该像素显示按钮
   function onScroll() {

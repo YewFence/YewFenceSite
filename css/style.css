@@ -83,7 +83,7 @@ body::before {
     /* 固定*/
     position: fixed;
     color: var(--color-text);
-    -webkit-font-smoothing: antialiased;/
+    -webkit-font-smoothing: antialiased;
 }
 
 img {
@@ -794,4 +794,22 @@ html[data-theme="dark"] textarea {
 /* AI真好使吧 */
 @media (prefers-reduced-motion: reduce) {
     .theme-transition, .theme-transition * { transition: none !important; }
+}
+
+/* =====================
+     移动端适配（附加规则）
+     ===================== */
+@media (max-width: 760px) {
+    /* 提升触控命中区域 */
+    .nav-menu a,
+    .nav-menu button.theme-btn,
+    .btn { min-height: 44px; }
+
+    /* 区块留白更紧凑 */
+    .section { padding: 3rem 0 2.25rem; }
+
+    /* 网格与卡片更紧凑 */
+    .grid { gap: 1.1rem; }
+    .projects-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    .card { padding: 1rem .95rem 1.1rem; }
 }
