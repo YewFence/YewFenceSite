@@ -44,16 +44,18 @@
     <section class="login-card" aria-label="登录面板">
       <h1>登录</h1>
       <p class="muted">本页仅用于站点维护人员使用。</p>
+      {% if error or success or info %}
+      <div class="alerts" aria-live="polite">
+        {% if error %}<div class="alert alert-error" role="alert">⚠️ {{ error }}</div>{% endif %}
+        {% if success %}<div class="alert alert-success" role="alert">✅ {{ success }}</div>{% endif %}
+        {% if info %}<div class="alert alert-info" role="alert">ℹ️ {{ info }}</div>{% endif %}
+      </div>
+      {% endif %}
       <form method="post" action="/login" novalidate>
         <div class="field">
           <label for="password">密码</label>
           <input id="password" name="password" type="password" placeholder="输入密码" autocomplete="current-password" required autofocus />
-          <div id="error" class="error">
-            {% if error %}{{ error }}{% endif %}
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}{{ messages[0] }}{% endif %}
-            {% endwith %}
-          </div>
+          
         </div>
         <div class="actions">
           <a class="btn" href="index.html">返回</a>
