@@ -44,16 +44,22 @@
     <section class="login-card" aria-label="登录面板">
       <h1>登录</h1>
       <p class="muted">本页仅用于站点维护人员使用。</p>
-      <div class="field">
-        <label for="password">密码</label>
-        <input id="password" type="password" placeholder="输入密码" autocomplete="current-password"/>
-        <div id="error" class="error"></div>
-      </div>
-      <div class="actions">
-        <button class="btn" id="btnBack">返回</button>
-        <button class="btn primary" id="btnLogin">登录</button>
-      </div>
-      <p class="muted">提示：本功能纯前端实现，不要用于敏感内容。</p>
+      <form method="post" action="/login" novalidate>
+        <div class="field">
+          <label for="password">密码</label>
+          <input id="password" name="password" type="password" placeholder="输入密码" autocomplete="current-password" required autofocus />
+          <div id="error" class="error">
+            {% if error %}{{ error }}{% endif %}
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}{{ messages[0] }}{% endif %}
+            {% endwith %}
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="index.html">返回</a>
+          <button class="btn primary" type="submit">登录</button>
+        </div>
+      </form>
     </section>
   </main>
 
@@ -66,38 +72,5 @@
   <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    (async function(){
-      const error = document.getElementById('error');
-      const passwordInput = document.getElementById('password');
-      const btnLogin = document.getElementById('btnLogin');
-      const btnBack = document.getElementById('btnBack');
-
-      // 初始化默认密码（仅首次）
-      await Auth.ensurePasswordInitialized('yewfence');
-
-      btnBack.addEventListener('click', () => {
-        window.location.href = 'index.html';
-      });
-
-      btnLogin.addEventListener('click', async () => {
-        const pw = passwordInput.value.trim();
-        if (!pw) { error.textContent = '请输入密码'; return; }
-        const ok = await Auth.checkPassword(pw);
-        if (ok) {
-          Auth.setAuthenticated(true);
-          window.location.href = 'management.html';
-        } else {
-          error.textContent = '密码错误';
-        }
-      });
-
-      // 回车提交
-      passwordInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') btnLogin.click();
-      });
-    })();
-  </script>
 </body>
 </html>
