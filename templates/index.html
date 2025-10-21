@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>主页 | YewFenceSite</title>
     <meta name="description" content="个人简介、成分查询与联系信息" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
     <header class="site-header">
@@ -99,6 +99,6 @@
 
     <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
 
-    <script src="js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

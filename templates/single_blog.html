@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>标题加载中</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 
 <body>
@@ -43,7 +43,7 @@
     </footer>
     <a class="btn primary blog-back" href="blogs_summary.html">返回</a>
     <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
-    <script src="js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
     <script src="js/single_blog_load.js"></script>
 </body>

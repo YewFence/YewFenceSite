@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>兴趣 | YewFenceSite</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
     <header class="site-header">
@@ -87,6 +87,6 @@
     </div>
 </footer>
 <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
-<script src="js/main.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
