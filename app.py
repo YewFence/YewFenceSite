@@ -1,8 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy  # 导入ORM库 SQLAlchemy
+import os # 导入 os 库来帮助我们构建路径
 
-# 一个 Flask 应用实例
+# 获取当前文件 (app.py) 所在的文件夹的绝对路径
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app = Flask(__name__)
-# 定义一个路由 (Routing)
+
+# 2. 配置数据库
+# 告诉 SQLAlchemy 我们的数据库在哪里
+# 我们使用 SQLite，数据库文件将命名为 'data.db'，存放在项目根目录
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    'sqlite:///' + os.path.join(basedir, 'data.db')
+# 关闭一个不必要的追踪功能
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# 3. 初始化 SQLAlchemy 实例
+# 把我们的 app 实例传给 SQLAlchemy，完成“绑定”
+db = SQLAlchemy(app)
+
+# 定义路由 (Routing)
 @app.route('/')
 def show_index_page():
     """ 显示首页 """
