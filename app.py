@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy  # 导入ORM库 SQLAlchemy
 import os # 导入 os 库来帮助我们构建路径
 from datetime import datetime # 我们需要 datetime
@@ -9,8 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash # 1. �
 # -----------------------------------------------
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'nawowenni_shenmecaishiyigefuzadezifuchuan' # 随便写一个复杂的字符串
 
 # 2. 配置数据库
 # 告诉 SQLAlchemy 我们的数据库在哪里
@@ -54,8 +54,8 @@ class Post(db.Model):
     title = db.Column(db.String(120), nullable=False)
     
     # --- 新增 ---
-    # 对应 json 'author' (既然是单用户，我们就直接存名字)
-    author_name = db.Column(db.String(80), default='YourName') # 你可以把'YourName'改成你的名字
+    # 对应 json 'author'
+    author_name = db.Column(db.String(80), default='YewFence') # 你可以把'YourName'改成你的名字
     
     # 对应 json 'brief_summary'
     brief_summary = db.Column(db.Text) # 用 Text 更保险，summary 可能会长
@@ -68,8 +68,6 @@ class Post(db.Model):
     
     # 对应 json 'status' (e.g., 'hidden', 'published')
     status = db.Column(db.String(30), nullable=False, default='draft')
-    
-    # --- 我们删除了 user_id 和外键 ---
 
     def __repr__(self):
         return f'<Post {self.title}>'
@@ -105,16 +103,49 @@ def show_blogs_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == "POST":
-        pw = request.form.get("password", "").strip()
-        # TODO: 这里替换为你的鉴权逻辑，比如对接数据库或哈希校验
-        if pw == "ok":
-            return redirect("/management")  # 或 url_for('management')
+# 检查用户是否已经登录了
+    if 'logged_in' in session:
+        return redirect(url_for('management')) # 如果已登录，直接跳到管理页
+
+    if request.method == 'POST':
+        # 1. 从表单获取输入的密码数据
+        password = request.form.get('password', '')
+        # 2. 从数据库获取管理员用户
+        admin_user = Admin.query.filter_by(username='YewFence').first()
+        # 3. 校验
+        # 检查：(1) 用户存在吗？ (2) 密码正确吗？
+        if admin_user and admin_user.check_password(password):
+            # 登录成功！
+            # 4. 存入 session，记住他
+            session['logged_in'] = True
+            session['username'] = admin_user.username
+            # 5. 重定向到管理页面
+            return redirect(url_for('management')) # 我们稍后创建这个路由
         else:
+            # 登录失败
             return render_template("login.html", error="密码错误"), 401
+    # GET: 支持通过查询参数 info 显示提醒信息
+    info = request.args.get('info')
+    if info:
+        return render_template("login.html", info=info)
     return render_template("login.html")
+
+@app.route('/logout')
+def logout():
+    """ 处理登出请求 """
+    # 清除 session
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    # 重定向到登录页，带提示信息
+    return redirect(url_for('login', info='你已成功登出'))
 
 @app.route('/management')
 def management():
     """ 显示管理页 """
+    # 检查是否登录
+    if 'logged_in' not in session:
+        # 未登录：带提示信息跳转到登录页
+        return redirect(url_for('login', info='请先登录后再访问管理页'))
+
+    # 渲染你的 management.html 页面
     return render_template('management.html')
