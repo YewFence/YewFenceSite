@@ -1111,3 +1111,21 @@ html[data-theme="dark"] textarea {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: .85rem;
 }
+
+/* =====================
+     移动端适配（附加规则）
+     ===================== */
+@media (max-width: 760px) {
+    /* 提升触控命中区域 */
+    .nav-menu a,
+    .nav-menu button.theme-btn,
+    .btn { min-height: 44px; }
+
+    /* 区块留白更紧凑 */
+    .section { padding: 3rem 0 2.25rem; }
+
+    /* 网格与卡片更紧凑 */
+    .grid { gap: 1.1rem; }
+    .projects-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    .card { padding: 1rem .95rem 1.1rem; }
+}
