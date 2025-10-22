@@ -12,11 +12,11 @@
 <body>
   <header class="site-header">
     <div class="container nav-wrapper">
-      <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+  <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
       <nav id="mainNav" class="nav" aria-label="主导航">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
         <ul id="navMenu" class="nav-menu">
-          <li><a href="index.html">首页</a></li>
+          <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
           <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
         </ul>
       </nav>
@@ -28,8 +28,8 @@
       <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem;">
         <h1 style="margin:0;">管理页面</h1>
         <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-          <button class="btn" id="btnLogout">退出登录</button>
-          <a class="btn" href="index.html">返回首页</a>
+          <a class="btn" href="{{ url_for('logout') }}">退出登录</a>
+          <a class="btn" href="{{ url_for('show_index_page') }}">返回首页</a>
         </div>
       </div>
       <!-- 管理内容将注入到此容器 -->
@@ -49,19 +49,5 @@
   <!-- 可选：用于打包导出 MD 文件 -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="js/management.js"></script>
-  <script>
-    (function(){
-      // 简单访问守卫：若非当前会话认证，则回到登录
-      if (!Auth.isAuthenticated()) {
-        window.location.replace('login.html');
-        return;
-      }
-      const btnLogout = document.getElementById('btnLogout');
-      btnLogout?.addEventListener('click', () => {
-        Auth.setAuthenticated(false);
-        window.location.href = 'index.html';
-      });
-    })();
-  </script>
 </body>
 </html>

@@ -29,11 +29,11 @@
 <body>
   <header class="site-header">
     <div class="container nav-wrapper">
-      <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+  <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
       <nav id="mainNav" class="nav" aria-label="主导航">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
         <ul id="navMenu" class="nav-menu">
-          <li><a href="index.html">首页</a></li>
+          <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
           <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
         </ul>
       </nav>
@@ -58,7 +58,7 @@
           
         </div>
         <div class="actions">
-          <a class="btn" href="index.html">返回</a>
+          <a class="btn" href="{{ url_for('show_index_page') }}">返回</a>
           <button class="btn primary" type="submit">登录</button>
         </div>
       </form>

@@ -93,7 +93,7 @@ def show_contact_page():
 @app.route('/interests')
 def show_interests_page():
     """ 显示兴趣页 """
-    return render_template('interests.html')
+    return render_template('interest.html')
 
 @app.route('/about')
 def show_about_page():
@@ -139,8 +139,12 @@ def post_detail(post_id):
     """ 显示文章详情页 """
     post = Post.query.get_or_404(post_id)
     # 将 Markdown 内容转换为 HTML
-    post_html = render_md(post.content)
-    return render_template("single_post.html", post=post, post_html=post_html)
+    post_html_from_md_body = render_md(post.content)
+    site_title = "Post | " + post.title
+    return render_template("single_post.html",
+                            post=post,
+                            post_html_from_md_body=post_html_from_md_body,
+                            title=site_title)
 
 @app.route('/logout')
 def logout():
