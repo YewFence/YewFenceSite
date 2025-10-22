@@ -36,11 +36,29 @@
         <section class="section">
             <div class="container">
                 <div id="blogs-list" class="large-cards-list">
-                    <article class="large-card">
+                    <article class="large-card" id="loadingMessage">
                         <h2>加载中...</h2>
                         <p class="meta">请稍候</p>
                         <p>如果长时间未加载，请检查网络连接或刷新页面。</p>
                     </article>
+                {% for post in posts %}
+                    {% if post.status != 'hidden' %}
+                        <article class="large-card">
+                            <h2 class="blog-list-item-title">{{ post.title }}</h2>
+                            <p class="blog-list-item-meta">
+                                <span class="blog-list-item-artistic-character">Posted on {{ post.date_posted.strftime('%Y-%m-%d') }}</span>
+                                <span class="blog-list-item-date"></span>
+                                <span class="blog-list-item-artistic-character"> By </span>
+                                <span class="blog-list-item-author">{{ post.author_name }}</span>
+                            </p>
+                            <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
+                            <a class="card-link blog-list-item-link" href="{{ url_for('post_detail', post_id=post.id) }}"></a>
+                        </article>
+                    {% endif %}
+
+                {% else %}
+                    <p>这里还没有文章...</p>
+                {% endfor %}
                 </div>
             </div>
         </section>
@@ -51,21 +69,13 @@
         </div>
     </footer>
     <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
-    <template id="blog-card-template">
-        <article class="large-card">
-            <h2 class="blog-list-item-title"></h2>
-            <p class="blog-list-item-meta">
-                <span class="blog-list-item-artistic-character">Posted on </span>
-                <span class="blog-list-item-date"></span>
-                <span class="blog-list-item-artistic-character"> By </span>
-                <span class="blog-list-item-author"></span>
-            </p>
-            <p class="blog-list-item-brief-summary"></p>
-            <a class="card-link blog-list-item-link"></a>
-        </article>
-    </template>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="js/blogs_list_load.js"></script>
+    <script>
+        loadingMessage = document.getElementById("loadingMessage");
+        if (loadingMessage) {
+            loadingMessage.style.display = "none";
+        }
+    </script>
 </body>
 
 </html>

@@ -96,10 +96,15 @@ def show_about_page():
     """ 显示关于页 """
     return render_template('about.html')
 
-@app.route('/blogs')
-def show_blogs_page():
+@app.route('/blog')
+# TODO: 记得更改一下文件名字，之后再说
+def show_blog_page():
     """ 显示博客页 """
-    return render_template('blogs_summary.html')
+    all_posts = Post.query.order_by(Post.date_posted.desc()).all()
+    
+    # 2. 把查询到的数据 (all_posts) 传递给模板
+    # 我们把模板里的变量名也叫 'posts'
+    return render_template('blogs_summary.html', posts=all_posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -129,6 +134,12 @@ def login():
     if info:
         return render_template("login.html", info=info)
     return render_template("login.html")
+
+@app.route('/post_detail/<int:post_id>')
+def post_detail(post_id):
+    """ 显示文章详情页 """
+    post = Post.query.get_or_404(post_id)
+    return render_template("single_post.html", post=post)
 
 @app.route('/logout')
 def logout():
