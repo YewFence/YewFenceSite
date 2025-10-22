@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy  # 导入ORM库 SQLAlchemy
 import os # 导入 os 库来帮助我们构建路径
+from datetime import datetime # 我们需要 datetime
+from werkzeug.security import generate_password_hash, check_password_hash # 1. 导入哈希工具
 
-# 获取当前文件 (app.py) 所在的文件夹的绝对路径
+# -----------------------------------------------
+# 应用和数据库配置
+# -----------------------------------------------
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
@@ -19,7 +24,60 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # 把我们的 app 实例传给 SQLAlchemy，完成“绑定”
 db = SQLAlchemy(app)
 
-# 定义路由 (Routing)
+# -----------------------------------------------
+# 模型定义
+# -----------------------------------------------
+
+# Admin 模型 (用于存储登录信息)
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    # 我们不存密码原文，只存哈希值！哈希值通常很长。
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    # (可选) 我们可以在模型里定义一个“设置密码”的方法
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # (可选) 再定义一个“检查密码”的方法
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return f'<Admin {self.username}>'
+
+# 文章模型
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # 主键
+    
+    # 对应 json 'title'
+    title = db.Column(db.String(120), nullable=False)
+    
+    # --- 新增 ---
+    # 对应 json 'author' (既然是单用户，我们就直接存名字)
+    author_name = db.Column(db.String(80), default='YourName') # 你可以把'YourName'改成你的名字
+    
+    # 对应 json 'brief_summary'
+    brief_summary = db.Column(db.Text) # 用 Text 更保险，summary 可能会长
+    
+    # 对应 .md 文件的内容
+    content = db.Column(db.Text, nullable=False) 
+    
+    # 对应 json 'date'
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow) 
+    
+    # 对应 json 'status' (e.g., 'hidden', 'published')
+    status = db.Column(db.String(30), nullable=False, default='draft')
+    
+    # --- 我们删除了 user_id 和外键 ---
+
+    def __repr__(self):
+        return f'<Post {self.title}>'
+    
+# -----------------------------------------------
+# 路由配置
+# -----------------------------------------------
+
 @app.route('/')
 def show_index_page():
     """ 显示首页 """
