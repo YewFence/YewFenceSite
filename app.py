@@ -1,75 +1,79 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy  # 导入ORM库 SQLAlchemy
 import os # 导入 os 库来帮助我们构建路径
-from datetime import datetime # 我们需要 datetime
-from werkzeug.security import generate_password_hash, check_password_hash # 1. 导入哈希工具
+from datetime import datetime # 我们需要 datetime记录默认的发布时间
+from werkzeug.security import generate_password_hash, check_password_hash # 导入哈希工具，校验密码
+
+# -----------------------------------------------
+# 功能函数配置
+# -----------------------------------------------
+
+# Markdown 渲染函数
+try:
+    from markdown import markdown as _md_render
+    def render_md(text: str) -> str:
+        return _md_render(
+            text or "",
+            extensions=['extra', 'codehilite', 'fenced_code', 'toc']
+        )
+except Exception:
+    def render_md(text: str) -> str:
+        return f"<pre>{(text or '').replace('<','&lt;').replace('>','&gt;')}</pre>"
 
 # -----------------------------------------------
 # 应用和数据库配置
 # -----------------------------------------------
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+# 1. 创建 Flask 应用实例
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'nawowenni_shenmecaishiyigefuzadezifuchuan' # 随便写一个复杂的字符串
 
+app.config['SECRET_KEY'] = 'nawowenni_shenmecaishiyigefuzadezifuchuan' # 随便写一个复杂的字符串
 # 2. 配置数据库
-# 告诉 SQLAlchemy 我们的数据库在哪里
-# 我们使用 SQLite，数据库文件将命名为 'data.db'，存放在项目根目录
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    'sqlite:///' + os.path.join(basedir, 'data.db')
+# 使用 SQLite，数据库文件将命名为 'data.db'，存放在项目根目录
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.db')
 # 关闭一个不必要的追踪功能
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 3. 初始化 SQLAlchemy 实例
-# 把我们的 app 实例传给 SQLAlchemy，完成“绑定”
+# 把我们的 app 实例传给 SQLAlchemy
 db = SQLAlchemy(app)
 
 # -----------------------------------------------
 # 模型定义
 # -----------------------------------------------
 
-# Admin 模型 (用于存储登录信息)
+# Admin 模型，存储登录信息，暂时不需要多用户管理
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    # 我们不存密码原文，只存哈希值！哈希值通常很长。
+    # 存储hash值
     password_hash = db.Column(db.String(128), nullable=False)
 
-    # (可选) 我们可以在模型里定义一个“设置密码”的方法
     def set_password(self, password):
+        """ 设置密码，存储哈希值到db """
         self.password_hash = generate_password_hash(password)
 
-    # (可选) 再定义一个“检查密码”的方法
     def check_password(self, password):
+        """ 检查密码是否正确 """
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
+        """ 返回字符串表示 """
         return f'<Admin {self.username}>'
 
 # 文章模型
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True) # 主键
-    
-    # 对应 json 'title'
     title = db.Column(db.String(120), nullable=False)
-    
-    # --- 新增 ---
-    # 对应 json 'author'
-    author_name = db.Column(db.String(80), default='YewFence') # 你可以把'YourName'改成你的名字
-    
-    # 对应 json 'brief_summary'
-    brief_summary = db.Column(db.Text) # 用 Text 更保险，summary 可能会长
-    
-    # 对应 .md 文件的内容
+    author_name = db.Column(db.String(80), default='YewFence') # 默认作者是YewFence 
+    brief_summary = db.Column(db.Text) 
     content = db.Column(db.Text, nullable=False) 
-    
-    # 对应 json 'date'
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow) 
-    
-    # 对应 json 'status' (e.g., 'hidden', 'published')
     status = db.Column(db.String(30), nullable=False, default='draft')
 
     def __repr__(self):
+        """ 返回字符串表示 """
         return f'<Post {self.title}>'
     
 # -----------------------------------------------
@@ -97,14 +101,11 @@ def show_about_page():
     return render_template('about.html')
 
 @app.route('/blog')
-# TODO: 记得更改一下文件名字，之后再说
 def show_blog_page():
     """ 显示博客页 """
     all_posts = Post.query.order_by(Post.date_posted.desc()).all()
-    
     # 2. 把查询到的数据 (all_posts) 传递给模板
-    # 我们把模板里的变量名也叫 'posts'
-    return render_template('blogs_summary.html', posts=all_posts)
+    return render_template('blog_index.html', posts=all_posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -118,14 +119,12 @@ def login():
         # 2. 从数据库获取管理员用户
         admin_user = Admin.query.filter_by(username='YewFence').first()
         # 3. 校验
-        # 检查：(1) 用户存在吗？ (2) 密码正确吗？
         if admin_user and admin_user.check_password(password):
-            # 登录成功！
-            # 4. 存入 session，记住他
+            # 4. 登录成功后将登录状态存入 session
             session['logged_in'] = True
             session['username'] = admin_user.username
             # 5. 重定向到管理页面
-            return redirect(url_for('management')) # 我们稍后创建这个路由
+            return redirect(url_for('management'))
         else:
             # 登录失败
             return render_template("login.html", error="密码错误"), 401
@@ -141,7 +140,7 @@ def post_detail(post_id):
     post = Post.query.get_or_404(post_id)
     # 将 Markdown 内容转换为 HTML
     post_html = render_md(post.content)
-    return render_template("single_blog.html", post=post, post_html=post_html)
+    return render_template("single_post.html", post=post, post_html=post_html)
 
 @app.route('/logout')
 def logout():
@@ -149,7 +148,7 @@ def logout():
     # 清除 session
     session.pop('logged_in', None)
     session.pop('username', None)
-    # 重定向到登录页，带提示信息
+    # 重定向到登录页，加上提示信息
     return redirect(url_for('login', info='你已成功登出'))
 
 @app.route('/management')
@@ -159,6 +158,5 @@ def management():
     if 'logged_in' not in session:
         # 未登录：带提示信息跳转到登录页
         return redirect(url_for('login', info='请先登录后再访问管理页'))
-
-    # 渲染你的 management.html 页面
+    # 已登录：显示管理页
     return render_template('management.html')
