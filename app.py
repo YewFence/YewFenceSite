@@ -139,7 +139,9 @@ def login():
 def post_detail(post_id):
     """ 显示文章详情页 """
     post = Post.query.get_or_404(post_id)
-    return render_template("single_post.html", post=post)
+    # 将 Markdown 内容转换为 HTML
+    post_html = render_md(post.content)
+    return render_template("single_blog.html", post=post, post_html=post_html)
 
 @app.route('/logout')
 def logout():
