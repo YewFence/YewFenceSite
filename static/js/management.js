@@ -1,28 +1,6 @@
 // Management page script: No HTML/CSS injected; all structure lives in management.html
 (function(){
 
-  // 触发浏览器下载（本地生成文件）
-  // name: 文件名，content: 文本内容
-  function downloadFile(name, content) {
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = name; a.click();
-    URL.revokeObjectURL(url);
-  }
-
-
-  // 向后端请求导出当前数据库中的 blogs.json 并触发下载
-  async function downloadBlogsFromServer() {
-    const res = await fetch('/api/posts/export_json');
-    if (!res.ok) throw new Error('导出失败');
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'blogs.json'; a.click();
-    URL.revokeObjectURL(url);
-  }
-
   function bindRow(row) {
     // 辅助：获取行的数字 ID（兼容不同结构）
     const getRowId = () => {
@@ -32,20 +10,6 @@
       if (t && /^\d+$/.test(t)) return t;
       return null;
     };
-
-    // 下载 MD：请求后端接口，后端会以文章标题作为文件名返回 Markdown
-    row.querySelector('[data-act="download-md"]')?.addEventListener('click', async () => {
-      try {
-        const id = getRowId();
-        if (!id) { alert('无法获取文章 ID'); return; }
-        // 直接跳转下载，由后端设置 Content-Disposition 为 “标题.md”
-        const a = document.createElement('a');
-        a.href = `/api/posts/${id}/md`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      } catch(err) { alert('下载失败：' + err.message); }
-    });
 
     // 上传 MD：将文件内容 POST 到后端，写入数据库的 post.content
     row.querySelector('[data-act="upload-md"]')?.addEventListener('change', async (e) => {

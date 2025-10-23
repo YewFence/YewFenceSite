@@ -127,7 +127,8 @@
         </div>
         <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem;">
           <button class="btn primary" id="btnAddNewPost">新增文章</button>
-          <button class="btn" id="btnExportMd">下载全部 MD（zip）</button>
+          <a class="btn" id="btnDownloadJson" href="/api/posts/export_json">下载json数据</a>
+          <a class="btn" id="btnExportMd" href="/api/posts/export_md_zip">下载全部 MD（zip）</a>
         </div>
         <div id="blogList" class="grid" style="gap: .85rem;">
           <!-- 列表模板：由后端循环渲染多项 -->

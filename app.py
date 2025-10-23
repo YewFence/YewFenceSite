@@ -314,7 +314,10 @@ def api_posts_export_json():
             'status': p.status,
             'note': p.note or ''
         })
-    resp = make_response(jsonify(payload))
+    # 直接用 UTF-8 文本返回，避免中文被转义为 \uXXXX
+    body = json.dumps(payload, ensure_ascii=False)
+    resp = make_response(body)
+    resp.headers['Content-Type'] = 'application/json; charset=utf-8'
     # 提示浏览器下载为文件（可选）
     resp.headers['Content-Disposition'] = 'attachment; filename=blogs.json'
     return resp
@@ -357,6 +360,32 @@ def api_post_download_md(post_id: int):
     resp = app.response_class(response=content, mimetype='text/markdown; charset=utf-8')
     # 提供 UTF-8 文件名
     resp.headers['Content-Disposition'] = f"attachment; filename*=UTF-8''{filename_utf8}"
+    return resp
+
+@app.route('/api/posts/export_md_zip', methods=['GET'])
+def api_posts_export_md_zip():
+    # 仅登录的管理页用户可操作
+    if 'logged_in' not in session:
+        return redirect(url_for('login', info='请先登录后再下载'))
+
+    import io
+    import zipfile
+
+    # 创建一个内存中的字节流
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        all_posts = Post.query.order_by(Post.id.desc()).all()
+        for post in all_posts:
+            filename_base = _safe_filename(post.title)
+            filename = f"{filename_base}.md"
+            content = post.content or ''
+            zip_file.writestr(filename, content)
+
+    # 准备响应
+    zip_buffer.seek(0)
+    resp = make_response(zip_buffer.read())
+    resp.headers['Content-Type'] = 'application/zip'
+    resp.headers['Content-Disposition'] = "attachment; filename=all_posts_md.zip"
     return resp
 
 @app.route('/management/posts/<int:post_id>/preview', methods=['GET'])
