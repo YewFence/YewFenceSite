@@ -1,6 +1,41 @@
 // Management page script: No HTML/CSS injected; all structure lives in management.html
 (function(){
 
+  // 统一的确认对话框（使用 management.html 中的 #confirmModal 结构）
+  function askConfirm(message = '是否继续？') {
+    const mask = document.getElementById('confirmModal');
+    const msg = document.getElementById('confirmMessage');
+    const btnOk = document.getElementById('confirmOk');
+    const btnCancel = document.getElementById('confirmCancel');
+    if (!mask || !msg || !btnOk || !btnCancel) {
+      // 兜底：如果找不到自定义弹窗，退化到原生 confirm
+      return Promise.resolve(window.confirm(message));
+    }
+    msg.textContent = message;
+    mask.setAttribute('aria-hidden','false');
+
+    return new Promise((resolve) => {
+      const clean = () => {
+        mask.setAttribute('aria-hidden','true');
+        mask.removeEventListener('click', onMaskClick);
+        btnOk.removeEventListener('click', onOk);
+        btnCancel.removeEventListener('click', onCancel);
+        document.removeEventListener('keydown', onKey);
+      };
+      const onOk = () => { clean(); resolve(true); };
+      const onCancel = () => { clean(); resolve(false); };
+      const onMaskClick = (e) => { if (e.target === mask) { onCancel(); } };
+      const onKey = (e) => {
+        if (e.key === 'Escape') { onCancel(); }
+        if (e.key === 'Enter') { onOk(); }
+      };
+      mask.addEventListener('click', onMaskClick, { once: false });
+      btnOk.addEventListener('click', onOk, { once: true });
+      btnCancel.addEventListener('click', onCancel, { once: true });
+      document.addEventListener('keydown', onKey, { once: false });
+    });
+  }
+
   function bindRow(row) {
     // 辅助：获取行的数字 ID（兼容不同结构）
     const getRowId = () => {
@@ -18,7 +53,8 @@
       const file = e.target.files?.[0];
       if (!file) return;
       const text = await file.text();
-      if (!window.confirm('将用所选 Markdown 覆盖数据库中的文章内容，是否继续？')) { e.target.value = ''; return; }
+      const ok = await askConfirm('将用所选 Markdown 覆盖数据库中的文章内容，是否继续？');
+      if (!ok) { e.target.value = ''; return; }
       try {
         const res = await fetch(`/api/posts/${id}/md`, {
           method: 'POST',
@@ -190,6 +226,38 @@
     document.querySelectorAll('.blog-row').forEach(bindRow);
     bindEditModal();
     initScrollToHash();
+
+    // 1) 删除文章：拦截点击，弹出确认
+    document.getElementById('mgmtRoot')?.addEventListener('click', async (e) => {
+      const a = e.target.closest('a[href]');
+      if (!a) return;
+      // 只对删除链接生效
+      if (/\/api\/posts\/.+\/delete$/.test(a.getAttribute('href') || '')) {
+        e.preventDefault();
+        const ok = await askConfirm('确定要删除这篇文章吗？该操作不可撤销。');
+        if (ok) {
+          // 直接跳转到删除链接
+          window.location.href = a.href;
+        }
+      }
+    });
+
+    // 2) 修改密码：提交前确认
+    const pwdForm = document.getElementById('changePwdForm');
+    if (pwdForm) {
+      pwdForm.addEventListener('submit', async (ev) => {
+        if (pwdForm.dataset.confirmed === 'true') {
+          return; // 已确认过，放行
+        }
+        ev.preventDefault();
+        const ok = await askConfirm('确认要修改密码吗？修改后会要求重新登录。');
+        if (ok) {
+          pwdForm.dataset.confirmed = 'true';
+          // 使用原生提交，避免再次触发拦截
+          pwdForm.submit();
+        }
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
