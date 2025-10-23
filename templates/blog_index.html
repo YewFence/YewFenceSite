@@ -7,6 +7,33 @@
     <title>个人博客 | Blog</title>
     <meta name="description" content="个人博客，分享编程与生活的点滴" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+    .status-badge {
+        font-size: .8rem;
+        border: 1px solid var(--color-border);
+        padding: .1rem .4rem;
+        border-radius: 6px;
+    }
+    .admin-container {
+        padding: 1rem;
+        background: var(--surface-bg);
+    }
+    .admin-container .logo {
+        font-weight: 600;
+        color: var(--color-accent, #2b8aef);
+        margin-right: .5rem;
+    }
+    .admin-container .btn { /* 让按钮在该区视觉更紧凑 */
+        padding: .4rem .7rem;
+        font-size: .95rem;
+    }
+    /* 小屏幕时堆叠显示 */
+    @media (max-width: 560px) {
+        .admin-section { flex-direction: column; align-items: stretch; }
+        .admin-section .logo { margin-bottom: .35rem; }
+        .admin-section .btn { width: 100%; }
+    }
+    </style>
 </head>
 
 <body>
@@ -34,6 +61,13 @@
             </div>
         </section>
         <section class="section">
+            {% if login_status %}
+            <div class="container admin-container">
+                <span class="logo">Welcome, Admin!</span>
+                <a class="btn primary" href="{{ url_for('management') }}">管理后台</a>
+                <a class="btn primary" href="{{ url_for('logout') }}">登出</a>
+            </div>
+            {% endif %}
             <div class="container">
                 <div id="blogs-list" class="large-cards-list">
                     <article class="large-card" id="loadingMessage">
@@ -42,22 +76,20 @@
                         <p>如果长时间未加载，请检查网络连接或刷新页面。</p>
                     </article>
                 {% for post in posts %}
-                    {% if post.status != 'hidden' %}
-                        <article class="large-card">
-                            <h2 class="blog-list-item-title">{{ post.title }}</h2>
-                            <p class="blog-list-item-meta">
-                                <span class="blog-list-item-artistic-character">Posted on {{ post.date_posted.strftime('%Y-%m-%d') }}</span>
-                                <span class="blog-list-item-date"></span>
-                                <span class="blog-list-item-artistic-character"> By </span>
-                                <span class="blog-list-item-author">{{ post.author_name }}</span>
-                            </p>
-                            <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
-                            <a class="card-link blog-list-item-link" href="{{ url_for('post_detail', post_id=post.id) }}"></a>
-                        </article>
-                    {% endif %}
-
-                {% else %}
-                    <p class="blog-list-item-meta">这里还没有文章...</p>
+                    <article class="large-card">
+                        <h2 class="blog-list-item-title">{{ post.title }}</h2>
+                        <p class="blog-list-item-meta">
+                            <span class="blog-list-item-artistic-character">Posted on</span>
+                            <span class="blog-list-item-date"> {{ post.date_posted.strftime('%Y-%m-%d') }}</span>
+                            <span> By </span>
+                            <span class="blog-list-item-author">{{ post.author_name }}</span>
+                            {% if post.status != 'published' %}
+                            <span class="status-badge">{{ post.status }}</span>
+                            {% endif %}
+                        </p>
+                        <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
+                        <a class="card-link blog-list-item-link" href="{{ url_for('post_detail', post_id=post.id) }}"></a>
+                    </article>
                 {% endfor %}
                 </div>
             </div>

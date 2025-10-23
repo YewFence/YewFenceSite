@@ -1,22 +1,232 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Management</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <style>
-    .mgmt-wrapper { min-height: calc(100vh - var(--header--height)); padding: 2rem 0; background: var(--surface-bg); }
+    .mgmt-wrapper {
+      min-height: calc(100vh - var(--header--height));
+      padding: 2rem 0;
+      background: var(--surface-bg);
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-mask[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(420px, 92vw);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+    }
+
+    .modal-head {
+      padding: .9rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      font-weight: 600;
+    }
+
+    .modal-body {
+      padding: 1rem;
+      color: var(--color-text);
+    }
+
+    .modal-foot {
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      gap: .5rem;
+      justify-content: flex-end;
+    }
+
+    .modal-danger {
+      color: var(--color-danger);
+    }
+
+    /* 行卡片自适应布局 */
+    .blog-row .grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .6rem;
+    }
+
+    .status-badge {
+      font-size: .8rem;
+      border: 1px solid var(--color-border);
+      padding: .1rem .4rem;
+      border-radius: 6px;
+    }
+
+    /* 管理列表：一行一个卡片 */
+    #blogList {
+      grid-template-columns: 1fr;
+    }
+
+    /* 修改密码区域 */
+    .change-password .grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: .6rem;
+      align-items: end;
+    }
+
+    .change-password label {
+      display: block;
+    }
+
+    .change-password input[type="password"] {
+      width: 100%;
+    }
+
+    .change-password .help {
+      font-size: .85rem;
+      color: var(--color-text);
+      opacity: .75;
+      grid-column: 1 / -1;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: .5rem;
+      justify-content: flex-end;
+      margin-top: .75rem;
+    }
+
+    /* 列表展示视图（替代输入框编辑） */
+    .post-meta { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin-top:.5rem; }
+    .post-kv { background: var(--color-bg); border:1px solid var(--color-border); border-radius: 8px; padding:.6rem .7rem; }
+    .post-kv .k { display:block; font-size:.8rem; color: var(--muted, #666); margin-bottom:.25rem; }
+    .post-kv .v { font-weight: 600; color: var(--color-text); word-break: break-word; }
+    .post-kv .v.v-summary,
+    .post-kv .v.v-note {
+      white-space: pre-wrap;  /* 或者换成 pre-line 看你的需要 */
+    }
+    .blog-row .btn { padding:.4rem .7rem; }
+    .blog-row .toolbar { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem; }
+    .status-badge.published { color: #177245; border-color: #17724533; background:#1772450f; }
+    .status-badge.hidden { color: #a15c00; border-color: #a15c0033; background:#a15c000f; }
+
+    /* 编辑弹窗（覆盖接近全屏） */
+    .edit-mask { position:fixed; inset:0; background: rgba(0,0,0,.45); display:none; z-index: 3000; align-items:center; justify-content:center; }
+    .edit-mask[aria-hidden="false"] { display:flex; }
+    .edit-panel { width:min(920px, 92vw); max-height:92vh; overflow:auto; background: var(--color-bg); border:1px solid var(--color-border); border-radius: 12px; box-shadow: var(--shadow-lg, 0 10px 30px rgba(0,0,0,.25));
+      /* 隐藏滚动条但保留滚动功能 */
+      -ms-overflow-style: none; /* IE/旧版 Edge */
+      scrollbar-width: none;   /* Firefox */
+    }
+    /* WebKit 浏览器（Chrome/Safari/新 Edge）隐藏滚动条 */
+    .edit-panel::-webkit-scrollbar { width: 0; height: 0; }
+    .edit-panel input,
+    .edit-panel textarea,
+    .edit-panel select {
+      font-family: var(--font-sans);
+    }
+    /* 美化编辑面板中的上传文件控件（原生 file 按钮） */
+    #fMdFile {
+      width: 100%;
+      height: 2.6rem;
+      padding: .35rem .5rem;
+      border: 1px dashed var(--color-border);
+      border-radius: 8px;
+      background: var(--color-bg);
+      transition: border-color .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+    }
+    #fMdFile:hover { border-color: color-mix(in oklab, var(--color-border), #000 12%); }
+    #fMdFile:focus { outline: none; border-color: color-mix(in oklab, var(--color-border), #3b82f6 55%); box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+    /* 按钮子元素样式（现代浏览器） */
+    #fMdFile::file-selector-button {
+      margin-right: .75rem;
+      padding: .4rem .8rem;
+      border: none;
+      border-radius: 6px;
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #fMdFile::file-selector-button:hover { background: #2563eb; }
+    #fMdFile::file-selector-button:active { background: #1d4ed8; }
+    /* 美化状态选择框 */
+    .edit-panel select#fStatus {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      height: 2.4rem;
+      padding: 0 .75rem;
+      padding-right: 2.2rem; /* 为箭头预留空间 */
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background-color: var(--color-bg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .6rem center;
+      background-size: 12px 12px;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .edit-panel select#fStatus:hover {
+      border-color: color-mix(in oklab, var(--color-border), #000 12%);
+    }
+    .edit-panel select#fStatus:focus {
+      outline: none;
+      border-color: color-mix(in oklab, var(--color-border), #3b82f6 55%);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+    }
+    /* 根据值给出轻微的视觉提示 */
+    .edit-panel select#fStatus.is-published {
+      border-color: #177245;
+      background-color: #1772450f;
+    }
+    .edit-panel select#fStatus.is-hidden {
+      border-color: #a15c00;
+      background-color: #a15c000f;
+    }
+    .edit-head { padding: .9rem 1rem; border-bottom:1px solid var(--color-border); font-weight:700; display:flex; align-items:center; justify-content:space-between;
+      position: sticky; top: 0; z-index: 5; background: inherit; box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    }
+    .edit-body { padding: 1rem; }
+    .edit-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:.75rem; }
+    .edit-grid label { display:block; }
+    .edit-foot { padding:.75rem 1rem; border-top:1px solid var(--color-border); display:flex; gap:.5rem; justify-content:flex-end; position:sticky; bottom:0; background:inherit; }
+    .close-x { border:none; background:transparent; font-size:1.25rem; line-height:1; cursor:pointer; }
+
+    /* 表单校验提示 */
+    .field { display:block; }
+    .field .hint { display:block; font-size:.8rem; color: var(--muted, #666); margin-top:.25rem; }
+    .field .error { display:none; font-size:.8rem; color: var(--color-danger, #c00); margin-top:.25rem; }
+    .field.invalid .error { display:block; }
+    .field.invalid input,
+    .field.invalid textarea,
+    .field.invalid select { border-color: var(--color-danger, #c00); outline-color: var(--color-danger, #c00); }
   </style>
 </head>
+
 <body>
   <header class="site-header">
     <div class="container nav-wrapper">
-  <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+      <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
       <nav id="mainNav" class="nav" aria-label="主导航">
         <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
         <ul id="navMenu" class="nav-menu">
           <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
+          <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+          <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+          <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+          <li><a href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+          <li><a href="{{ url_for('management') }}" class="active">管理页面</a></li>
           <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
         </ul>
       </nav>
@@ -32,7 +242,132 @@
           <a class="btn" href="{{ url_for('show_index_page') }}">返回首页</a>
         </div>
       </div>
-      <!-- 管理内容将注入到此容器 -->
+      <!-- 确认对话框（可选使用）。默认隐藏，若使用自定义弹窗，可由 JS 切换 aria-hidden。 -->
+      <div id="confirmModal" class="modal-mask" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-card" role="document">
+          <div class="modal-head" id="confirmTitle">确认操作</div>
+          <div class="modal-body" id="confirmMessage">是否继续？</div>
+          <div class="modal-foot">
+            <button class="btn" id="confirmCancel">取消</button>
+            <button class="btn primary" id="confirmOk">确定</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 编辑弹窗 -->
+      <div id="editModal" class="edit-mask" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="edit-panel" role="document" aria-labelledby="editTitleBar">
+          <div class="edit-head">
+            <strong id="editTitleBar">编辑文章信息</strong>
+            <button class="close-x" type="button" aria-label="关闭" data-edit="close">×</button>
+          </div>
+          <div class="edit-body">
+            <form id="editForm" class="edit-grid" novalidate>
+              <label class="field">标题
+                <input type="text" id="fTitle" name="title" required>
+                <span class="hint">可选，为空则自动检测</span>
+              </label>
+              <label class="field">作者
+                <input type="text" id="fAuthor" name="author">
+                <span class="hint">可选，为空则默认为YewFence</span>
+              </label>
+              <label class="field">日期
+                <input type="date" id="fDate" name="date">
+                <span class="hint">格式 YYYY-MM-DD</span>
+                <span class="error">日期无效</span>
+              </label>
+              <label class="field" style="grid-column:1/-1;">摘要
+                <textarea id="fSummary" name="summary" rows="3"></textarea>
+              </label>
+              <label class="field" style="grid-column:1/-1;">备注
+                <span class="hint">可选，不对外显示</span>
+                <textarea id="fNote" name="note" rows="2"></textarea>
+              </label>
+              <label class="field">状态
+                <select id="fStatus" name="status">
+                  <option value="published">公开</option>
+                  <option value="hidden">隐藏</option>
+                </select>
+              </label>
+              <label class="field" style="grid-column:1/-1;">上传 Markdown
+                <input type="file" id="fMdFile" accept=".md">
+                <input type="hidden" id="fContent" name="content" />
+                <span class="hint">选择 .md 文件后，会在保存时覆盖文章内容（如有）</span>
+              </label>
+            </form>
+          </div>
+          <div class="edit-foot">
+            <button class="btn" type="button" data-edit="cancel">取消</button>
+            <button class="btn primary" type="submit" form="editForm" data-edit="upload">保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 修改密码 -->
+      <section class="large-card" aria-label="账户与安全">
+        <div class="title-wrapper">
+          <h2>账户与安全</h2>
+        </div>
+        <form id="changePwdForm" class="change-password" action="/api/change_password" method="post"
+          novalidate>
+          <div class="grid">
+            <label>新密码
+              <input type="password" name="new_password" autocomplete="new-password">
+            </label>
+            <label>确认新密码
+              <input type="password" name="confirm_password" autocomplete="new-password">
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">修改密码</button>
+            <button class="btn" type="reset">重置</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 博客管理面板 -->
+      <section class="large-card" aria-label="博客管理">
+        <div class="title-wrapper">
+          <h2 id="blogPanelTitle">博客管理</h2>
+        </div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem;">
+          <button class="btn primary" id="btnAddNewPost">新增文章</button>
+          <button class="btn" id="btnExportMd">下载全部 MD（zip）</button>
+        </div>
+        <div id="blogList" class="grid" style="gap: .85rem;">
+          <!-- 列表模板：由后端循环渲染多项 -->
+          {% for post in posts %}
+          <article class="card blog-row" id="post-{{ post.id }}">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:.75rem;">
+              <h3 style="margin:0; display:flex; align-items:center; gap:.5rem;">
+                <span class="title-text">{{ post.title }}</span>
+                <span class="status-badge v-status">{{ post.status }}</span>
+              </h3>
+            </div>
+            <!-- 展示视图（文本显示） + 隐藏域（供保存全部使用） -->
+            <div class="post-meta">
+              <div class="post-kv"><span class="k">ID</span><span class="v v-id future">{{ post.id }}</span></div>
+              <div class="post-kv"><span class="k">作者</span><span class="v v-author">{{ post.author_name }}</span></div>
+              <div class="post-kv"><span class="k">日期</span><span class="v v-date">{{ post.date_posted.strftime('%Y-%m-%d') if post.date_posted else '' }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">标题</span><span class="v v-title">{{ post.title }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">摘要</span><span class="v v-summary">{{ post.brief_summary }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">备注</span><span class="v v-note">{{ post.note }}</span></div>
+            </div>
+
+            <div class="toolbar">
+              <a class="btn" href="/management/posts/{{ post.id }}/preview" target="_blank">预览 MD</a>
+              <a class="btn" href="/api/posts/{{ post.id }}/md" request="GET">下载 MD</a>
+                <label class="btn">
+                  重新上传 MD
+                  <input type="file" accept=".md" style="display:none" data-act="upload-md" />
+                </label>
+              <button class="btn primary" data-act="edit-row">编辑</button>
+              <a class="btn" href="/api/posts/{{ post.id }}/delete">删除文章</a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
     </div>
   </main>
 
@@ -45,9 +380,9 @@
   <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  <script src="js/auth.js"></script>
   <!-- 可选：用于打包导出 MD 文件 -->
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/management.js"></script>
+  <script src="{{ url_for('static', filename='js/management.js') }}"></script>
+  
 </body>
+
 </html>

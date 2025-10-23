@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>标题加载中</title>
+    <title>{{ post.title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 
@@ -28,7 +28,7 @@
     <main class="blog-container">
         <article id="blog-content">
             <div id="blog-markdown">
-                <h2>{{ post.title }}</h2>
+                <h1>{{ post.title }}</h1>
                 <div class="blog-body">
                     {{ post_html_from_md_body | safe }}
                 </div>
