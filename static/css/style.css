@@ -598,251 +598,6 @@ a {
     color: var(--color-accent);
 }
 
-/* 文章样式 */
-.blog-container {
-    position: relative;
-    padding: 4rem 4rem 3.5rem;
-    background: var(--surface-bg);
-    min-height: calc(100vh - var(--header--height));
-}
-
-#blog-markdown {
-    max-width: 1200px;
-    margin: 0 auto;
-    line-height: 2;
-    color: var(--color-text);
-}
-
-#blog-markdown h1 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-size: clamp(1.9rem, 2.6vw, 2.25rem);
-    line-height: 1.25;
-    color: var(--color-text);
-}
-
-#blog-markdown h2, 
-#blog-markdown h3 {
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--color-text);
-}
-
-#blog-markdown h2 {
-    position: relative;
-    font-size: 1.75rem;
-}
-
-#blog-markdown h2:first-of-type::before {
-    content: "";
-    position: absolute;
-    left:-20px;
-    top:50%;
-    transform:translateY(-50%);
-    height:70%; 
-    width: 6px;
-    border-radius: 4px;
-    background: var(--color-accent);
-    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 2px 6px -2px rgba(0,0,0,.25);
-}
-
-
-#blog-markdown h3 {
-    font-size: 1.5rem;
-}
-
-#blog-markdown h4 {
-    font-size: 1.25rem;
-    margin-top: 2rem;
-    margin-bottom: .75rem;
-}
-
-#blog-markdown h5 {
-    font-size: 1.1rem;
-    margin-top: 1.75rem;
-    margin-bottom: .5rem;
-    color: var(--color-text-alt);
-}
-
-#blog-markdown h6 {
-    font-size: 1rem;
-    margin-top: 1.5rem;
-    margin-bottom: .35rem;
-    letter-spacing: .5px;
-    color: var(--color-text-alt);
-}
-
-#blog-markdown p {
-    margin: 1.25rem 0;
-}
-
-#blog-markdown a {
-    color: var(--color-accent);
-    text-underline-offset: 2px;
-    text-decoration-thickness: 2px;
-    text-decoration: underline;
-}
-
-#blog-markdown img {
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-sm);
-    margin: 1.5rem 0;
-}
-
-#blog-markdown pre {
-    background: var(--color-bg-alt);
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    overflow-x: auto;
-    box-shadow: var(--shadow-sm);
-    margin: 1.5rem 0;
-    border-left: 4px solid var(--color-accent);
-}
-
-#blog-markdown pre,
-#blog-markdown code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    line-height: 1.6;
-}
-
-#blog-markdown code {
-    background: var(--color-bg-alt);
-    padding: .2rem .4rem;
-    border-radius: var(--radius-sm);
-    font-size: .95rem;
-}
-
-#blog-markdown pre code {
-    background: transparent;
-    padding: 0;
-    font-size: .95rem;
-}
-
-#blog-markdown blockquote {
-    border-left: 4px solid var(--color-accent);
-    padding-left: 1rem;
-    color: var(--color-text-alt);
-    margin: 1.5rem 0;
-    font-style: italic;
-    background: linear-gradient(90deg, rgba(37,99,235,.06), transparent 60%);
-    border-radius: var(--radius-sm);
-}
-
-#blog-markdown blockquote p:first-child::before {
-    content: "“";
-    margin-right: .15rem;
-}
-
-#blog-markdown blockquote p:last-child::after {
-    content: "”";
-    margin-left: .15rem;
-}
-
-#blog-markdown ul,
-#blog-markdown ol {
-    margin: 1.25rem 0 1.25rem;
-}
-
-#blog-markdown ol li {
-    list-style: decimal;
-    margin: .5rem 0;
-}
-
-#blog-markdown ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 1.25rem 0 1.25rem;
-}
-
-#blog-markdown ul li {
-    position: relative;
-    padding-left: 1.15rem;
-    margin: .4rem 0;
-}
-
-#blog-markdown ul li:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: .55em;
-    width: .55rem;
-    height: .55rem;
-    background: linear-gradient(135deg,var(--color-accent),var(--color-accent-decorate));
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--color-bg);
-}
-
-#blog-markdown ul ul li:before {
-    background: linear-gradient(135deg, var(--color-accent-hover), var(--color-accent));
-}
-
-#blog-markdown .task-list-item {
-    list-style: none;
-}
-#blog-markdown .task-list-item input[type="checkbox"] {
-    margin-right: .5rem;
-    transform: translateY(1px);
-    accent-color: var(--color-accent);
-}
-
-#blog-markdown table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    display: block;
-    overflow-x: auto;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-sm);
-}
-
-#blog-markdown th,
-#blog-markdown td {
-    padding: .75rem;
-    border: 1px solid var(--color-border);
-}
-
-#blog-markdown th {
-    background: var(--color-bg-alt);
-    text-align: left;
-}
-
-#blog-markdown tr:nth-child(even) {
-    background: var(--color-bg-alt);
-}
-
-#blog-markdown tr:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-
-#blog-markdown a:hover {
-    text-decoration: none;
-}
-
-#blog-markdown pre:hover {
-    box-shadow: var(--shadow-md);
-}
-
-#blog-markdown img:hover {
-    box-shadow: var(--shadow-md);
-}
-
-#blog-markdown code:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-
-#blog-markdown blockquote:hover {
-    background: var(--color-bg-alt);
-    box-shadow: var(--shadow-sm);
-}
-
-#blog-markdown table th:hover,
-#blog-markdown table td:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-
 /* 警告消息样式 */
 .alerts { display: grid; gap: .5rem; margin: .5rem 0 0; }
 .alert {
@@ -864,73 +619,6 @@ a {
 .alert-info {
     border-color: var(--color-accent);
     color: var(--color-accent);
-}
-
-/* =====================
-   管理页面输入样式（仅作用于 .mgmt-wrapper 内）
-   ===================== */
-.mgmt-wrapper .grid label {
-    display: grid;
-    gap: .35rem;
-    font-size: .9rem;
-    color: var(--color-text-alt);
-}
-
-.mgmt-wrapper input[type="text"],
-.mgmt-wrapper input[type="password"],
-.mgmt-wrapper input[type="date"],
-.mgmt-wrapper textarea,
-.mgmt-wrapper select {
-    width: 100%;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg);
-    color: var(--color-text);
-    border-radius: var(--radius-sm);
-    padding: .55rem .65rem;
-    line-height: 1.4;
-    transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
-}
-
-.mgmt-wrapper input[type="text"]:hover,
-.mgmt-wrapper input[type="password"]:hover,
-.mgmt-wrapper input[type="date"]:hover,
-.mgmt-wrapper textarea:hover,
-.mgmt-wrapper select:hover {
-    border-color: var(--color-accent-hover);
-}
-
-.mgmt-wrapper input[type="text"]:focus,
-.mgmt-wrapper input[type="password"]:focus,
-.mgmt-wrapper input[type="date"]:focus,
-.mgmt-wrapper textarea:focus,
-.mgmt-wrapper select:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
-}
-
-.mgmt-wrapper input::placeholder,
-.mgmt-wrapper textarea::placeholder {
-    color: var(--color-text-alt);
-    opacity: .8;
-}
-
-.mgmt-wrapper input:disabled,
-.mgmt-wrapper textarea:disabled,
-.mgmt-wrapper select:disabled {
-    opacity: .7;
-    cursor: not-allowed;
-}
-
-/* 深色模式下输入背景与描边对比 */
-html[data-theme="dark"] .mgmt-wrapper input[type="text"],
-html[data-theme="dark"] .mgmt-wrapper input[type="password"],
-html[data-theme="dark"] .mgmt-wrapper input[type="date"],
-html[data-theme="dark"] .mgmt-wrapper textarea,
-html[data-theme="dark"] .mgmt-wrapper select {
-    background: var(--color-bg-night);
-    border-color: var(--color-border);
-    color: var(--color-text);
 }
 
 .blog-meta {
@@ -957,7 +645,7 @@ html[data-theme="dark"] .mgmt-wrapper select {
     color: var(--color-accent-hover);
 }
 
-/* Buttons */
+/* 按钮样式 */
 .btn {
     --btn-bg: var(--color-bg-alt);
     --btn-color: var(--color-text);
@@ -1145,59 +833,27 @@ html[data-theme="dark"] textarea {
 }
 
 /* =============主题切换渐变动画支持============ */
-/* 在切换 data-theme 前后给 <html> 添加 .theme-transition 类, 而不是直接给所有元素添加该类 */
-.theme-transition, .theme-transition body,
-.theme-transition .site-header,
-.theme-transition .section,
-.theme-transition .project-item,
-.theme-transition .card,
-.theme-transition .tag-list li,
-.theme-transition .site-footer,
-.theme-transition .hero,
-.theme-transition .hero-inner,
-.theme-transition .page-hero.mini,
-.theme-transition .nav-menu a,
-.theme-transition .nav-menu button.theme-btn,
-.theme-transition .btn,
-.theme-transition .btn.primary,
-.theme-transition .large-card,
-.theme-transition .large-card:before,
-.theme-transition .blog-container,
-.theme-transition .blog-content,
-.theme-transition .blog-title,
-.theme-transition #blog-markdown,
-.theme-transition pre,
-.theme-transition blockquote,
-.theme-transition table {
-        transition: background-color .55s cubic-bezier(.4,.2,.2,1),
-                                color .45s cubic-bezier(.4,.2,.2,1),
-                                border-color .55s cubic-bezier(.4,.2,.2,1),
-                                box-shadow .55s cubic-bezier(.4,.2,.2,1),
-                                background .65s cubic-bezier(.4,.2,.2,1);
+.theme-transition,
+.theme-transition :where(*, *::before, *::after) {
+    transition:
+        background-color .55s cubic-bezier(.4,.2,.2,1),
+        color .45s cubic-bezier(.4,.2,.2,1),
+        border-color .55s cubic-bezier(.4,.2,.2,1),
+        box-shadow .55s cubic-bezier(.4,.2,.2,1),
+        background .65s cubic-bezier(.4,.2,.2,1);
+}
+
+/* 对性能敏感或不需要主题过渡的元素显式禁用 */
+.theme-transition :where(video, canvas, .no-theme-transition) {
+    transition: none !important;
 }
 
 
 /* 避免用户偏好减少动态时造成干扰 */
 /* AI真好使吧 */
 @media (prefers-reduced-motion: reduce) {
-    .theme-transition, .theme-transition * { transition: none !important; }
-}
-
-/* 分隔线 */
-#blog-markdown hr {
-    height: 1px;
-    border: none;
-    margin: 2rem 0;
-    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-}
-
-/* 键盘按键标记 */
-#blog-markdown kbd {
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
-    border-bottom-width: 2px;
-    border-radius: 4px;
-    padding: .15rem .35rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: .85rem;
+    .theme-transition,
+    .theme-transition *,
+    .theme-transition *::before,
+    .theme-transition *::after { transition: none !important; }
 }

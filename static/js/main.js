@@ -267,7 +267,7 @@
     if (clickCount >= REQUIRED) {
       reset();
       // 静默跳转，避免可见提示
-      window.location.href = 'login.html';
+      window.location.href = 'login';
     }
   });
 
