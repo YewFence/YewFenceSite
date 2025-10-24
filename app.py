@@ -335,7 +335,7 @@ def api_posts_export_json():
     resp = make_response(body)
     resp.headers['Content-Type'] = 'application/json; charset=utf-8'
     # 提示浏览器下载为文件（可选）
-    resp.headers['Content-Disposition'] = 'attachment; filename=blogs.json'
+    resp.headers['Content-Disposition'] = 'attachment; filename=blog.json'
     return resp
 
 # 以标题为文件名下载该文章的 Markdown 源文档

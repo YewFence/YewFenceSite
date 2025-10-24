@@ -33,7 +33,7 @@
     font-size: 1.75rem;
 }
 
-#blog-markdown h2:first-of-type::before {
+#blog-markdown h1:first-of-type::before {
     content: "";
     position: absolute;
     left:-20px;
@@ -210,42 +210,8 @@
     background: var(--color-bg-alt);
 }
 
-#blog-markdown tr:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-
 #blog-markdown a:hover {
     text-decoration: none;
-}
-
-#blog-markdown pre:hover {
-    box-shadow: var(--shadow-md);
-}
-
-#blog-markdown img:hover {
-    box-shadow: var(--shadow-md);
-}
-
-#blog-markdown code:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-
-#blog-markdown blockquote:hover {
-    background: var(--color-bg-alt);
-    box-shadow: var(--shadow-sm);
-}
-
-#blog-markdown table th:hover,
-#blog-markdown table td:hover {
-    background: var(--color-accent-hover);
-    color: #fff;
-}
-#blog-markdown table tr:hover th,
-#blog-markdown table tr:hover td {
-    background: var(--color-accent-hover);
-    color: #fff;
 }
 
 #blog-markdown hr {
