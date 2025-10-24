@@ -5,26 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>登录</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-  <style>
-    .login-wrapper { min-height: calc(100vh - var(--header--height)); display: grid; place-items: center; background: var(--surface-bg); }
-    .login-card {
-      width: min(420px, 92vw);
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      padding: 1.25rem 1.25rem 1.35rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .login-card h1 { margin: 0 0 .75rem; font-size: 1.35rem; }
-    .login-card .field { display: grid; gap: .35rem; margin: .85rem 0; }
-    .login-card label { font-size: .9rem; color: var(--color-text-alt); }
-    .login-card input[type="password"], .login-card input[type="text"] {
-      border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: .6rem .65rem; background: var(--color-bg); color: var(--color-text);
-    }
-    .login-card .actions { display:flex; gap:.6rem; justify-content:flex-end; margin-top:.85rem; }
-    .muted { color: var(--color-text-alt); font-size: .8rem; }
-    .error { color: var(--color-danger); font-size: .85rem; margin-top: .25rem; min-height: 1.2em; }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
 </head>
 <body>
   <header class="site-header">
