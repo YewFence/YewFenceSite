@@ -71,7 +71,7 @@ def migrate():
         print('\n[管理员设置] 如用户已存在将更新其密码')
         admin_username = ask_str('请输入管理员用户名', default='admin')
         while True:
-            p1 = getpass('请输入管理员密码:(若为空则默认为password) ')
+            p1 = getpass('请输入管理员密码(若为空则默认为password) :')
             p2 = getpass('请再次输入以确认: ')
             if p1 != p2:
                 print('两次输入不一致，请重试。')

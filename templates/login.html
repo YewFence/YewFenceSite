@@ -53,6 +53,8 @@
       {% endif %}
       <form method="post" action="/login" novalidate>
         <div class="field">
+          <label for="username">用户名</label>
+          <input id="username" name="username" type="text" placeholder="输入用户名" autocomplete="username" required autofocus />
           <label for="password">密码</label>
           <input id="password" name="password" type="password" placeholder="输入密码" autocomplete="current-password" required autofocus />
           

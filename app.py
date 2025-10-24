@@ -142,11 +142,15 @@ def login():
 
     if request.method == 'POST':
         # 1. 从表单获取输入的密码数据
+        username = request.form.get('username', '')
         password = request.form.get('password', '')
         # 2. 从数据库获取管理员用户
-        admin_user = Admin.query.filter_by(username='YewFence').first()
+        admin_user = Admin.query.filter_by(username=username).first()
         # 3. 校验
-        if admin_user and admin_user.check_password(password):
+        if not admin_user:
+            # 用户名不存在
+            return render_template("login.html", error="用户名不存在"), 401
+        if admin_user.check_password(password):
             # 4. 登录成功后将登录状态存入 session
             session['logged_in'] = True
             session['username'] = admin_user.username
@@ -154,12 +158,10 @@ def login():
             return redirect(url_for('management'))
         else:
             # 登录失败
-            return render_template("login.html", error="密码错误"), 401
+            return render_template("login.html", error="密码或用户名错误"), 401
     # GET: 支持通过查询参数 info 显示提醒信息
-    info = request.args.get('info')
-    if info:
-        return render_template("login.html", info=info)
-    return render_template("login.html")
+    info = request.args.get('info') or ''
+    return render_template("login.html", info=info)
 
 def find_title_in_content(content: str, target: str = 'title') -> str | None:
     """提取 Markdown 首个标题，或返回移除首个标题后的正文。
