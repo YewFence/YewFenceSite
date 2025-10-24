@@ -39,15 +39,15 @@
 <body>
     <header class="site-header">
         <div class="container nav-wrapper">
-            <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+            <a class="logo" href="{{ url_for('main.index') }}">YewFence's <span>Site</span></a>
             <nav id="mainNav" class="nav" aria-label="主导航">
                 <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
                 <ul id="navMenu" class="nav-menu">
-                    <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
-                    <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
-                    <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
-                    <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
-                    <li><a class="active" href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+                    <li><a href="{{ url_for('main.index') }}">首页</a></li>
+                    <li><a href="{{ url_for('main.about') }}">关于我</a></li>
+                    <li><a href="{{ url_for('main.interests') }}">我的兴趣</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">联系我</a></li>
+                    <li><a class="active" href="{{ url_for('blog.index') }}">个人博客</a></li>
                     <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
                 </ul>
             </nav>
@@ -64,8 +64,8 @@
             {% if login_status %}
             <div class="container admin-container">
                 <span class="logo">Welcome, Admin!</span>
-                <a class="btn primary" href="{{ url_for('management') }}">管理后台</a>
-                <a class="btn primary" href="{{ url_for('logout') }}">登出</a>
+                <a class="btn primary" href="{{ url_for('auth.management') }}">管理后台</a>
+                <a class="btn primary" href="{{ url_for('auth.logout') }}">登出</a>
             </div>
             {% endif %}
             <div class="container">
@@ -88,7 +88,7 @@
                             {% endif %}
                         </p>
                         <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
-                        <a class="card-link blog-list-item-link" href="{{ url_for('post_detail', post_id=post.id) }}"></a>
+                        <a class="card-link blog-list-item-link" href="{{ url_for('blog.post_detail', post_id=post.id) }}"></a>
                     </article>
                 {% endfor %}
                 </div>

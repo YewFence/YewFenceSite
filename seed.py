@@ -4,7 +4,12 @@ from datetime import datetime
 from getpass import getpass
 
 # 导入 Flask 应用上下文和模型
-from app import app, db, Admin, Post
+from app import create_app
+from extensions import db
+from models import Admin, Post
+
+# 创建应用实例
+app = create_app()
 
 # ---------------
 # 交互辅助函数

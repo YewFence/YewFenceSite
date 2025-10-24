@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: yewfence-blog
+    ports:
+      - "5000:5000"
+    volumes:
+      # 挂载数据库目录（持久化数据）
+      - ./instance:/app/instance
+      # 挂载文章目录（可选，方便编辑）
+      - ./posts:/app/posts
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key-in-production}
+      - DATABASE_URI=sqlite:///instance/data.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+# 如果需要使用 PostgreSQL（可选）
+#  db:
+#    image: postgres:16-alpine
+#    container_name: yewfence-db
+#    environment:
+#      POSTGRES_DB: yewfence
+#      POSTGRES_USER: blog
+#      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    restart: unless-stopped
+
+#volumes:
+#  postgres_data:

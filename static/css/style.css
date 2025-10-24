@@ -75,7 +75,7 @@ body::before {
     width: 100%;
     height: 100%;
     z-index: -1; /* 确保背景在内容后面 */
-    background-image: url('../images/Gemini_YewFence.png');
+    background-image: url('../images/Gemini_YewFence.webp');
     /* 让背景图尺寸覆盖整个屏幕*/
     background-size: cover;
     /* 让背景图居中显示 */
