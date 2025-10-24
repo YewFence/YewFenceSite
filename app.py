@@ -230,6 +230,8 @@ def strip_md_title_if_matches(content: str, db_title: str) -> str:
 def post_detail(post_id):
     """ 显示文章详情页 """
     post = Post.query.get_or_404(post_id)
+    if post.status == 'hidden' and not session.get('logged_in'):
+        return render_template("404.html"), 404
     post_content = strip_md_title_if_matches(post.content or '', post.title)
     # 将 Markdown 内容转换为 HTML
     post_html_from_md_body = render_md(post_content or '')
@@ -505,3 +507,12 @@ def api_post_delete(post_id: int):
     except Exception:
         db.session.rollback()
         return redirect(url_for('management') + f"#post-{post.id}")
+
+# -------------------------
+# 错误页面
+# -------------------------
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # 专用 404 页面
+    return render_template('404.html'), 404
