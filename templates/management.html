@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/management_style.css') }}" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+      <nav id="mainNav" class="nav" aria-label="主导航">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+        <ul id="navMenu" class="nav-menu">
+          <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
+          <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+          <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+          <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+          <li><a href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+          <li><a href="{{ url_for('management') }}" class="active">管理页面</a></li>
+          <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mgmt-wrapper">
+    <div class="container" id="mgmtRoot">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem;">
+        <h1 style="margin:0;">管理页面</h1>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+          <a class="btn" href="{{ url_for('logout') }}">退出登录</a>
+          <a class="btn" href="{{ url_for('show_index_page') }}">返回首页</a>
+        </div>
+      </div>
+      <!-- 确认对话框（可选使用）。默认隐藏，若使用自定义弹窗，可由 JS 切换 aria-hidden。 -->
+      <div id="confirmModal" class="modal-mask" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-card" role="document">
+          <div class="modal-head" id="confirmTitle">确认操作</div>
+          <div class="modal-body" id="confirmMessage">是否继续？</div>
+          <div class="modal-foot">
+            <button class="btn" id="confirmCancel">取消</button>
+            <button class="btn primary" id="confirmOk">确定</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 编辑弹窗 -->
+      <div id="editModal" class="edit-mask" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="edit-panel" role="document" aria-labelledby="editTitleBar">
+          <div class="edit-head">
+            <strong id="editTitleBar">编辑文章信息</strong>
+            <button class="close-x" type="button" aria-label="关闭" data-edit="close">×</button>
+          </div>
+          <div class="edit-body">
+            <form id="editForm" class="edit-grid" novalidate>
+              <label class="field">标题
+                <input type="text" id="fTitle" name="title" required>
+                <span class="hint">可选，为空则自动检测</span>
+              </label>
+              <label class="field">作者
+                <input type="text" id="fAuthor" name="author">
+                <span class="hint">可选，为空则默认为YewFence</span>
+              </label>
+              <label class="field">日期
+                <input type="date" id="fDate" name="date">
+                <span class="hint">格式 YYYY-MM-DD</span>
+                <span class="error">日期无效</span>
+              </label>
+              <label class="field" style="grid-column:1/-1;">摘要
+                <textarea id="fSummary" name="summary" rows="3"></textarea>
+              </label>
+              <label class="field" style="grid-column:1/-1;">备注
+                <span class="hint">可选，不对外显示</span>
+                <textarea id="fNote" name="note" rows="2"></textarea>
+              </label>
+              <label class="field">状态
+                <select id="fStatus" name="status">
+                  <option value="published">公开</option>
+                  <option value="hidden">隐藏</option>
+                </select>
+              </label>
+              <label class="field" style="grid-column:1/-1;">上传 Markdown
+                <input type="file" id="fMdFile" accept=".md">
+                <input type="hidden" id="fContent" name="content" />
+                <span class="hint">选择 .md 文件后，会在保存时覆盖文章内容（如有）</span>
+              </label>
+            </form>
+          </div>
+          <div class="edit-foot">
+            <button class="btn" type="button" data-edit="cancel">取消</button>
+            <button class="btn primary" type="submit" form="editForm" data-edit="upload">保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 修改密码 -->
+      <section class="large-card" aria-label="账户与安全">
+        <div class="title-wrapper">
+          <h2>账户与安全</h2>
+        </div>
+        <form id="changePwdForm" class="change-password" action="/api/change_password" method="post"
+          novalidate>
+          <div class="grid">
+            <label>新密码
+              <input type="password" name="new_password" autocomplete="new-password">
+            </label>
+            <label>确认新密码
+              <input type="password" name="confirm_password" autocomplete="new-password">
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">修改密码</button>
+            <button class="btn" type="reset">重置</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 博客管理面板 -->
+      <section class="large-card" aria-label="博客管理">
+        <div class="title-wrapper">
+          <h2 id="blogPanelTitle">博客管理</h2>
+        </div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem;">
+          <button class="btn primary" id="btnAddNewPost">新增文章</button>
+          <a class="btn" id="btnDownloadJson" href="/api/posts/export_json">下载json数据</a>
+          <a class="btn" id="btnExportMd" href="/api/posts/export_md_zip">下载全部 MD（zip）</a>
+        </div>
+        <div id="blogList" class="grid" style="gap: .85rem;">
+          <!-- 列表模板：由后端循环渲染多项 -->
+          {% for post in posts %}
+          <article class="card blog-row" id="post-{{ post.id }}">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:.75rem;">
+              <h3 style="margin:0; display:flex; align-items:center; gap:.5rem;">
+                <span class="title-text">{{ post.title }}</span>
+                <span class="status-badge v-status">{{ post.status }}</span>
+              </h3>
+            </div>
+            <!-- 展示视图（文本显示） + 隐藏域（供保存全部使用） -->
+            <div class="post-meta">
+              <div class="post-kv"><span class="k">ID</span><span class="v v-id future">{{ post.id }}</span></div>
+              <div class="post-kv"><span class="k">作者</span><span class="v v-author">{{ post.author_name }}</span></div>
+              <div class="post-kv"><span class="k">日期</span><span class="v v-date">{{ post.date_posted.strftime('%Y-%m-%d') if post.date_posted else '' }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">标题</span><span class="v v-title">{{ post.title }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">摘要</span><span class="v v-summary">{{ post.brief_summary }}</span></div>
+              <div class="post-kv" style="grid-column:1/-1;"><span class="k">备注</span><span class="v v-note">{{ post.note }}</span></div>
+            </div>
+
+            <div class="toolbar">
+              <a class="btn" href="/management/posts/{{ post.id }}/preview" target="_blank">预览 MD</a>
+              <a class="btn" href="/api/posts/{{ post.id }}/md" request="GET">下载 MD</a>
+                <label class="btn">
+                  重新上传 MD
+                  <input type="file" accept=".md" style="display:none" data-act="upload-md" />
+                </label>
+              <button class="btn primary" data-act="edit-row">编辑</button>
+              <a class="btn" href="/api/posts/{{ post.id }}/delete">删除文章</a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> YewFence.</p>
+    </div>
+  </footer>
+
+  <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <!-- 可选：用于打包导出 MD 文件 -->
+  <script src="{{ url_for('static', filename='js/management.js') }}"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人博客 | Blog</title>
+    <meta name="description" content="个人博客，分享编程与生活的点滴" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+    .status-badge {
+        font-size: .8rem;
+        border: 1px solid var(--color-border);
+        padding: .1rem .4rem;
+        border-radius: 6px;
+    }
+    .admin-container {
+        padding: 1rem;
+        background: var(--surface-bg);
+    }
+    .admin-container .logo {
+        font-weight: 600;
+        color: var(--color-accent, #2b8aef);
+        margin-right: .5rem;
+    }
+    .admin-container .btn { /* 让按钮在该区视觉更紧凑 */
+        padding: .4rem .7rem;
+        font-size: .95rem;
+    }
+    /* 小屏幕时堆叠显示 */
+    @media (max-width: 560px) {
+        .admin-section { flex-direction: column; align-items: stretch; }
+        .admin-section .logo { margin-bottom: .35rem; }
+        .admin-section .btn { width: 100%; }
+    }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
+                    <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+                    <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+                    <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+                    <li><a class="active" href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="page-hero mini">
+            <div class="container">
+                <h1>个人博客</h1>
+                <p class="subtitle">分享编程与生活的点滴</p>
+            </div>
+        </section>
+        <section class="section">
+            {% if login_status %}
+            <div class="container admin-container">
+                <span class="logo">Welcome, Admin!</span>
+                <a class="btn primary" href="{{ url_for('management') }}">管理后台</a>
+                <a class="btn primary" href="{{ url_for('logout') }}">登出</a>
+            </div>
+            {% endif %}
+            <div class="container">
+                <div id="blogs-list" class="large-cards-list">
+                    <article class="large-card" id="loadingMessage">
+                        <h2>加载中...</h2>
+                        <p class="meta">请稍候</p>
+                        <p>如果长时间未加载，请检查网络连接或刷新页面。</p>
+                    </article>
+                {% for post in posts %}
+                    <article class="large-card">
+                        <h2 class="blog-list-item-title">{{ post.title }}</h2>
+                        <p class="blog-list-item-meta">
+                            <span class="blog-list-item-artistic-character">Posted on</span>
+                            <span class="blog-list-item-date"> {{ post.date_posted.strftime('%Y-%m-%d') }}</span>
+                            <span> By </span>
+                            <span class="blog-list-item-author">{{ post.author_name }}</span>
+                            {% if post.status != 'published' %}
+                            <span class="status-badge">{{ post.status }}</span>
+                            {% endif %}
+                        </p>
+                        <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
+                        <a class="card-link blog-list-item-link" href="{{ url_for('post_detail', post_id=post.id) }}"></a>
+                    </article>
+                {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>© <span id="year"></span> YewFence.</p>
+        </div>
+    </footer>
+    <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        loadingMessage = document.getElementById("loadingMessage");
+        if (loadingMessage) {
+            loadingMessage.style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

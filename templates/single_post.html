@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+            <nav id="mainNav" class="nav" aria-label="主导航">
+                <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+                <ul id="navMenu" class="nav-menu">
+                    <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
+                    <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+                    <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+                    <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+                    <li><a class="active" href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+                    <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="blog-container">
+        <article id="blog-content">
+            <div id="blog-markdown">
+                <h1>{{ post.title }}</h1>
+                <div class="blog-body">
+                    {{ post_html_from_md_body | safe }}
+                </div>
+            </div>
+            <div class="blog-meta">
+                <span class="blog-date">{{ post.date_posted }}</span> | <span class="blog-author">{{ post.author_name }}</span>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>© <span id="year"></span> YewFence.</p>
+        </div>
+    </footer>
+    <a class="btn primary blog-back" href="{{ url_for('show_blog_page') }}">返回</a>
+    <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

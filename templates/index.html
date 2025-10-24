@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>主页 | YewFenceSite</title>
     <meta name="description" content="个人简介、成分查询与联系信息" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
     <header class="site-header">
         <div class="container nav-wrapper">
-            <a class="logo" href="index.html">YewFence's <span>Site</span></a>
+            <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
             <nav id="mainNav" class="nav" aria-label="主导航">
                 <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
                 <ul id="navMenu" class="nav-menu">
-                    <li><a class="active" href="index.html">首页</a></li>
-                    <li><a href="about.html">关于我</a></li>
-                    <li><a href="interest.html">我的兴趣</a></li>
-                    <li><a href="contact.html">联系我</a></li>
-                    <li><a href="blogs_summary.html">个人博客</a></li>
+                    <li><a class="active" href="{{ url_for('show_index_page') }}">首页</a></li>
+                    <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+                    <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+                    <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+                    <li><a href="{{ url_for('show_blog_page') }}">个人博客</a></li>
                     <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
                 </ul>
             </nav>
@@ -64,21 +64,21 @@
                     <article class="card">
                         <h3>游戏成分</h3>
                         <p>啥都玩点，来者不拒</p>
-                        <a class="card-link" href="interest.html#p1"></a>
+                        <a class="card-link" href="{{ url_for('show_interests_page') }}#p1"></a>
                     </article>
                     <article class="card">
                         <h3>兴趣编程</h3>
                         <p>想研究一堆AI</p>
-                        <a class="card-link" href="interest.html#p2"></a>
+                        <a class="card-link" href="{{ url_for('show_interests_page') }}#p2"></a>
                     </article>
                     <article class="card">                     
                         <h3>二次元</h3>
                         <p>不知不觉也是看了很多番和小说了，虽然不多，但是也很多了<s>废话</s></p>
-                        <a class="card-link" href="interest.html#p3"></a>
+                        <a class="card-link" href="{{ url_for('show_interests_page') }}#p3"></a>
                     </article>
                 </div>
                 <div class="center mt">
-                    <a href="interest.html" class="btn small">查询成分</a>
+                    <a href="{{ url_for('show_interests_page') }}" class="btn small">查询成分</a>
                 </div>
             </div>
         </section>
@@ -87,7 +87,7 @@
             <div class="container narrow">
                 <h2 class="section-title">个人账号</h2>
                 <p>想找我聊天？欢迎联系我</p>
-                <a href="contact.html" class="btn primary">前往联系页面</a>
+                <a href="{{ url_for('show_contact_page') }}" class="btn primary">前往联系页面</a>
             </div>
         </section>
     </main>
@@ -101,6 +101,6 @@
 
     <button id="backToTop" aria-label="返回顶部" class="back-to-top" hidden>↑</button>
 
-    <script src="js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

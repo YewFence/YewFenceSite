@@ -11,6 +11,7 @@
   const formStatus = document.getElementById('formStatus');
   const siteHeader = document.querySelector('.site-header');
   const hero = document.querySelector('.hero');
+  const heroInner = document.querySelector('.hero .hero-inner');
 
   // 设置当前年份（页脚版权）
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
@@ -136,4 +137,45 @@
       });
     });
   }
+})();
+
+// ================= 隐藏入口：快速点击 YewFence 五次跳转登录 =================
+(function () {
+  // 仅在首页存在 .hero-inner 时启用
+  const heroInner = document.querySelector('.hero .hero-inner');
+  if (!heroInner) return;
+  // 目标：h1 内的 .accent（YewFence 文本）
+  const target = heroInner.querySelector('h1 .accent');
+  if (!target) return;
+
+  let clickCount = 0;
+  let firstClickAt = 0;
+  const WINDOW_MS = 1500; // 1.5 秒内点击 5 次
+  const REQUIRED = 5;
+
+  function reset() {
+    clickCount = 0;
+    firstClickAt = 0;
+  }
+
+  target.addEventListener('click', () => {
+    const now = Date.now();
+    if (firstClickAt === 0 || now - firstClickAt > WINDOW_MS) {
+      // 开启新窗口
+      firstClickAt = now;
+      clickCount = 1;
+      return;
+    }
+    clickCount += 1;
+    if (clickCount >= REQUIRED) {
+      reset();
+      // 静默跳转，避免可见提示
+      window.location.href = 'login';
+    }
+  });
+
+  // 超时自动重置
+  setInterval(() => {
+    if (firstClickAt && Date.now() - firstClickAt > WINDOW_MS) reset();
+  }, 300);
 })();

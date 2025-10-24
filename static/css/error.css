@@ -1,0 +1,85 @@
+:root {
+  --error-glow: color-mix(in oklab, var(--color-accent) 70%, transparent 30%);
+}
+
+.error-container {
+  min-height: calc(100vh - var(--header--height));
+  display: grid;
+  place-items: center;
+  padding: 4rem 1.5rem;
+  background: var(--surface-bg);
+}
+
+.error-card {
+  width: min(860px, 100%);
+  background: var(--color-bg);
+  border-radius: var(--radius-md, 16px);
+  box-shadow: 0 10px 30px -12px rgba(0,0,0,.25), 0 1px 0 1px rgba(0,0,0,.04) inset;
+  border: 1px solid var(--color-border);
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  text-align: center;
+}
+
+.error-hero {
+  display: flex;
+  justify-content: center;
+  gap: clamp(.25rem, 1vw, .75rem);
+  line-height: 1;
+  margin: .25rem 0 1rem;
+}
+
+.error-hero span {
+  font-weight: 800;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: clamp(4rem, 12vw, 9rem);
+  letter-spacing: -.03em;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-decorate));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 10px 25px var(--error-glow));
+}
+
+.error-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: .25rem 0 .5rem;
+  color: var(--color-text);
+}
+
+.error-desc {
+  color: var(--color-text-alt);
+  margin: 0 auto 1.25rem;
+  max-width: 48em;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+/* Subtle floating animation */
+@keyframes floaty {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.error-hero .d1 { animation: floaty 5s ease-in-out infinite; }
+.error-hero .d2 { animation: floaty 5.2s ease-in-out infinite; }
+.error-hero .d3 { animation: floaty 5.4s ease-in-out infinite; }
+
+/* Dark mode tweaks inherit from global variables */
+html[data-theme="dark"] .error-card {
+  box-shadow: 0 12px 30px -12px rgba(0,0,0,.6), 0 1px 0 1px rgba(255,255,255,.03) inset;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .error-hero .d1,
+  .error-hero .d2,
+  .error-hero .d3 {
+    animation: none;
+  }
+}

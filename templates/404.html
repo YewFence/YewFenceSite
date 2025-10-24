@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 Not Found | YewFenceSite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}" />
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a class="logo" href="{{ url_for('show_index_page') }}">YewFence's <span>Site</span></a>
+      <nav id="mainNav" class="nav" aria-label="主导航">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">☰</button>
+        <ul id="navMenu" class="nav-menu">
+          <li><a href="{{ url_for('show_index_page') }}">首页</a></li>
+          <li><a href="{{ url_for('show_about_page') }}">关于我</a></li>
+          <li><a href="{{ url_for('show_interests_page') }}">我的兴趣</a></li>
+          <li><a href="{{ url_for('show_contact_page') }}">联系我</a></li>
+          <li><a href="{{ url_for('show_blog_page') }}">个人博客</a></li>
+          <li><button id="themeSwitcher" class="theme-btn" aria-label="切换主题">🌙</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="error-container theme-transition">
+    <section class="error-card">
+      <div class="error-hero" aria-hidden="true">
+        <span class="d1">4</span>
+        <span class="d2">0</span>
+        <span class="d3">4</span>
+      </div>
+      <h1 class="error-title">页面不见了</h1>
+      <p class="error-desc">抱歉，你访问的页面不存在或已被移动。你可以返回上一页，或前往首页继续浏览。</p>
+      <div class="error-actions">
+        <a class="btn primary" href="{{ url_for('show_index_page') }}">返回首页</a>
+        <button class="btn" type="button" onclick="history.back()">返回上一页</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> YewFence.</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
