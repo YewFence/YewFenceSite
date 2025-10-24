@@ -88,7 +88,7 @@ def migrate():
     mode = None  # skip/overwrite/clear
     if do_posts:
         print('\n[导入文章] 将根据 JSON 中的 title 去 posts 目录查找同名 .md 文件')
-        json_path = ask_str('请输入 blog.json 的路径', default=os.path.join('data', 'blog.json'))
+        json_path = ask_str('请输入 blog.json 的路径', default='blog.json')
         md_dir = ask_str('请输入 .md 文件所在文件夹', default='posts')
         print('覆盖策略：')
         print('  1) 跳过已存在（按标题判断）')
