@@ -15,9 +15,25 @@ import re
 try:
     from markdown import markdown as _md_render
     def render_md(text: str) -> str:
+        # 启用常用扩展，并显式打开 tables（有些环境下仅依赖 extra 可能未能正确解析表格）
+        exts = [
+            'extra',         # 一揽子功能：abbr、attr_list、def_list、fenced_code、footnotes、tables、smarty 等
+            'tables',        # 显式开启表格，确保管道表语法被识别
+            'attr_list',     # 支持 {#id .class} 属性列表
+            'sane_lists',    # 更贴近 GFM 的列表解析，减少与表格的歧义
+            'fenced_code',   # 三反引号代码块
+            'codehilite',    # 代码高亮（需要 Pygments）
+            'toc'            # 目录（根据标题生成）
+        ]
         return _md_render(
             text or "",
-            extensions=['extra', 'codehilite', 'fenced_code', 'toc']
+            extensions=exts,
+            extension_configs={
+                'codehilite': {
+                    'guess_lang': False,
+                    'noclasses': False
+                }
+            }
         )
 except Exception:
     def render_md(text: str) -> str:
