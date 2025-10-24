@@ -1,0 +1,24 @@
+# Python/venv
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+.env
+
+# Tools & caches
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+
+# Builds
+build/
+dist/
+
+# SQLite
+data.db
