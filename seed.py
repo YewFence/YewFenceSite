@@ -62,7 +62,7 @@ def migrate():
     print('2) 导入 JSON + MD 到数据库')
     print('3) 两者都做')
     choice = ask_str('请输入 1/2/3', default='3')
-    if choice not in ('1', '2', '3'):
+    if choice not in ('1', '2', '3', ''):
         print('无效选择，已取消。')
         return
 
@@ -93,8 +93,8 @@ def migrate():
     mode = None  # skip/overwrite/clear
     if do_posts:
         print('\n[导入文章] 将根据 JSON 中的 title 去 posts 目录查找同名 .md 文件')
-        json_path = ask_str('请输入 blog.json 的路径', default='blog.json')
-        md_dir = ask_str('请输入 .md 文件所在文件夹', default='posts')
+        json_path = ask_str('请输入 blog.json 的路径', default='samples/blog.json')
+        md_dir = ask_str('请输入 .md 文件所在文件夹', default='samples/posts')
         print('覆盖策略：')
         print('  1) 跳过已存在（按标题判断）')
         print('  2) 覆盖已存在（按标题更新内容与元数据）')
