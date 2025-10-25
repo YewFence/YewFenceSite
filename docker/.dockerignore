@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Database (生产环境应该挂载外部卷)
+*.db
+instance/
+
+# Documentation
+README.md
+LICENSE
+images/
+
+# Testing
+.pytest_cache/
+.coverage
+.mypy_cache/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Scripts (本地使用的脚本)
+init_db.py
+scripts/
