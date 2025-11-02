@@ -21,17 +21,9 @@ services:
     restart: unless-stopped
     # healthcheck 由 Dockerfile 定义
 
-# 如果需要使用 PostgreSQL（可选）
-#  db:
-#    image: postgres:16-alpine
-#    container_name: yewfence-db
-#    environment:
-#      POSTGRES_DB: yewfence
-#      POSTGRES_USER: blog
-#      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
-#    restart: unless-stopped
-
-#volumes:
-#  postgres_data:
+# 如果需要使用 Nginx Docker 的网络进行反向代理，可以取消下面的注释
+#   networks:
+#     - nginx-proxy-network
+# networks:
+#   nginx-proxy-network:
+#     external: true
