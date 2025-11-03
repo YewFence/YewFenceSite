@@ -2,6 +2,7 @@ services:
   web:
     build: .
     container_name: yewfence-blog
+    image: yewfence-site:latest
     ports:
       - "5000:5000"
     volumes:
