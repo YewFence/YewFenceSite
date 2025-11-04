@@ -25,3 +25,6 @@ data.db
 
 # Docker override (environment-specific config)
 docker-compose.override.yml
+
+# LLM
+.claude/
