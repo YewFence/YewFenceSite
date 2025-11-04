@@ -200,7 +200,7 @@ def edit_post(post_id: int):
         content_changed = False
         if 'content' in form:
             new_content = form.get('content') or ''
-            if post.content != new_content:
+            if new_content and post.content != new_content:
                 post.content = new_content
                 content_changed = True
 
