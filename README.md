@@ -59,8 +59,6 @@ models/              # 数据库模型
 routes/              # Flask路由（提供RESTful API）
 samples/             # 博客示例数据
 scripts/             # 脚本文件夹
-static/              # 旧版静态资源（已迁移到Vue）
-templates/           # 旧版HTML模板（已废弃）
 utils/               # 工具函数
 
 app.py               # Flask应用工厂
