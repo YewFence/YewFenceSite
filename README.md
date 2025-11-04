@@ -8,48 +8,92 @@
 有一个博客页面，可以查看文章，这是公开的  
 有一个简单的管理后台，可以登录后进行博客的管理  
 
-## 使用工具
-- HTML
-- CSS
-- JavaScripts
+## 技术栈
+
+### 前端
+- Vue 3 (Composition API)
+- Vite
+- Vue Router 4
+- Pinia (状态管理)
+- Axios (HTTP客户端)
+- 原生CSS
+
+### 后端
 - Python 3.13
-- SQLite
 - Flask
-- Jinja2
+- Flask-SQLAlchemy
+- Flask-Migrate
+- Flask-CORS
+- SQLite
+- Markdown渲染
+
+### 部署
 - Docker (可选)
+- Nginx (推荐)
+
+## 项目架构
+
+本项目采用**前后端分离**架构：
+
+- **前端**: Vue 3 SPA，提供用户界面和交互
+- **后端**: Flask RESTful API，提供数据和业务逻辑
 
 ## 目录结构
+
 ```
+frontend/            # Vue 3前端项目
+  ├── src/
+  │   ├── api/       # API接口封装
+  │   ├── assets/    # 静态资源
+  │   ├── components/# Vue组件
+  │   ├── router/    # 路由配置
+  │   ├── stores/    # Pinia状态管理
+  │   └── views/     # 页面组件
+  ├── .env.*         # 环境变量配置
+  ├── package.json   # NPM依赖
+  └── vite.config.js # Vite配置
+
 docker/              # Docker相关文件
-  └── entrypoint.sh  # 容器启动脚本
-docs/                # 文档文件夹(TODO)
-instance/           # 实例文件夹(docker运行后挂载点)
-  └── data.db       # SQLite数据库文件
 migrations/          # 数据库迁移脚本
 models/              # 数据库模型
-routes/              # 路由定义
+routes/              # Flask路由（提供RESTful API）
 samples/             # 博客示例数据
-  ├── blog.json      # 示例文章元数据
-  └── posts/         # 示例文章Markdown文件
 scripts/             # 脚本文件夹
-static/              # 静态资源文件夹
-templates/           # HTML模板文件夹
-utils/               # 工具函数文件夹
-.dockerignore        # Docker构建忽略文件
-.env.example         # 环境变量示例文件
+static/              # 旧版静态资源（已迁移到Vue）
+templates/           # 旧版HTML模板（已废弃）
+utils/               # 工具函数
+
 app.py               # Flask应用工厂
-auto_seed.py         # Docker自动初始化脚本（非交互式）
-config.py            # 配置文件
-docker-compose.yml   # Docker Compose配置文件
-Dockerfile           # Docker镜像构建文件
-extensions.py        # Flask扩展
-LICENSE              # 许可证文件
-README.md            # 项目说明文件
-requirements.txt     # Python依赖库清单
-seed.py              # 数据库初始化/变更脚本（交互式）
+config.py            # Flask配置
+extensions.py        # Flask扩展（含CORS配置）
+requirements.txt     # Python依赖
+seed.py              # 数据库初始化脚本
 ```
 
-## 本地运行与访问（Windows / PowerShell）
+## 快速开始
+
+### 前端（Vue 3）
+
+1) 进入前端目录
+```bash
+cd frontend
+```
+
+2) 安装依赖
+```bash
+npm install
+```
+
+3) 启动开发服务器
+```bash
+npm run dev
+```
+
+前端会在 `http://localhost:5173` 启动，并自动代理API请求到后端。
+
+### 后端（Flask）
+
+#### Windows / PowerShell
 
 1) 克隆本仓库到本地，并进入目录
 
