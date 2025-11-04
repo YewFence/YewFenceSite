@@ -7,9 +7,9 @@ services:
       - "5000:5000"
     volumes:
       # 挂载数据库目录（持久化数据）
-      - ./instance:/app/instance
+      - ./yewfence_site_data/instance:/app/instance
       # 挂载文章目录（可选，方便编辑）
-      - ./posts:/app/posts
+      # - ./yewfence_site_data/posts:/app/posts
     environment:
       - FLASK_ENV=production
       - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key-in-production}
