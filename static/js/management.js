@@ -125,7 +125,7 @@
       form.querySelectorAll('.field').forEach(n=> n.classList.remove('invalid'));
       // 设置表单 action
       const id = row.querySelector('.future')?.textContent || '';
-      form.action = `/management/posts/${id}/edit`;
+      form.action = `/api/posts/${id}/edit`;
       form.method = 'post';
       if (fContent) fContent.value = '';
       open(row);
@@ -139,7 +139,7 @@
       if (!mask || !form) return;
       // 清空表单并设为新建模式
       form.reset();
-      form.action = '/management/posts/new';
+      form.action = '/api/posts/new';
       form.method = 'post';
       // 一些默认值
       const fDate = document.getElementById('fDate');
