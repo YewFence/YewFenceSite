@@ -23,7 +23,8 @@ try:
             'sane_lists',
             'fenced_code',
             'codehilite',
-            'toc'
+            'toc',
+            'pymdownx.tilde'  # 支持删除线 ~~text~~
         ]
         return _md_render(
             text or "",
