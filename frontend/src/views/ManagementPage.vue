@@ -233,11 +233,11 @@ const savePost = async () => {
     }
 
     if (editingPost.value) {
-      await apiEditPost(editingPost.value.id, data)
-      alert('文章更新成功')
+      const response = await apiEditPost(editingPost.value.id, data)
+      alert(`文章更新成功！文章 ID: ${response.post_id || editingPost.value.id}`)
     } else {
-      await createPost(data)
-      alert('文章创建成功')
+      const response = await createPost(data)
+      alert(`文章创建成功！文章 ID: ${response.post_id}`)
     }
 
     closeEditModal()
@@ -262,7 +262,7 @@ const deletePost = async (id) => {
     loadPosts()
   } catch (error) {
     console.error('删除失败:', error)
-    alert('删除失败')
+    alert('删除失败: ' + (error.response?.data?.error || error.message))
   }
 }
 

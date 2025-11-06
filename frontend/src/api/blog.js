@@ -42,7 +42,7 @@ export const updatePostMarkdown = (id, content) => {
 
 // 预览文章
 export const previewPost = (id) => {
-  return api.get(`/api/posts/${id}/preview`)
+  return api.get(`/api/blog/${id}/preview`)
 }
 
 // 创建文章

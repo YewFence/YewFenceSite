@@ -85,3 +85,30 @@ def change_password():
     session.pop('logged_in', None)
     session.pop('username', None)
     return jsonify({'success': True, 'message': '密码已更新，请使用新密码重新登录'}), 200
+
+# 文章预览路由
+@auth_bp.route('/blog/<int:post_id>/preview', methods=['GET'])
+@login_required
+def post_preview(post_id: int):
+    post = Post.query.get_or_404(post_id)
+    # 不需要检查是否隐藏状态，因为已登录用户可以预览所有文章
+    # 优化：使用缓存的 HTML，如果没有则重新渲染
+    if post.rendered_html:
+        post_html_from_md_body = post.rendered_html
+    else:
+        # 首次访问或缓存失效，重新渲染并保存
+        post_html_from_md_body = post.render_content()
+        from extensions import db
+        db.session.commit()
+
+    post_data = {
+        'id': post.id,
+        'title': post.title,
+        'author_name': post.author_name,
+        'date_posted': post.date_posted.strftime('%Y-%m-%d') if post.date_posted else None,
+        'brief_summary': post.brief_summary or '',
+        'status': post.status,
+        'content': post_html_from_md_body
+    }
+
+    return jsonify({'post': post_data})
