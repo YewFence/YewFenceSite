@@ -2,12 +2,12 @@ import api from './config'
 
 // 获取博客文章列表
 export const getPosts = () => {
-  return api.get('/blog')
+  return api.get('/api/blog')
 }
 
 // 获取单篇文章
 export const getPost = (id) => {
-  return api.get(`/blog/${id}`)
+  return api.get(`/api/blog/${id}`)
 }
 
 // 导出文章列表为JSON

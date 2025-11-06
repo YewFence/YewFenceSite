@@ -33,15 +33,6 @@ def create_app(config_name=None):
     app.register_blueprint(auth_bp)
     app.register_blueprint(api_bp)
 
-    # 注册 API 蓝图的特殊路由（管理页相关）
-    from routes.api import post_preview, create_post, edit_post
-    app.add_url_rule('/management/posts/<int:post_id>/preview',
-                     view_func=post_preview, methods=['GET'])
-    app.add_url_rule('/management/posts/new',
-                     view_func=create_post, methods=['POST'])
-    app.add_url_rule('/management/posts/<int:post_id>/edit',
-                     view_func=edit_post, methods=['POST'])
-
     # 注册错误处理器
     @app.errorhandler(404)
     def page_not_found(e):

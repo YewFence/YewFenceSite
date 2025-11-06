@@ -6,7 +6,7 @@ export const login = (username, password) => {
   formData.append('username', username)
   formData.append('password', password)
 
-  return api.post('/login', formData, {
+  return api.post('/api/auth/login', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -15,10 +15,10 @@ export const login = (username, password) => {
 
 // 登出
 export const logout = () => {
-  return api.get('/logout')
+  return api.get('/api/auth/logout')
 }
 
 // 获取管理页面数据
 export const getManagementData = () => {
-  return api.get('/management')
+  return api.get('/api/management/posts')
 }
