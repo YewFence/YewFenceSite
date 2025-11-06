@@ -86,15 +86,20 @@ const handleLogin = async () => {
     loading.value = true
     alertMessage.value = ''
 
-    await apiLogin(username.value, password.value)
+    const response = await apiLogin(username.value, password.value)
 
-    authStore.login()
-    alertType.value = 'success'
-    alertMessage.value = '登录成功！正在跳转...'
-
-    setTimeout(() => {
+    if (response.data.success) {
+      
+      alertType.value = 'success'
+      alertMessage.value = '登录成功！正在跳转...'
+      authStore.login()
+      setTimeout(() => {
       router.push('/management')
-    }, 1000)
+      }, 1000)
+    } else {
+      alertType.value = 'error'
+      alertMessage.value = response.data.error || '登录失败，请检查用户名和密码'
+    }
   } catch (error) {
     alertType.value = 'error'
     alertMessage.value = error.response?.data?.error || '登录失败，请检查用户名和密码'
