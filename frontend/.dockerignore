@@ -1,6 +1,5 @@
 # 依赖目录
 node_modules
-pnpm-lock.yaml
 
 # 构建产物
 dist

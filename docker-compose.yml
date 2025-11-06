@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    container_name: yewfence-blog
+    container_name: yewfence-site
     image: yewfence-site:latest
     ports:
       - "5000:5000"
