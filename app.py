@@ -27,16 +27,10 @@ def create_app(config_name=None):
     })
 
     # 注册蓝图
-    from routes import main_bp, blog_bp, auth_bp, api_bp
-    app.register_blueprint(main_bp)
+    from routes import blog_bp, auth_bp, api_bp
     app.register_blueprint(blog_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(api_bp)
-
-    # 注册错误处理器
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('404.html'), 404
 
     # 导入模型（确保迁移能识别）
     with app.app_context():
