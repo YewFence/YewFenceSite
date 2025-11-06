@@ -19,7 +19,12 @@ def create_app(config_name=None):
     # 配置CORS，允许前端访问
     cors.init_app(app, resources={
         r"/*": {
-            "origins": ["http://localhost:5173", "http://localhost:3000"],
+            "origins": [
+                "http://localhost:5173",  # Vite 开发服务器
+                "http://localhost:3000",  # 备用开发端口
+                "http://localhost",       # Docker nginx (端口80)
+                "http://localhost:80"     # Docker nginx (显式端口)
+            ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
             "supports_credentials": True

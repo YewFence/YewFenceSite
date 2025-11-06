@@ -88,8 +88,8 @@ const handleLogin = async () => {
 
     const response = await apiLogin(username.value, password.value)
 
-    if (response.data.success) {
-      
+    if (response.success) {
+
       alertType.value = 'success'
       alertMessage.value = '登录成功！正在跳转...'
       authStore.login()
@@ -98,11 +98,11 @@ const handleLogin = async () => {
       }, 1000)
     } else {
       alertType.value = 'error'
-      alertMessage.value = response.data.error || '登录失败，请检查用户名和密码'
+      alertMessage.value = response.error || '登录失败，请检查用户名和密码'
     }
   } catch (error) {
     alertType.value = 'error'
-    alertMessage.value = error.response?.data?.error || '登录失败，请检查用户名和密码'
+    alertMessage.value = error.error || '登录失败，请检查用户名和密码'
   } finally {
     loading.value = false
   }

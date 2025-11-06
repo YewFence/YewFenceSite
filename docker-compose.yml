@@ -7,11 +7,11 @@ services:
     container_name: yewfence-frontend
     image: yewfence-frontend:latest
     volumes:
-      # 挂载构建输出到共享 bind mount
-      - frontend-dist-data:/app/dist
+      # 挂载输出目录到共享 bind mount
+      - frontend-dist-data:/output
     # 构建完成后退出，不需要持续运行
     restart: "no"
-    command: sh -c "echo 'Frontend build completed. Files are in /app/dist directory.'"
+    command: sh -c "cp -r /app/dist/* /output/ && echo 'Frontend build completed and files copied to volume.'"
 
   backend:
     build: .

@@ -15,17 +15,23 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
         'sqlite:///' + os.path.join(basedir, 'data.db')
 
+    # Session 配置（支持前后端分离）
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'  # 允许跨站请求携带 cookie
+
 
 class DevelopmentConfig(Config):
     """开发环境配置"""
     DEBUG = True
     FLASK_ENV = 'development'
+    SESSION_COOKIE_SECURE = False  # 开发环境允许 HTTP
 
 
 class ProductionConfig(Config):
     """生产环境配置"""
     DEBUG = False
     FLASK_ENV = 'production'
+    SESSION_COOKIE_SECURE = False  # Docker 内部使用 HTTP，nginx 处理 HTTPS
 
 
 # 配置字典
