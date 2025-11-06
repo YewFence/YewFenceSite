@@ -1,8 +1,22 @@
 services:
-  web:
+
+  # 前端构建服务 (build-only)
+  frontend:
+    build:
+      context: ./frontend
+    container_name: yewfence-frontend
+    image: yewfence-frontend:latest
+    volumes:
+      # 挂载构建输出到共享 bind mount
+      - frontend-dist-data:/app/dist
+    # 构建完成后退出，不需要持续运行
+    restart: "no"
+    command: sh -c "echo 'Frontend build completed. Files are in /app/dist directory.'"
+
+  backend:
     build: .
-    container_name: yewfence-site
-    image: yewfence-site:latest
+    container_name: yewfence-backend
+    image: yewfence-backend:latest
     ports:
       - "5000:5000"
     volumes:
@@ -20,9 +34,17 @@ services:
     restart: unless-stopped
     # healthcheck 由 Dockerfile 定义
 
-# 如果需要使用 Nginx Docker 的网络进行反向代理，可以取消下面的注释
-#   networks:
-#     - nginx-proxy-network
+# 定义共享 bind mount 卷
+volumes:
+  frontend-dist-data:
+    name: frontend-dist-data
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./yewfence_site_data/frontend_dist
+
+# # 定义网络
 # networks:
-#   nginx-proxy-network:
-#     external: true
+# nginx-proxy-network:
+#   driver: bridge

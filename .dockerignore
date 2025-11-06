@@ -54,3 +54,6 @@ docker-compose.yml
 # Scripts (本地使用的脚本)
 init_db.py
 scripts/
+
+# 前端文件
+frontend/
