@@ -151,7 +151,7 @@ import { useRouter, RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
-import { tempDataStore } from '../stores/tempData'
+import { loginAlertStore } from '../stores/loginAlert'
 import {
   getPosts,
   createPost,
@@ -165,6 +165,7 @@ import { logout as apiLogout, updatePassword as apiUpdatePassword } from '../api
 
 const router = useRouter()
 const authStore = useAuthStore()
+const store = loginAlertStore()
 const user_name = ref('')
 const loading = ref(true)
 const saving = ref(false)
@@ -205,34 +206,41 @@ const loadPosts = async () => {
 }
 
 // 修改密码
-const changePassword = async (event) => {
+const changePassword = async () => {
   const userName = sessionStorage.getItem('username') || 'yewfence'
-  console.log('Changing password for user:', userName)
-  const newPassword = new_password.value
-  const confirmPassword = confirm_password.value
+  const newPassword = new_password.value?.trim()
+  const confirmPassword = confirm_password.value?.trim()
+
   if (!newPassword || !confirmPassword) {
     alert('请输入新密码和确认密码')
     return
   }
-
   if (newPassword !== confirmPassword) {
     alert('两次输入的密码不一致')
     return
   }
 
   try {
-    const response = await apiUpdatePassword(userName, newPassword)
-    if (response.error) {
-      throw new Error(response.error)
-    } else if (response.success === "true") {
-      alert('密码修改成功，请重新登录')
+    // axios 返回对象形如 { data, status, headers... }，真正的业务字段在 data 中
+    const { data } = await apiUpdatePassword(userName, newPassword)
+    if (data.error) {
+      throw new Error(data.error)
+    }
+    // 后端可能返回 success: true(boolean) 或 'true'(string)，都视为成功
+    if (data.success === true || data.success === 'true') {
+      
+    } else {
+      // 不直接抛“未知错误”，给出更可调试的信息
+      console.warn('密码修改接口返回非预期结构')
     }
     await apiLogout()
     authStore.logout()
+    store.setInfoForLoginPage('success', '密码修改成功，请重新登录')
     router.push('/login')
   } catch (error) {
+    const msg = error.response?.data?.error || error.message || '未知错误'
     console.error('密码修改失败:', error)
-    alert('密码修改失败: ' + (error.response?.data?.error || error.message))
+    alert('密码修改失败: ' + msg)
   }
 }
 
@@ -386,8 +394,8 @@ const handleLogout = async () => {
   try {
     await apiLogout()
     authStore.logout()
-    const store = tempDataStore()
-    store.setDataForNextPage('已成功登出', null)
+    const store = loginAlertStore()
+    store.setInfoForLoginPage('info', '已成功登出')
     router.push('/login')
   } catch (error) {
     console.error('登出失败:', error)
@@ -405,6 +413,7 @@ useHead({
 onMounted(async () => {
   const isAuth = await authStore.checkAuth()
   if (!isAuth) {
+    store.setInfoForLoginPage('info', '请先登录以访问管理页面')
     router.push('/login')
   } else {
     user_name.value = localStorage.getItem('username') || ''

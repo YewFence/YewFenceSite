@@ -52,7 +52,7 @@ import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
-import { tempDataStore } from '../stores/tempData'
+import { loginAlertStore } from '../stores/loginAlert'
 import { login as apiLogin } from '../api/auth'
 
 useHead({
@@ -65,7 +65,7 @@ useHead({
 
 const router = useRouter()
 const authStore = useAuthStore()
-
+const store = loginAlertStore()
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
@@ -122,12 +122,11 @@ onMounted(async () => {
   if (isAuthenticated) {
     router.push('/management')
   }
-  const store = tempDataStore()
-  const tempMessage = store.message
-  if (tempMessage) {
-    alertType.value = 'info'
-    alertMessage.value = tempMessage
-    store.clearData()
+  const storeMessageText = store.messageText
+  if (storeMessageText) {
+    alertType.value = store.messageType
+    alertMessage.value = storeMessageText
+    store.clearInfo()
   }
 })
 </script>
