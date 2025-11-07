@@ -12,8 +12,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # 数据库配置
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
-        'sqlite:///' + os.path.join(basedir, 'data.db')
+    database_uri = os.environ.get('DATABASE_URI') or 'data.db'
+    SQLALCHEMY_DATABASE_URI = ('sqlite:///' + os.path.join(basedir, database_uri)).replace('\\', '/')
 
     # Session 配置（支持前后端分离）
     SESSION_COOKIE_HTTPONLY = True

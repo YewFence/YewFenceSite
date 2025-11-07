@@ -18,19 +18,7 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true
       },
-      '/blog': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      },
-      '/login': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      },
       '/logout': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      },
-      '/management': {
         target: 'http://localhost:5000',
         changeOrigin: true
       }
