@@ -11,7 +11,6 @@
       </article>
       <article v-else-if="post" id="blog-content">
         <div id="blog-markdown">
-          <h1>{{ post.title }}</h1>
           <div class="blog-body" v-html="post.content"></div>
         </div>
         <div class="blog-meta">
@@ -34,6 +33,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { getPost } from '../api/blog'
@@ -41,6 +41,8 @@ import { getPost } from '../api/blog'
 const route = useRoute()
 const loading = ref(true)
 const post = ref(null)
+const postTitle = ref('Loading')
+const metaContent = ref('')
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -55,6 +57,9 @@ const loadPost = async () => {
     const postId = route.params.id
     const data = await getPost(postId)
     post.value = data.post
+    // 设置动态标题和描述
+    postTitle.value = data.post.title
+    metaContent.value = data.post.brief_summary
   } catch (error) {
     console.error('加载文章失败:', error)
     post.value = null
@@ -65,6 +70,13 @@ const loadPost = async () => {
 
 onMounted(() => {
   loadPost()
+})
+
+useHead({
+  title: postTitle,
+  meta: [
+    { name: 'description', content: metaContent }
+  ]
 })
 </script>
 
