@@ -25,6 +25,7 @@ def index():
             'author_name': post.author_name,
             'date_posted': post.date_posted.strftime('%Y-%m-%d') if post.date_posted else None,
             'brief_summary': post.brief_summary or '',
+            'note': post.note or '',
             'status': post.status
         })
 

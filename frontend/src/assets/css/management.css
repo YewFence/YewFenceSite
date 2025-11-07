@@ -181,7 +181,7 @@ html[data-theme="dark"] .mgmt-wrapper {
     position: fixed;
     inset: 0;
     background: var(--mgmt-edit-mask-bg);
-    display: none;
+    display: flex;
     z-index: 3000;
     align-items: center;
     justify-content: center;

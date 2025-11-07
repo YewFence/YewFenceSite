@@ -72,7 +72,7 @@
                 </div>
                 <div class="post-kv" style="grid-column:1/-1;">
                   <span class="k">备注</span>
-                  <span class="v v-note">{{ post.brief_summary }}</span>
+                  <span class="v v-note">{{ post.note }}</span>
                 </div>
               </div>
               <div class="post-actions">
