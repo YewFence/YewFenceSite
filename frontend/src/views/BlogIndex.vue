@@ -7,8 +7,8 @@
       </div>
     </section>
     <section class="section">
-      <div v-if="authStore.isAuthenticated" class="container admin-container">
-        <span class="logo">Welcome, Admin!</span>
+      <div v-if="isAuth" class="container admin-container">
+        <span class="logo">Welcome, {{ authStore.user_name }}!</span>
         <RouterLink class="btn primary" to="/management">管理后台</RouterLink>
         <button class="btn primary" @click="handleLogout">登出</button>
       </div>
@@ -54,12 +54,13 @@ import { RouterLink, useRouter } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
 import { getPosts } from '../api/blog'
-import { logout } from '../api/auth'
+import { logout as apiLogout } from '../api/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const loading = ref(true)
 const posts = ref([])
+const isAuth = ref(false)
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -83,16 +84,18 @@ const loadPosts = async () => {
 // 登出
 const handleLogout = async () => {
   try {
-    await logout()
+    await apiLogout()
     authStore.logout()
     router.push('/blog')
+    alert('已成功登出')
+    isAuth.value = false
   } catch (error) {
     console.error('登出失败:', error)
   }
 }
 
-onMounted(() => {
-  authStore.checkAuth()
+onMounted(async () => {
+  isAuth.value = await authStore.checkAuth()
   loadPosts()
 })
 </script>

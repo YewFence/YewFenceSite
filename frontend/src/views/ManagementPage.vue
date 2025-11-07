@@ -381,7 +381,7 @@ const exportMdZip = async () => {
 // 登出
 const handleLogout = async () => {
   try {
-    await logout()
+    await apiLogout()
     authStore.logout()
     router.push('/login')
   } catch (error) {
@@ -389,9 +389,9 @@ const handleLogout = async () => {
   }
 }
 
-onMounted(() => {
-  authStore.checkAuth()
-  if (!authStore.isAuthenticated) {
+onMounted(async () => {
+  const isAuth = await authStore.checkAuth()
+  if (!isAuth) {
     router.push('/login')
   } else {
     loadPosts()

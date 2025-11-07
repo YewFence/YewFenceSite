@@ -105,3 +105,11 @@ def post_preview(post_id: int):
     }
 
     return jsonify({'post': post_data})
+
+@auth_bp.route('/auth/status', methods=['GET'])
+def auth_status():
+    """检查用户的登录状态，返回 JSON"""
+    if 'logged_in' in session:
+        return jsonify({'authenticated': True, 'username': session.get('username', '')}), 200
+    else:
+        return jsonify({'authenticated': False}), 200
