@@ -57,6 +57,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
 
 const promptVisible = ref(false)
@@ -89,6 +90,14 @@ const copyText = async (text, index) => {
     }, 2000)
   }
 }
+
+// 设置页面标题和描述
+useHead({
+  title: '联系我 - YewFenceSite',
+  meta: [
+    { name: 'description', content: 'YewFence的联系信息' }
+  ]
+})
 </script>
 
 <style scoped>

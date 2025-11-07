@@ -63,6 +63,8 @@ const loadPost = async () => {
   } catch (error) {
     console.error('加载文章失败:', error)
     post.value = null
+    postTitle.value = '文章不存在 - YewFenceSite'
+    metaContent.value = '抱歉，您访问的文章不存在或已被删除。'
   } finally {
     loading.value = false
   }
@@ -75,7 +77,8 @@ onMounted(() => {
 useHead({
   title: postTitle,
   meta: [
-    { name: 'description', content: metaContent }
+    { name: 'description', content: metaContent },
+    { name: 'author', content: 'YewFence' }
   ]
 })
 </script>

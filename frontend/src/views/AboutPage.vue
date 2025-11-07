@@ -46,7 +46,17 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
+
+// 设置页面标题和描述
+useHead({
+  title: '关于我 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '了解YewFence的背景、技能、成分和时间线' }
+  ]
+})
+
 </script>
 
 <style scoped>

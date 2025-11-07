@@ -147,6 +147,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
 import {
@@ -388,6 +389,14 @@ const handleLogout = async () => {
     console.error('登出失败:', error)
   }
 }
+
+useHead({
+  title: '管理页面 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '管理博客文章和账户设置' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 
 onMounted(async () => {
   const isAuth = await authStore.checkAuth()

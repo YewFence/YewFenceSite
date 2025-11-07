@@ -42,6 +42,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { previewPost } from '../api/blog'
@@ -49,6 +50,8 @@ import { previewPost } from '../api/blog'
 const route = useRoute()
 const loading = ref(true)
 const post = ref(null)
+const postTitle = ref('')
+const pageTitle = ref('')
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -63,6 +66,8 @@ const loadPost = async () => {
     const postId = route.params.id
     const data = await previewPost(postId)
     post.value = data.post
+    postTitle.value = post.value.title
+    pageTitle.value = `${postTitle.value} - 预览 - YewFenceSite`
   } catch (error) {
     console.error('加载文章预览失败:', error)
     post.value = null
@@ -70,6 +75,15 @@ const loadPost = async () => {
     loading.value = false
   }
 }
+
+useHead({
+  title: pageTitle,
+  meta: [
+    { name: 'description', content: '文章预览页面，仅登录用户可见。' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
+
 
 onMounted(() => {
   loadPost()

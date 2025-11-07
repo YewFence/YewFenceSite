@@ -61,7 +61,16 @@
 </template>
 
 <script setup>
+import { useHead } from '@vueuse/head';
 import DefaultLayout from '../components/DefaultLayout.vue'
+
+useHead({
+  title: "我的兴趣 - YewFenceSite",
+  meta: [
+    { name: 'description', content: '了解YewFence的兴趣爱好' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 </script>
 
 <style scoped>

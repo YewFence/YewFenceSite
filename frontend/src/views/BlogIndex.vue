@@ -50,11 +50,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { RouterLink, useRouter } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
 import { getPosts } from '../api/blog'
 import { logout as apiLogout } from '../api/auth'
+
+useHead({
+  title: '个人博客 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '分享编程与生活的点滴' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 
 const router = useRouter()
 const authStore = useAuthStore()

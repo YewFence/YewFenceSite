@@ -20,9 +20,17 @@
 
 <script setup>
 import { useRouter, RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head';
 import DefaultLayout from '../components/DefaultLayout.vue'
 
 const router = useRouter()
+
+useHead ({
+  title: "404 页面未找到 - YewFenceSite",
+  meta: [
+    { name: 'description', content: '抱歉，你访问的页面不存在或已被移动。你可以返回上一页，或前往首页继续浏览。' }
+  ]
+})
 
 const goBack = () => {
   router.go(-1)

@@ -48,10 +48,19 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
 import { login as apiLogin } from '../api/auth'
+
+useHead({
+  title: '登录 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '登录以访问管理功能。' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 
 const router = useRouter()
 const authStore = useAuthStore()
