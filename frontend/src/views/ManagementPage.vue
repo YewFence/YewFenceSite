@@ -78,7 +78,7 @@
               <div class="post-actions">
                 <button class="btn small" @click="editPost(post)">编辑</button>
                 <button class="btn small" @click="downloadMarkdown(post.id)">下载MD</button>
-                <a :href="`/blog/${post.id}`" target="_blank" class="btn small">预览</a>
+                <a :href="`/blog/${post.id}/preview`" target="_blank" class="btn small">预览</a>
                 <button class="btn small danger" @click="deletePost(post.id)">删除</button>
               </div>
             </div>

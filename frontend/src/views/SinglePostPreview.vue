@@ -76,7 +76,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style>
 @import '../assets/css/post.css';
 
 /* 预览模式横幅样式 */
