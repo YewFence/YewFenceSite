@@ -19,19 +19,16 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = (userName) => {
-    sessionStorage.setItem('username', userName)
-    user_name.value = userName
+    localStorage.setItem('username', userName)
   }
 
   const logout = () => {
-    sessionStorage.removeItem('username')
-    user_name.value = null
+    localStorage.removeItem('username')
   }
 
   return {
     checkAuth,
     login,
-    logout,
-    user_name
+    logout
   }
 })

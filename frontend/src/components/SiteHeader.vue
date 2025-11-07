@@ -16,6 +16,7 @@
           <li><RouterLink to="/interests" @click="closeMenu">我的兴趣</RouterLink></li>
           <li><RouterLink to="/contact" @click="closeMenu">联系我</RouterLink></li>
           <li><RouterLink to="/blog" @click="closeMenu">个人博客</RouterLink></li>
+          <li v-if="showAdminLink"><RouterLink to="/management" @click="closeMenu">管理页</RouterLink></li>
           <li>
             <button
               id="themeSwitcher"
@@ -33,12 +34,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useThemeStore } from '../stores/theme'
+import { useAuthStore } from '../stores/auth'
 
 const themeStore = useThemeStore()
 const isMenuOpen = ref(false)
+const showAdminLink = ref(false)
+
+const checkAuth = async () => {
+  // 只有在用户已认证时才显示“管理页”链接
+  const authStore = useAuthStore()
+  const isAuthenticated = await authStore.checkAuth()
+  return isAuthenticated
+}
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -61,8 +71,9 @@ const handleClickOutside = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
+  showAdminLink.value = await checkAuth()
 })
 
 onUnmounted(() => {

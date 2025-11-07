@@ -99,7 +99,6 @@ const handleLogin = async () => {
     const response = await apiLogin(username.value, password.value)
 
     if (response.success) {
-
       alertType.value = 'success'
       alertMessage.value = '登录成功！正在跳转...'
       authStore.login(username.value)

@@ -4,6 +4,7 @@
       <div class="container" id="mgmtRoot">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem;">
           <h1 style="margin:0;">管理页面</h1>
+          <span class="logo">Welcome, {{ user_name }}!</span>
           <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
             <button class="btn" @click="handleLogout">退出登录</button>
             <RouterLink class="btn" to="/">返回首页</RouterLink>
@@ -164,7 +165,7 @@ import { logout as apiLogout, updatePassword as apiUpdatePassword } from '../api
 
 const router = useRouter()
 const authStore = useAuthStore()
-
+const user_name = ref('')
 const loading = ref(true)
 const saving = ref(false)
 const posts = ref([])
@@ -406,7 +407,8 @@ onMounted(async () => {
   if (!isAuth) {
     router.push('/login')
   } else {
-    loadPosts()
+    user_name.value = localStorage.getItem('username') || ''
+    await loadPosts()
   }
 })
 </script>

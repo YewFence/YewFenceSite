@@ -8,9 +8,9 @@
     </section>
     <section class="section">
       <div v-if="isAuth" class="container admin-container">
-        <span class="logo">Welcome, {{ authStore.user_name }}!</span>
+        <span class="logo">Welcome, {{ user_name }}!</span>
         <RouterLink class="btn primary" to="/management">管理后台</RouterLink>
-        <button class="btn primary" @click="handleLogout">登出</button>
+        <button id='logoutButton' class="btn primary" @click="handleLogout">登出</button>
       </div>
       <div class="container">
         <div id="blogs-list" class="large-cards-list">
@@ -31,8 +31,8 @@
               <span class="blog-list-item-artistic-character">Posted on </span>
               <span class="blog-list-item-date"> {{ formatDate(post.date_posted) }}</span>
               <span class="blog-list-item-artistic-character"> By </span>
-              <span class="blog-list-item-author">{{ post.author_name }}</span>
-              <span v-if="post.status !== 'published'" class="status-badge">{{ post.status }}</span>
+              <span class="blog-list-item-author">{{ post.author_name }} </span>
+              <span v-if="isAuth" class="status-badge">{{ post.status }}</span>
             </p>
             <p class="blog-list-item-brief-summary">{{ post.brief_summary }}</p>
             <RouterLink class="card-link blog-list-item-link" :to="`/blog/${post.id}`"></RouterLink>
@@ -70,6 +70,7 @@ const authStore = useAuthStore()
 const loading = ref(true)
 const posts = ref([])
 const isAuth = ref(false)
+const user_name = ref('')
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -105,15 +106,22 @@ const handleLogout = async () => {
 
 onMounted(async () => {
   isAuth.value = await authStore.checkAuth()
-  loadPosts()
+  if (isAuth.value) {
+    user_name.value = localStorage.getItem('username') || ''
+  }
+  await loadPosts()
 })
 </script>
 
 <style scoped>
+#logoutButton {
+  margin-left: 0.5rem;
+}
 .status-badge {
   font-size: .8rem;
   border: 1px solid var(--color-border);
   padding: .1rem .4rem;
+  margin-left: .5rem;
   border-radius: 6px;
 }
 .admin-container {
