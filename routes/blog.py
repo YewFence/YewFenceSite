@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, jsonify
 from models import Post
-from utils import render_md, strip_md_title_if_matches
+from utils import render_md
 
 blog_bp = Blueprint('blog', __name__, url_prefix='/api')
 

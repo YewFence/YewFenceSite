@@ -42,20 +42,16 @@ except Exception:
         return f"<pre>{(text or '').replace('<','&lt;').replace('>','&gt;')}</pre>"
 
 
-def find_title_in_content(content: str, target: str = 'title') -> str | None:
-    """提取 Markdown 首个标题，或返回移除首个标题后的正文。
+def find_title_in_content(content: str) -> str | None:
+    """提取 Markdown 首个标题。
 
     支持两类标题：
     - ATX: 以一个或多个 # 开头的行（例如: # Title）
     - Setext: 标题行下一行全为 '=' 或 '-'（例如: Title\n=====）
 
-    参数:
-      content: 原始 Markdown 文本
-      target: 'title' 返回标题文本；'post' 返回移除首个标题后的正文
+    参数: content: 原始 Markdown 文本
 
-    返回:
-      - 当 target='title'：返回首个标题文本，未找到则返回 None
-      - 当 target='post' ：返回移除首个标题后的正文；未找到标题则返回原内容
+    返回: 文章标题
     """
     if content is None:
         return None if target == 'title' else ''
@@ -80,30 +76,13 @@ def find_title_in_content(content: str, target: str = 'title') -> str | None:
         # 先识别 ATX 标题
         t = atx_title(raw)
         if t:
-            if target == 'title':
-                return t
-            # target == 'post': 删除该行
-            return "\n".join(lines[:i] + lines[i+1:])
+            return t
 
         # 再尝试识别 Setext 标题（下一行全为 '=' 或 '-'）
         if i + 1 < n:
             title_line = raw.strip()
             underline = lines[i + 1].strip()
             if title_line and (is_all('=', underline) or is_all('-', underline)):
-                if target == 'title':
-                    return title_line
-                # target == 'post': 删除标题行与下划线行
-                return "\n".join(lines[:i] + lines[i+2:])
-
+                return title_line
     # 未找到任何标题
-    return None if target == 'title' else content
-
-
-def strip_md_title_if_matches(content: str, db_title: str) -> str:
-    """若 MD 首个标题与数据库标题相同（忽略大小写与前后空白），则返回去掉该标题后的正文，否则返回原内容。"""
-    raw = content or ''
-    md_title = find_title_in_content(raw, target='title')
-    norm = lambda s: (s or '').strip().lower()
-    if norm(md_title) == norm(db_title):
-        return find_title_in_content(raw, target='post') or ''
-    return raw
+    return None

@@ -22,10 +22,7 @@ class Post(db.Model):
 
     def render_content(self):
         """渲染并缓存 Markdown 内容"""
-        from utils.markdown_helper import render_md, strip_md_title_if_matches
-
-        # 去掉标题（如果与数据库标题重复）
-        content_without_title = strip_md_title_if_matches(self.content or '', self.title)
+        from utils.markdown_helper import render_md
         # 渲染为 HTML
-        self.rendered_html = render_md(content_without_title or '')
+        self.rendered_html = render_md(self.content or '')
         return self.rendered_html

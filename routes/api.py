@@ -6,7 +6,7 @@ import zipfile
 
 from models import Post
 from extensions import db
-from utils import login_required, render_md, find_title_in_content, strip_md_title_if_matches
+from utils import login_required, render_md, find_title_in_content
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 

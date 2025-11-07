@@ -28,9 +28,9 @@
           >
             <h2 class="blog-list-item-title">{{ post.title }}</h2>
             <p class="blog-list-item-meta">
-              <span class="blog-list-item-artistic-character">Posted on</span>
+              <span class="blog-list-item-artistic-character">Posted on </span>
               <span class="blog-list-item-date"> {{ formatDate(post.date_posted) }}</span>
-              <span> By </span>
+              <span class="blog-list-item-artistic-character"> By </span>
               <span class="blog-list-item-author">{{ post.author_name }}</span>
               <span v-if="post.status !== 'published'" class="status-badge">{{ post.status }}</span>
             </p>
