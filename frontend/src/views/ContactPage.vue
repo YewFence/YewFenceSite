@@ -80,6 +80,7 @@ const copyText = async (text, index) => {
     promptVisible.value = true
     setTimeout(() => {
       promptText.value = '点击以复制'
+      promptVisible.value = false
     }, 2000)
   } catch (err) {
     console.error('复制失败: ', err)
@@ -87,6 +88,7 @@ const copyText = async (text, index) => {
     promptVisible.value = true
     setTimeout(() => {
       promptText.value = '点击以复制'
+      promptVisible.value = false
     }, 2000)
   }
 }
