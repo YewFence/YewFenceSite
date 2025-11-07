@@ -9,7 +9,6 @@
     <section class="section">
       <div v-if="isAuth" class="container admin-container">
         <span class="logo">Welcome, {{ user_name }}!</span>
-        <RouterLink class="btn primary" to="/management">管理后台</RouterLink>
         <button id='logoutButton' class="btn primary" @click="handleLogout">登出</button>
       </div>
       <div class="container">
