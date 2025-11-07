@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     checkAuth,
     login,
-    logout
+    logout,
+    user_name
   }
 })
