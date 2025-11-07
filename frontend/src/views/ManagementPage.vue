@@ -221,24 +221,21 @@ const changePassword = async () => {
   }
 
   try {
-    // axios 返回对象形如 { data, status, headers... }，真正的业务字段在 data 中
-    const { data } = await apiUpdatePassword(userName, newPassword)
-    if (data.error) {
-      throw new Error(data.error)
+    const result = await apiUpdatePassword(userName, newPassword)
+    if (result?.error) {
+      throw new Error(result.error)
     }
-    // 后端可能返回 success: true(boolean) 或 'true'(string)，都视为成功
-    if (data.success === true || data.success === 'true') {
-      
+    if (result?.success === true || result?.success === 'true') {
+      console.log('密码修改成功')
     } else {
-      // 不直接抛“未知错误”，给出更可调试的信息
-      console.warn('密码修改接口返回非预期结构')
+      console.warn('未知错误')
     }
     await apiLogout()
     authStore.logout()
     store.setInfoForLoginPage('success', '密码修改成功，请重新登录')
     router.push('/login')
   } catch (error) {
-    const msg = error.response?.data?.error || error.message || '未知错误'
+    const msg = error?.response?.data?.error || error?.message || '未知错误'
     console.error('密码修改失败:', error)
     alert('密码修改失败: ' + msg)
   }
