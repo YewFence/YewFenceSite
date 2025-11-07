@@ -72,4 +72,9 @@ onUnmounted(() => {
 
 <style scoped>
 /* Header样式已在全局CSS中定义 */
+.nav-menu a.router-link-active::after{
+    /* 鼠标悬停时，水平缩放到 1*/
+    transform: scaleX(1);
+}
+
 </style>
