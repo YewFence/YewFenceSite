@@ -150,6 +150,7 @@ import { useRouter, RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
+import { tempDataStore } from '../stores/tempData'
 import {
   getPosts,
   createPost,
@@ -384,6 +385,8 @@ const handleLogout = async () => {
   try {
     await apiLogout()
     authStore.logout()
+    const store = tempDataStore()
+    store.setDataForNextPage('已成功登出', null)
     router.push('/login')
   } catch (error) {
     console.error('登出失败:', error)

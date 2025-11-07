@@ -47,11 +47,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
+import { tempDataStore } from '../stores/tempData'
 import { login as apiLogin } from '../api/auth'
 
 useHead({
@@ -116,6 +117,20 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+onMounted(async () => {
+  const isAuthenticated = await authStore.checkAuth()
+  if (isAuthenticated) {
+    router.push('/management')
+  }
+  const store = tempDataStore()
+  const tempMessage = store.message
+  if (tempMessage) {
+    alertType.value = 'info'
+    alertMessage.value = tempMessage
+    store.clearData()
+  }
+})
 </script>
 
 <style>
