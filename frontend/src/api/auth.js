@@ -13,6 +13,18 @@ export const login = (username, password) => {
   })
 }
 
+export const updatePassword = (userName, newPassword) => {
+  const formData = new FormData()
+  formData.append('username', userName)
+  formData.append('new_password', newPassword)
+
+  return api.post('/api/auth/change_password', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
 // 登出
 export const logout = () => {
   return api.get('/api/auth/logout')

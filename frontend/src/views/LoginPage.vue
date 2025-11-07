@@ -92,7 +92,7 @@ const handleLogin = async () => {
 
       alertType.value = 'success'
       alertMessage.value = '登录成功！正在跳转...'
-      authStore.login()
+      authStore.login(username.value)
       setTimeout(() => {
       router.push('/management')
       }, 1000)

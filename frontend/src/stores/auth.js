@@ -11,14 +11,16 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated.value = sessionStorage.getItem('authenticated') === 'true'
   }
 
-  const login = () => {
+  const login = (userName) => {
     isAuthenticated.value = true
+    sessionStorage.setItem('username', userName)
     sessionStorage.setItem('authenticated', 'true')
   }
 
   const logout = () => {
     isAuthenticated.value = false
     sessionStorage.removeItem('authenticated')
+    sessionStorage.removeItem('username')
   }
 
   return {

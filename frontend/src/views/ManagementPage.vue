@@ -9,6 +9,25 @@
             <RouterLink class="btn" to="/">返回首页</RouterLink>
           </div>
         </div>
+        <div class="large-card" aria-label="账户与安全">
+          <div class="title-wrapper">
+            <h2>密码修改</h2>
+          </div>
+          <form id="changePwdForm" class="change-password" @submit.prevent="changePassword" novalidate>
+            <div class="grid">
+              <label>新密码
+                <input type="password" v-model="new_password" autocomplete="new-password">
+              </label>
+              <label>确认新密码
+                <input type="password" v-model="confirm_password" autocomplete="new-password">
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="btn primary" type="submit" @click="changePassword">修改密码</button>
+              <button class="btn" type="reset">重置</button>
+            </div>
+          </form>
+        </div>
 
         <!-- 导出按钮 -->
         <div class="export-section">
@@ -29,22 +48,33 @@
           <div v-if="loading" class="loading">加载中...</div>
           <div v-else-if="posts.length === 0" class="empty">暂无文章</div>
           <div v-else class="post-list">
-            <div
-              v-for="post in posts"
-              :key="post.id"
-              class="post-item"
-              :id="`post-${post.id}`"
-            >
-              <div class="post-header">
-                <h3>{{ post.title }}</h3>
-                <span class="post-status" :class="post.status">{{ post.status }}</span>
-              </div>
+            <div v-for="post in posts" :key="post.id" class="post-item large-card" :id="`post-${post.id}`">
               <div class="post-meta">
-                <span>ID: {{ post.id }}</span> |
-                <span>作者: {{ post.author_name }}</span> |
-                <span>日期: {{ formatDate(post.date_posted) }}</span>
+                <div class="post-kv">
+                  <span class="k">ID</span>
+                  <span class="v v-id future">{{ post.id }}</span>
+                </div>
+                <div class="post-kv">
+                  <span class="k">作者</span>
+                  <span class="v v-author">{{ post.author_name }}</span>
+                </div>
+                <div class="post-kv">
+                  <span class="k">日期</span>
+                  <span class="v v-date">{{ formatDate(post.date_posted) }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">标题</span>
+                  <span class="v v-title">{{ post.title }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">摘要</span>
+                  <span class="v v-summary">{{ post.brief_summary }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">备注</span>
+                  <span class="v v-note">{{ post.brief_summary }}</span>
+                </div>
               </div>
-              <p class="post-summary">{{ post.brief_summary }}</p>
               <div class="post-actions">
                 <button class="btn small" @click="editPost(post)">编辑</button>
                 <button class="btn small" @click="downloadMarkdown(post.id)">下载MD</button>
@@ -128,7 +158,7 @@ import {
   exportPostsJson,
   exportPostsMdZip
 } from '../api/blog'
-import { logout } from '../api/auth'
+import { logout as apiLogout, updatePassword as apiUpdatePassword } from '../api/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -148,6 +178,8 @@ const formData = ref({
   content: ''
 })
 const uploadedFile = ref(null)
+const new_password = ref('')
+const confirm_password = ref('')
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -166,6 +198,38 @@ const loadPosts = async () => {
     alert('加载文章失败')
   } finally {
     loading.value = false
+  }
+}
+
+// 修改密码
+const changePassword = async (event) => {
+  const userName = sessionStorage.getItem('username') || 'yewfence'
+  console.log('Changing password for user:', userName)
+  const newPassword = new_password.value
+  const confirmPassword = confirm_password.value
+  if (!newPassword || !confirmPassword) {
+    alert('请输入新密码和确认密码')
+    return
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert('两次输入的密码不一致')
+    return
+  }
+
+  try {
+    const response = await apiUpdatePassword(userName, newPassword)
+    if (response.error) {
+      throw new Error(response.error)
+    } else if (response.success === "true") {
+      alert('密码修改成功，请重新登录')
+    }
+    await apiLogout()
+    authStore.logout()
+    router.push('/login')
+  } catch (error) {
+    console.error('密码修改失败:', error)
+    alert('密码修改失败: ' + (error.response?.data?.error || error.message))
   }
 }
 
