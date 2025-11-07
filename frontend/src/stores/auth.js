@@ -8,9 +8,14 @@ export const useAuthStore = defineStore('auth', () => {
   const checkAuth = async () => {
     // 这里可以通过检查cookie或发送请求到后端验证
     // 简单实现：检查sessionStorage
-    const response = await fetch('/api/auth/status')
-    const data = await response.json()
-    return data.authenticated
+    try {
+      const response = await fetch('/api/auth/status')
+      const data = await response.json()
+      return data.authenticated
+    } catch (error) {
+      console.error('Error checking auth status:', error)
+      return false
+    }
   }
 
   const login = (userName) => {
