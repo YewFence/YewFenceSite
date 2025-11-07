@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, jsonify
 from models import Post
 from utils import render_md, strip_md_title_if_matches
 
@@ -7,7 +7,7 @@ blog_bp = Blueprint('blog', __name__)
 
 @blog_bp.route('/blog')
 def index():
-    """显示博客列表页"""
+    """返回博客列表JSON数据"""
     # 优化：直接在数据库层过滤，而不是加载所有文章后再过滤
     if session.get('logged_in'):
         # 已登录用户可见所有文章
@@ -17,16 +17,27 @@ def index():
         visible_posts = Post.query.filter(Post.status != 'hidden')\
                                   .order_by(Post.date_posted.desc()).all()
 
-    return render_template('blog_index.html', posts=visible_posts, login_status=session.get('logged_in'))
+    posts_data = []
+    for post in visible_posts:
+        posts_data.append({
+            'id': post.id,
+            'title': post.title,
+            'author_name': post.author_name,
+            'date_posted': post.date_posted.strftime('%Y-%m-%d') if post.date_posted else None,
+            'brief_summary': post.brief_summary or '',
+            'status': post.status
+        })
+
+    return jsonify({'posts': posts_data, 'login_status': session.get('logged_in')})
 
 
-@blog_bp.route('/post_detail/<int:post_id>')
+@blog_bp.route('/blog/<int:post_id>')
 def post_detail(post_id):
-    """显示文章详情页"""
+    """返回文章详情JSON数据"""
     post = Post.query.get_or_404(post_id)
 
     if post.status == 'hidden' and not session.get('logged_in'):
-        return render_template("404.html"), 404
+        return jsonify({'error': '文章不存在'}), 404
 
     # 优化：使用缓存的 HTML，如果没有则重新渲染
     if post.rendered_html:
@@ -37,9 +48,14 @@ def post_detail(post_id):
         from extensions import db
         db.session.commit()
 
-    site_title = "Post | " + post.title
+    post_data = {
+        'id': post.id,
+        'title': post.title,
+        'author_name': post.author_name,
+        'date_posted': post.date_posted.strftime('%Y-%m-%d') if post.date_posted else None,
+        'brief_summary': post.brief_summary or '',
+        'status': post.status,
+        'content': post_html_from_md_body
+    }
 
-    return render_template("single_post.html",
-                          post=post,
-                          post_html_from_md_body=post_html_from_md_body,
-                          title=site_title)
+    return jsonify({'post': post_data})
