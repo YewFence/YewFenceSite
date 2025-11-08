@@ -14,7 +14,7 @@ services:
       - app-network
 
   backend:
-    build: .
+    build: ./backend
     container_name: yewfence-backend
     image: yewfence-backend:latest
     ports:

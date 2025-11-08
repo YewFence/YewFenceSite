@@ -18,7 +18,7 @@ class Config:
 class DevelopmentConfig(Config):
     """开发环境配置"""
     # 数据库配置，可在环境变量自定义路径
-    DATABASE_PATH = os.environ.get('DATABASE_PATH') or 'yewfence_site_data/instance/data.db'
+    DATABASE_PATH = os.environ.get('DATABASE_PATH') or '../yewfence_site_data/instance/data.db'
     sql_path = os.path.join(basedir, DATABASE_PATH)
     SQLALCHEMY_DATABASE_URI = ('sqlite:///' + sql_path).replace('\\', '/')
     DEBUG = True
