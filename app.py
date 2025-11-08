@@ -19,7 +19,12 @@ def create_app(config_name=None):
     # 配置CORS，允许前端访问
     cors.init_app(app, resources={
         r"/*": {
-            "origins": ["http://localhost:5173", "http://localhost:3000"],
+            "origins": [
+                "http://localhost:5173",  # Vite 开发服务器
+                "http://localhost:3000",  # 备用开发端口
+                "http://localhost",       # Docker nginx (端口80)
+                "http://localhost:80"     # Docker nginx (显式端口)
+            ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
             "supports_credentials": True
@@ -27,25 +32,10 @@ def create_app(config_name=None):
     })
 
     # 注册蓝图
-    from routes import main_bp, blog_bp, auth_bp, api_bp
-    app.register_blueprint(main_bp)
+    from routes import blog_bp, auth_bp, api_bp
     app.register_blueprint(blog_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(api_bp)
-
-    # 注册 API 蓝图的特殊路由（管理页相关）
-    from routes.api import post_preview, create_post, edit_post
-    app.add_url_rule('/management/posts/<int:post_id>/preview',
-                     view_func=post_preview, methods=['GET'])
-    app.add_url_rule('/management/posts/new',
-                     view_func=create_post, methods=['POST'])
-    app.add_url_rule('/management/posts/<int:post_id>/edit',
-                     view_func=edit_post, methods=['POST'])
-
-    # 注册错误处理器
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('404.html'), 404
 
     # 导入模型（确保迁移能识别）
     with app.app_context():

@@ -34,6 +34,12 @@ const router = createRouter({
       component: () => import('../views/SinglePost.vue')
     },
     {
+      path: '/blog/:id/preview',
+      name: 'post-preview',
+      component: () => import('../views/SinglePostPreview.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginPage.vue')

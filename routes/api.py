@@ -110,23 +110,6 @@ def export_md_zip():
     resp.headers['Content-Disposition'] = "attachment; filename=all_posts_md.zip"
     return resp
 
-
-# 文章预览路由
-@api_bp.route('/posts/<int:post_id>/preview', methods=['GET'])
-@login_required
-def post_preview(post_id: int):
-    """预览文章"""
-    from flask import render_template
-    post = Post.query.get_or_404(post_id)
-    md = strip_md_title_if_matches(post.content or '', post.title)
-    post_html_from_md_body = render_md(md)
-    site_title = "PostReview | " + post.title
-    return render_template("single_post.html",
-                          post=post,
-                          post_html_from_md_body=post_html_from_md_body,
-                          title=site_title)
-
-
 # CRUD 路由
 @api_bp.route('/posts/new', methods=['POST'])
 @login_required
@@ -161,11 +144,11 @@ def create_post():
 
         db.session.add(p)
         db.session.commit()
-        return redirect(url_for('auth.management'))
+        return jsonify({'success': True, 'message': '创建成功', 'post_id': p.id}), 201
     except Exception as e:
         db.session.rollback()
         print(f"创建文章失败: {str(e)}")
-        return redirect(url_for('auth.management'))
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @api_bp.route('/posts/<int:post_id>/edit', methods=['POST'])
@@ -209,11 +192,11 @@ def edit_post(post_id: int):
             post.render_content()
 
         db.session.commit()
-        return redirect(url_for('auth.management') + f"#post-{post.id}")
+        return jsonify({'success': True, 'message': '更新成功', 'post_id': post.id}), 200
     except Exception as e:
         db.session.rollback()
         print(f"编辑文章失败: {str(e)}")
-        return redirect(url_for('auth.management') + f"#post-{post.id}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @api_bp.route('/posts/<int:post_id>/delete', methods=['GET'])
@@ -225,8 +208,8 @@ def delete_post(post_id: int):
     try:
         db.session.delete(post)
         db.session.commit()
-        return redirect(url_for('auth.management'))
+        return jsonify({'success': True, 'message': '删除成功'}), 200
     except Exception as e:
         db.session.rollback()
         print(f"删除文章失败: {str(e)}")
-        return redirect(url_for('auth.management') + f"#post-{post.id}")
+        return jsonify({'success': False, 'error': str(e)}), 500
