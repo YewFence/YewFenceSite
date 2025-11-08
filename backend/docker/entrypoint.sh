@@ -46,7 +46,7 @@ with app.app_context():
 
 if [ "$NEED_INIT" = "yes" ]; then
     echo "[INFO] No admin accounts found. Running auto-initialization..."
-    python auto_seed.py
+    python scripts/auto_seed.py
     if [ $? -eq 0 ]; then
         echo "[OK] Auto-initialization completed successfully"
     else
