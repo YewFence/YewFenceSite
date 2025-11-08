@@ -23,11 +23,5 @@ dist/
 # SQLite
 data.db
 
-# Docker override (environment-specific config)
-docker-compose.override.yml
-
-# Docker volumes
-yewfence_site_data/
-
 # LLM
 .claude/

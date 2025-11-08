@@ -1,0 +1,51 @@
+import os
+from flask import Flask
+from config import config
+from extensions import db, migrate, cors
+
+
+def create_app(config_name=None):
+    """应用工厂函数"""
+    if config_name is None:
+        config_name = os.environ.get('FLASK_ENV', 'development')
+
+    app = Flask(__name__)
+    app.config.from_object(config.get(config_name, config['default']))
+
+    # 初始化扩展
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    # 配置CORS，允许前端访问
+    cors.init_app(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",  # Vite 开发服务器
+                "http://localhost:3000",  # 备用开发端口
+                "http://localhost",       # Docker nginx (端口80)
+                "http://localhost:80"     # Docker nginx (显式端口)
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        }
+    })
+
+    # 注册蓝图
+    from routes import blog_bp, auth_bp, crud_bp, export_bp, healthcheck_bp
+    app.register_blueprint(blog_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(crud_bp)
+    app.register_blueprint(export_bp)
+    app.register_blueprint(healthcheck_bp)
+
+    # 导入模型（确保迁移能识别）
+    with app.app_context():
+        from models import Admin, Post
+
+    return app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
