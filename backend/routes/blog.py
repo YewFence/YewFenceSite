@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, jsonify
+from flask import Blueprint, session, jsonify
 from models import Post
 from utils import render_md
 

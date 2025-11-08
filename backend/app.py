@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 from config import config
 from extensions import db, migrate, cors
 
