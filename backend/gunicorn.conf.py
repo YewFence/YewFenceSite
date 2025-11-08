@@ -41,15 +41,21 @@ logconfig_dict = {
     },
     "handlers": {
         "access_file": {
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "generic",
             "filename": "/var/log/gunicorn/access.log",
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 14,
             "filters": ["health_check_filter"],
         },
         "error_file": {
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "generic",
             "filename": "/var/log/gunicorn/error.log",
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 14,
         },
         "console": {
             "class": "logging.StreamHandler",
