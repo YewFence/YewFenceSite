@@ -32,10 +32,12 @@ def create_app(config_name=None):
     })
 
     # 注册蓝图
-    from routes import blog_bp, auth_bp, api_bp
+    from routes import blog_bp, auth_bp, crud_bp, export_bp, healthcheck_bp
     app.register_blueprint(blog_bp)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(api_bp)
+    app.register_blueprint(crud_bp)
+    app.register_blueprint(export_bp)
+    app.register_blueprint(healthcheck_bp)
 
     # 导入模型（确保迁移能识别）
     with app.app_context():

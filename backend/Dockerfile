@@ -39,7 +39,7 @@ EXPOSE 5000
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python -c "from urllib.request import urlopen; urlopen('http://localhost:5000/', timeout=2)" || exit 1
+    CMD python -c "from urllib.request import urlopen; urlopen('http://localhost:5000/api/health', timeout=2)" || exit 1
 
 # 使用 entrypoint 启动
 ENTRYPOINT ["./entrypoint.sh"]
