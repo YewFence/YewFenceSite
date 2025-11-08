@@ -4,10 +4,30 @@
       <div class="container" id="mgmtRoot">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem;">
           <h1 style="margin:0;">管理页面</h1>
+          <span class="logo">Welcome, {{ user_name }}!</span>
           <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
             <button class="btn" @click="handleLogout">退出登录</button>
             <RouterLink class="btn" to="/">返回首页</RouterLink>
           </div>
+        </div>
+        <div class="large-card" aria-label="账户与安全">
+          <div class="title-wrapper">
+            <h2>密码修改</h2>
+          </div>
+          <form id="changePwdForm" class="change-password" @submit.prevent="changePassword" novalidate>
+            <div class="grid">
+              <label>新密码
+                <input type="password" v-model="new_password" autocomplete="new-password">
+              </label>
+              <label>确认新密码
+                <input type="password" v-model="confirm_password" autocomplete="new-password">
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="btn primary" type="submit" @click="changePassword">修改密码</button>
+              <button class="btn" type="reset">重置</button>
+            </div>
+          </form>
         </div>
 
         <!-- 导出按钮 -->
@@ -29,26 +49,37 @@
           <div v-if="loading" class="loading">加载中...</div>
           <div v-else-if="posts.length === 0" class="empty">暂无文章</div>
           <div v-else class="post-list">
-            <div
-              v-for="post in posts"
-              :key="post.id"
-              class="post-item"
-              :id="`post-${post.id}`"
-            >
-              <div class="post-header">
-                <h3>{{ post.title }}</h3>
-                <span class="post-status" :class="post.status">{{ post.status }}</span>
-              </div>
+            <div v-for="post in posts" :key="post.id" class="post-item large-card" :id="`post-${post.id}`">
               <div class="post-meta">
-                <span>ID: {{ post.id }}</span> |
-                <span>作者: {{ post.author_name }}</span> |
-                <span>日期: {{ formatDate(post.date_posted) }}</span>
+                <div class="post-kv">
+                  <span class="k">ID</span>
+                  <span class="v v-id future">{{ post.id }}</span>
+                </div>
+                <div class="post-kv">
+                  <span class="k">作者</span>
+                  <span class="v v-author">{{ post.author_name }}</span>
+                </div>
+                <div class="post-kv">
+                  <span class="k">日期</span>
+                  <span class="v v-date">{{ formatDate(post.date_posted) }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">标题</span>
+                  <span class="v v-title">{{ post.title }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">摘要</span>
+                  <span class="v v-summary">{{ post.brief_summary }}</span>
+                </div>
+                <div class="post-kv" style="grid-column:1/-1;">
+                  <span class="k">备注</span>
+                  <span class="v v-note">{{ post.note }}</span>
+                </div>
               </div>
-              <p class="post-summary">{{ post.brief_summary }}</p>
               <div class="post-actions">
                 <button class="btn small" @click="editPost(post)">编辑</button>
                 <button class="btn small" @click="downloadMarkdown(post.id)">下载MD</button>
-                <a :href="`/blog/${post.id}`" target="_blank" class="btn small">预览</a>
+                <a :href="`/blog/${post.id}/preview`" target="_blank" class="btn small">预览</a>
                 <button class="btn small danger" @click="deletePost(post.id)">删除</button>
               </div>
             </div>
@@ -89,14 +120,16 @@
                 </label>
                 <label class="field">
                   状态
-                  <select v-model="formData.status">
-                    <option value="published">公开</option>
-                    <option value="hidden">隐藏</option>
+                  <select v-model="formData.status" 
+                  :class='formData.status + "-select"' 
+                  class="edit-panel">
+                    <option value="published" id="published-select">公开</option>
+                    <option value="hidden" id="hidden-select">隐藏</option>
                   </select>
                 </label>
                 <label class="field" style="grid-column:1/-1;">
                   上传 Markdown
-                  <input type="file" accept=".md" @change="handleFileUpload" />
+                  <input type="file" accept=".md" @change="handleFileUpload" id="fMdFile"/>
                   <span class="hint">选择 .md 文件后，会在保存时覆盖文章内容</span>
                 </label>
               </form>
@@ -117,8 +150,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
+import { loginAlertStore } from '../stores/loginAlert'
 import {
   getPosts,
   createPost,
@@ -128,11 +163,12 @@ import {
   exportPostsJson,
   exportPostsMdZip
 } from '../api/blog'
-import { logout } from '../api/auth'
+import { logout as apiLogout, updatePassword as apiUpdatePassword } from '../api/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
-
+const store = loginAlertStore()
+const user_name = ref('')
 const loading = ref(true)
 const saving = ref(false)
 const posts = ref([])
@@ -148,6 +184,8 @@ const formData = ref({
   content: ''
 })
 const uploadedFile = ref(null)
+const new_password = ref('')
+const confirm_password = ref('')
 
 // 格式化日期
 const formatDate = (dateStr) => {
@@ -166,6 +204,42 @@ const loadPosts = async () => {
     alert('加载文章失败')
   } finally {
     loading.value = false
+  }
+}
+
+// 修改密码
+const changePassword = async () => {
+  const userName = sessionStorage.getItem('username') || 'yewfence'
+  const newPassword = new_password.value?.trim()
+  const confirmPassword = confirm_password.value?.trim()
+
+  if (!newPassword || !confirmPassword) {
+    alert('请输入新密码和确认密码')
+    return
+  }
+  if (newPassword !== confirmPassword) {
+    alert('两次输入的密码不一致')
+    return
+  }
+
+  try {
+    const result = await apiUpdatePassword(userName, newPassword)
+    if (result?.error) {
+      throw new Error(result.error)
+    }
+    if (result?.success === true || result?.success === 'true') {
+      console.log('密码修改成功')
+    } else {
+      console.warn('未知错误')
+    }
+    await apiLogout()
+    authStore.logout()
+    store.setInfoForLoginPage('success', '密码修改成功，请重新登录')
+    router.push('/login')
+  } catch (error) {
+    const msg = error?.response?.data?.error || error?.message || '未知错误'
+    console.error('密码修改失败:', error)
+    alert('密码修改失败: ' + msg)
   }
 }
 
@@ -317,106 +391,46 @@ const exportMdZip = async () => {
 // 登出
 const handleLogout = async () => {
   try {
-    await logout()
+    await apiLogout()
     authStore.logout()
+    const store = loginAlertStore()
+    store.setInfoForLoginPage('info', '已成功登出')
     router.push('/login')
   } catch (error) {
     console.error('登出失败:', error)
   }
 }
 
-onMounted(() => {
-  authStore.checkAuth()
-  if (!authStore.isAuthenticated) {
+useHead({
+  title: '管理页面 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '管理博客文章和账户设置' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
+
+onMounted(async () => {
+  const isAuth = await authStore.checkAuth()
+  if (!isAuth) {
+    store.setInfoForLoginPage('info', '请先登录以访问管理页面')
     router.push('/login')
   } else {
-    loadPosts()
+    user_name.value = localStorage.getItem('username') || ''
+    await loadPosts()
   }
 })
 </script>
 
 <style>
 @import '../assets/css/management.css';
-
-.export-section {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: var(--surface-bg);
-  border-radius: 8px;
+.logo {
+    /* 默认向flexbox起点对齐 */
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: .5px;
 }
 
-.posts-section {
-  margin-top: 2rem;
-}
-
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.post-item {
-  padding: 1rem;
-  background: var(--surface-bg);
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-}
-
-.post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.post-header h3 {
-  margin: 0;
-}
-
-.post-status {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-}
-
-.post-status.published {
-  background: var(--color-success, #28a745);
-  color: white;
-}
-
-.post-status.hidden {
-  background: var(--color-muted, #6c757d);
-  color: white;
-}
-
-.post-meta {
-  color: var(--color-muted);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.post-summary {
-  margin: 0.5rem 0;
-}
-
-.post-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-.btn.small {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.9rem;
-}
-
-.btn.danger {
-  background: var(--color-danger, #dc3545);
-  color: white;
-}
-
-.btn.danger:hover {
-  background: var(--color-danger-dark, #c82333);
+.logo span {
+    color: var(--color-accent);
 }
 </style>

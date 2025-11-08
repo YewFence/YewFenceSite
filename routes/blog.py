@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, jsonify
 from models import Post
-from utils import render_md, strip_md_title_if_matches
+from utils import render_md
 
 blog_bp = Blueprint('blog', __name__, url_prefix='/api')
 
@@ -25,6 +25,7 @@ def index():
             'author_name': post.author_name,
             'date_posted': post.date_posted.strftime('%Y-%m-%d') if post.date_posted else None,
             'brief_summary': post.brief_summary or '',
+            'note': post.note or '',
             'status': post.status
         })
 

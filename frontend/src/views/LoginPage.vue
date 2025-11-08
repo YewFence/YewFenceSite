@@ -47,15 +47,25 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
+import { loginAlertStore } from '../stores/loginAlert'
 import { login as apiLogin } from '../api/auth'
+
+useHead({
+  title: '登录 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '登录以访问管理功能。' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 
 const router = useRouter()
 const authStore = useAuthStore()
-
+const store = loginAlertStore()
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
@@ -89,10 +99,9 @@ const handleLogin = async () => {
     const response = await apiLogin(username.value, password.value)
 
     if (response.success) {
-
       alertType.value = 'success'
       alertMessage.value = '登录成功！正在跳转...'
-      authStore.login()
+      authStore.login(username.value)
       setTimeout(() => {
       router.push('/management')
       }, 1000)
@@ -107,6 +116,19 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+onMounted(async () => {
+  const isAuthenticated = await authStore.checkAuth()
+  if (isAuthenticated) {
+    router.push('/management')
+  }
+  const storeMessageText = store.messageText
+  if (storeMessageText) {
+    alertType.value = store.messageType
+    alertMessage.value = storeMessageText
+    store.clearInfo()
+  }
+})
 </script>
 
 <style>

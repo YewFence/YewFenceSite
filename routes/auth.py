@@ -25,7 +25,7 @@ def login():
         return jsonify({'success': False, 'error': '用户名不存在'}), 401
 
     if admin_user.check_password(password):
-        # 登录成功后将登录状态存入 session
+        # 登录成功，设置 session
         session['logged_in'] = True
         session['username'] = admin_user.username
         return jsonify({'success': True, 'message': '登录成功', 'username': admin_user.username}), 200
@@ -64,26 +64,19 @@ def get_management_posts():
 @login_required
 def change_password():
     """处理修改密码请求，返回 JSON"""
-    username = session.get('username') or 'YewFence'
+    username = request.form.get('username') or 'yewfence'
     admin_user = Admin.query.filter_by(username=username).first()
 
     if not admin_user:
         return jsonify({'success': False, 'error': '用户不存在，请重新登录'}), 401
 
     new_password = request.form.get('new_password', '')
-    confirm_password = request.form.get('confirm_password', '')
-
-    # 校验
-    if new_password != confirm_password:
-        return jsonify({'success': False, 'error': '新密码与确认密码不匹配'}), 400
 
     # 更新密码
     admin_user.set_password(new_password)
     db.session.commit()
 
     # 修改密码后强制登出，要求使用新密码重新登录
-    session.pop('logged_in', None)
-    session.pop('username', None)
     return jsonify({'success': True, 'message': '密码已更新，请使用新密码重新登录'}), 200
 
 # 文章预览路由
@@ -112,3 +105,11 @@ def post_preview(post_id: int):
     }
 
     return jsonify({'post': post_data})
+
+@auth_bp.route('/auth/status', methods=['GET'])
+def auth_status():
+    """检查用户的登录状态，返回 JSON"""
+    if 'logged_in' in session:
+        return jsonify({'authenticated': True, 'username': session.get('username', '')}), 200
+    else:
+        return jsonify({'authenticated': False}), 200

@@ -181,7 +181,7 @@ html[data-theme="dark"] .mgmt-wrapper {
     position: fixed;
     inset: 0;
     background: var(--mgmt-edit-mask-bg);
-    display: none;
+    display: flex;
     z-index: 3000;
     align-items: center;
     justify-content: center;
@@ -198,7 +198,6 @@ html[data-theme="dark"] .mgmt-wrapper {
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    box-shadow: var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, .25));
     /* 隐藏滚动条但保留滚动功能 */
     -ms-overflow-style: none;
     /* IE/旧版 Edge */
@@ -272,31 +271,20 @@ html[data-theme="dark"] .mgmt-wrapper {
     border: 1px solid var(--color-border);
     border-radius: 8px;
     background-color: var(--color-bg);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right .6rem center;
     background-size: 12px 12px;
     transition: border-color .15s ease, box-shadow .15s ease;
 }
 
-.edit-panel select#fStatus:hover {
-    border-color: color-mix(in oklab, var(--color-border), #000 12%);
-}
-
-.edit-panel select#fStatus:focus {
-    outline: none;
-    border-color: color-mix(in oklab, var(--color-border), #3b82f6 55%);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
-}
-
 /* 根据值给出轻微的视觉提示 */
-.edit-panel select#fStatus.is-published {
+.edit-panel.published-select {
     border-color: #177245;
     background-color: #1772450f;
 }
 
-.edit-panel select#fStatus.is-hidden {
-    border-color: #a15c00;
+.edit-panel.hidden-select{
+    border-color: #1e63f7;
     background-color: #a15c000f;
 }
 
@@ -444,18 +432,84 @@ html[data-theme="dark"] .mgmt-wrapper select {
     color: var(--color-text);
 }
 
-/* =============主题切换渐变动画支持============ */
-.theme-transition,
-.theme-transition :where(*, *::before, *::after) {
-    transition:
-        background-color .55s cubic-bezier(.4, .2, .2, 1),
-        color .45s cubic-bezier(.4, .2, .2, 1),
-        border-color .55s cubic-bezier(.4, .2, .2, 1),
-        box-shadow .55s cubic-bezier(.4, .2, .2, 1),
-        background .65s cubic-bezier(.4, .2, .2, 1);
+.export-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--surface-bg);
+  border-radius: 8px;
 }
 
-/* 对性能敏感或不需要主题过渡的元素显式禁用 */
-.theme-transition :where(video, canvas, .no-theme-transition) {
-    transition: none !important;
+.posts-section {
+  margin-top: 2rem;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.post-item {
+  padding: 1rem;
+  background: var(--surface-bg);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.post-header h3 {
+  margin: 0;
+}
+
+.post-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.post-status.published {
+  background: var(--color-success, #28a745);
+  color: white;
+}
+
+.post-status.hidden {
+  background: var(--color-muted, #6c757d);
+  color: white;
+}
+
+.post-meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-summary {
+  margin: 0.5rem 0;
+}
+
+.post-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.btn.small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.btn.danger {
+  background: var(--color-danger, #dc3545);
+  color: white;
+}
+
+.btn.danger:hover {
+  background: var(--color-danger-dark, #c82333);
 }

@@ -68,6 +68,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 
@@ -95,6 +96,14 @@ const handleSecretClick = () => {
     router.push('/login')
   }
 }
+
+useHead ({
+  title: "YewFenceSite",
+  meta: [
+    { name: 'description', content: 'YewFenceSite主页' },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 
 // 超时自动重置
 setInterval(() => {

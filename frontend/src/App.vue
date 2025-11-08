@@ -7,6 +7,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import { useThemeStore } from './stores/theme'
+import { useHead } from '@vueuse/head'
 
 // 初始化主题
 const themeStore = useThemeStore()
@@ -16,6 +17,15 @@ const yearSpan = document.getElementById('year')
 if (yearSpan) {
   yearSpan.textContent = new Date().getFullYear()
 }
+
+// 设置全局标题和描述
+useHead({
+  title: 'YewFenceSite',
+  meta: [
+    { name: 'description', content: "YewFence's Site" },
+    { name: 'author', content: 'YewFence' }
+  ]
+})
 </script>
 
 <style>

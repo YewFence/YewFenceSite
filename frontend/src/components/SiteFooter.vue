@@ -14,5 +14,16 @@ const currentYear = ref(new Date().getFullYear())
 </script>
 
 <style scoped>
-/* Footer样式已在全局CSS中定义 */
+/* 页脚 Footer */
+.site-footer {
+    padding: 2.5rem 0 2.25rem;
+    background: transparent;
+    margin-top: 2rem;
+}
+
+.footer-inner {
+    text-align: center;
+    font-size: .8rem;
+    color: var(--color-text-light);
+}
 </style>

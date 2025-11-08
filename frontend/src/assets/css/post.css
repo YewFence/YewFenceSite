@@ -123,19 +123,8 @@
     padding-left: 1rem;
     color: var(--color-text-alt);
     margin: 1.5rem 0;
-    font-style: italic;
     background: linear-gradient(90deg, rgba(37,99,235,.06), transparent 60%);
     border-radius: var(--radius-sm);
-}
-
-#blog-markdown blockquote p:first-child::before {
-    content: "“";
-    margin-right: .15rem;
-}
-
-#blog-markdown blockquote p:last-child::after {
-    content: "”";
-    margin-left: .15rem;
 }
 
 #blog-markdown ul,

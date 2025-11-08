@@ -46,9 +46,54 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
+
+// 设置页面标题和描述
+useHead({
+  title: '关于我 - YewFenceSite',
+  meta: [
+    { name: 'description', content: '了解YewFence的背景、技能、成分和时间线' }
+  ]
+})
+
 </script>
 
 <style scoped>
-/* 页面样式已在全局CSS中定义 */
+/* 时间轴 Timeline */
+.timeline {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    border-left: 2px solid var(--color-border);
+}
+
+.timeline li {
+    position: relative;
+    padding: .75rem 0 .75rem 1.25rem;
+}
+
+.timeline li:before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 1.15rem;
+    width: 10px;
+    height: 10px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--color-bg);
+}
+
+.timeline .time {
+    font-weight: 600;
+    display: inline-block;
+    min-width: 3.5rem;
+}
+
+.timeline .event {
+    display: inline-block;
+    color: var(--color-text);
+}
+
 </style>

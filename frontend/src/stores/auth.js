@@ -2,27 +2,31 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-  const isAuthenticated = ref(false)
+  const user_name = ref(null)
 
   // 检查登录状态（从cookie或localStorage）
-  const checkAuth = () => {
+  const checkAuth = async () => {
     // 这里可以通过检查cookie或发送请求到后端验证
     // 简单实现：检查sessionStorage
-    isAuthenticated.value = sessionStorage.getItem('authenticated') === 'true'
+    try {
+      const response = await fetch('/api/auth/status')
+      const data = await response.json()
+      return data.authenticated
+    } catch (error) {
+      console.error('Error checking auth status:', error)
+      return false
+    }
   }
 
-  const login = () => {
-    isAuthenticated.value = true
-    sessionStorage.setItem('authenticated', 'true')
+  const login = (userName) => {
+    localStorage.setItem('username', userName)
   }
 
   const logout = () => {
-    isAuthenticated.value = false
-    sessionStorage.removeItem('authenticated')
+    localStorage.removeItem('username')
   }
 
   return {
-    isAuthenticated,
     checkAuth,
     login,
     logout

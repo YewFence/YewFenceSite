@@ -1,17 +1,17 @@
 services:
 
-  # 前端构建服务 (build-only)
   frontend:
     build:
       context: ./frontend
     container_name: yewfence-frontend
     image: yewfence-frontend:latest
-    volumes:
-      # 挂载输出目录到共享 bind mount
-      - frontend-dist-data:/output
-    # 构建完成后退出，不需要持续运行
-    restart: "no"
-    command: sh -c "cp -r /app/dist/* /output/ && echo 'Frontend build completed and files copied to volume.'"
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
   backend:
     build: .
@@ -32,19 +32,11 @@ services:
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password}
     restart: unless-stopped
+    networks:
+      - app-network
     # healthcheck 由 Dockerfile 定义
 
-# 定义共享 bind mount 卷
-volumes:
-  frontend-dist-data:
-    name: frontend-dist-data
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./yewfence_site_data/frontend_dist
-
-# # 定义网络
-# networks:
-# nginx-proxy-network:
-#   driver: bridge
+# 定义网络
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,146 @@
+/* ===============
+   页面头部 / 导航栏
+   Header / Nav
+   =============== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-wrapper {
+    /* 好高级哦flex，将左侧的推到左侧，右侧的推到右侧，自动居中对齐 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header--height);
+}
+
+.logo {
+    /* 默认向flexbox起点对齐 */
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.logo span {
+    color: var(--color-accent);
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--color-border);
+    padding: .35rem .6rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+
+.nav-menu a,
+.nav-menu button.theme-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .55rem .9rem;
+    border-radius: var(--radius-sm);
+    font-size: .95rem;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background 0.6s ease;
+}
+
+.nav-menu a {
+    position: relative; /* 让 a 标签成为定位的标准 */
+}
+
+.nav-menu li a::after{
+    content: "";
+    position: absolute;
+    /* 直接算出中间，免得再用transfrom造成干扰 */
+    left: 10%;
+    bottom: 10%;
+    width: 80%;
+    height: 3px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    /* 默认情况下，让它在视觉层水平方向上缩放为 0  */
+    transform: scaleX(0);
+    /* 设置变换的原点为中心。这样缩放就会从中间开始 */
+    transform-origin: center;
+    /* 为 transform 属性添加过渡效果 */
+    transition: transform 0.3s ease;
+}
+.nav-menu a:hover::after{
+    /* 鼠标悬停时，水平缩放到 1*/
+    transform: scaleX(1);
+}
+
+.nav-menu a:hover,
+.nav-menu button.theme-btn:hover {
+    background: var(--color-bg-alt);
+}
+
+.nav-menu a.active {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.theme-btn {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 760px) {
+    .nav-toggle {
+        display: inline-block;
+    }
+
+    .nav-menu {
+        position: absolute;
+        right: 1rem;
+        top: 64px;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--color-bg);
+        padding: .75rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        min-width: 180px;
+        opacity: 0;
+        transform: translateY(-8px);
+        pointer-events: none;
+        transition: var(--transition);
+    }
+
+    .nav-menu.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .nav-menu li {
+        width: 100%;
+    }
+
+    .nav-menu a,
+    .nav-menu button.theme-btn {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

@@ -6,7 +6,7 @@ import zipfile
 
 from models import Post
 from extensions import db
-from utils import login_required, render_md, find_title_in_content, strip_md_title_if_matches
+from utils import login_required, render_md, find_title_in_content
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -173,8 +173,8 @@ def edit_post(post_id: int):
         if dv:
             post.date_posted = dv
 
-        post.brief_summary = form.get('summary')
-        post.note = form.get('note')
+        post.brief_summary = form.get('summary') or ''
+        post.note = form.get('note') or ''
         st = (form.get('status') or '').strip().lower()
         if st in allowed_status:
             post.status = st
