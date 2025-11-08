@@ -60,12 +60,4 @@ echo ""
 echo "========================================="
 echo "[4/4] Starting Gunicorn server..."
 echo "========================================="
-exec gunicorn \
-    --bind 0.0.0.0:5000 \
-    --workers 4 \
-    --threads 2 \
-    --timeout 60 \
-    --access-logfile - \
-    --error-logfile - \
-    --log-level info \
-    "app:create_app()"
+exec gunicorn --config gunicorn.conf.py "app:create_app()"
