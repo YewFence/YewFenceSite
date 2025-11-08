@@ -46,7 +46,7 @@ with app.app_context():
 
 if [ "$NEED_INIT" = "yes" ]; then
     echo "[INFO] No admin accounts found. Running auto-initialization..."
-    python auto_seed.py
+    python scripts/auto_seed.py
     if [ $? -eq 0 ]; then
         echo "[OK] Auto-initialization completed successfully"
     else
@@ -60,12 +60,4 @@ echo ""
 echo "========================================="
 echo "[4/4] Starting Gunicorn server..."
 echo "========================================="
-exec gunicorn \
-    --bind 0.0.0.0:5000 \
-    --workers 4 \
-    --threads 2 \
-    --timeout 60 \
-    --access-logfile - \
-    --error-logfile - \
-    --log-level info \
-    "app:create_app()"
+exec gunicorn --config gunicorn.conf.py "app:create_app()"

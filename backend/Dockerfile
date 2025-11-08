@@ -14,12 +14,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# 安装 uv
+RUN pip install --no-cache-dir uv
+
 # 复制依赖文件
-COPY requirements.txt .
+COPY pyproject.toml .
 
 # 安装 Python 依赖
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir gunicorn
+RUN uv pip install --system -r pyproject.toml && \
+    uv pip install --system gunicorn
 
 # 复制项目文件
 COPY . .
@@ -36,7 +39,7 @@ EXPOSE 5000
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python -c "from urllib.request import urlopen; urlopen('http://localhost:5000/', timeout=2)" || exit 1
+    CMD python -c "from urllib.request import urlopen; urlopen('http://localhost:5000/api/health', timeout=2)" || exit 1
 
 # 使用 entrypoint 启动
 ENTRYPOINT ["./entrypoint.sh"]
