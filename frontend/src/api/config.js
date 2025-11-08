@@ -33,10 +33,17 @@ api.interceptors.response.use(
     if (error.response) {
       // 处理HTTP错误状态码
       switch (error.response.status) {
-        case 401:
-          // 未授权，跳转登录
-          window.location.href = '/login'
+        case 401: {
+          // 未授权：除登录/状态接口外再跳转，避免在登录页错误时出现整页刷新
+          const reqUrl = error.config?.url || ''
+          const isLoginEndpoint = reqUrl.includes('/api/auth/login')
+          const isStatusEndpoint = reqUrl.includes('/api/auth/status')
+          const alreadyOnLogin = typeof window !== 'undefined' && window.location?.pathname === '/login'
+          if (!isLoginEndpoint && !isStatusEndpoint && !alreadyOnLogin) {
+            window.location.href = '/login'
+          }
           break
+        }
         case 404:
           console.error('请求的资源不存在')
           break

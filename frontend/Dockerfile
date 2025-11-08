@@ -33,5 +33,9 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 # 暴露端口 80
 EXPOSE 80
 
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget -q --spider http://localhost/ || exit 1
+
 # 启动 Nginx
 CMD ["nginx", "-g", "daemon off;"]

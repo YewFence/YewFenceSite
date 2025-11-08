@@ -3,7 +3,7 @@
     <!-- section分隔网页滚动的吸附点 -->
     <section class="hero scroller" id="hero">
       <div class="container hero-inner">
-        <h1>你好，我是 <span class="accent" @click="handleSecretClick">YewFence</span></h1>
+        <h1 id="main-title">你好，我是 <span class="accent" @click="handleSecretClick">YewFence</span></h1>
         <p class="subtitle">一名前端初学者</p>
         <div class="hero-actions">
         </div>
@@ -116,4 +116,20 @@ setInterval(() => {
 
 <style scoped>
 /* 页面样式已在全局CSS中定义 */
+#main-title {
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8),
+               0 0 30px rgba(0, 0, 0, 0.5),
+               0 0 40px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+#main-title .accent {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 </style>
