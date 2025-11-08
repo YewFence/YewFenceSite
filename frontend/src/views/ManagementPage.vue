@@ -120,14 +120,16 @@
                 </label>
                 <label class="field">
                   状态
-                  <select v-model="formData.status">
-                    <option value="published">公开</option>
-                    <option value="hidden">隐藏</option>
+                  <select v-model="formData.status" 
+                  :class='formData.status + "-select"' 
+                  class="edit-panel">
+                    <option value="published" id="published-select">公开</option>
+                    <option value="hidden" id="hidden-select">隐藏</option>
                   </select>
                 </label>
                 <label class="field" style="grid-column:1/-1;">
                   上传 Markdown
-                  <input type="file" accept=".md" @change="handleFileUpload" />
+                  <input type="file" accept=".md" @change="handleFileUpload" id="fMdFile"/>
                   <span class="hint">选择 .md 文件后，会在保存时覆盖文章内容</span>
                 </label>
               </form>
@@ -421,86 +423,14 @@ onMounted(async () => {
 
 <style>
 @import '../assets/css/management.css';
-
-.export-section {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: var(--surface-bg);
-  border-radius: 8px;
+.logo {
+    /* 默认向flexbox起点对齐 */
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: .5px;
 }
 
-.posts-section {
-  margin-top: 2rem;
-}
-
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.post-item {
-  padding: 1rem;
-  background: var(--surface-bg);
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-}
-
-.post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.post-header h3 {
-  margin: 0;
-}
-
-.post-status {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-}
-
-.post-status.published {
-  background: var(--color-success, #28a745);
-  color: white;
-}
-
-.post-status.hidden {
-  background: var(--color-muted, #6c757d);
-  color: white;
-}
-
-.post-meta {
-  color: var(--color-muted);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.post-summary {
-  margin: 0.5rem 0;
-}
-
-.post-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-.btn.small {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.9rem;
-}
-
-.btn.danger {
-  background: var(--color-danger, #dc3545);
-  color: white;
-}
-
-.btn.danger:hover {
-  background: var(--color-danger-dark, #c82333);
+.logo span {
+    color: var(--color-accent);
 }
 </style>

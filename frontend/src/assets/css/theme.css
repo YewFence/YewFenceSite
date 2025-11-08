@@ -1,0 +1,43 @@
+/* ===============
+   基础变量 & 主题
+   =============== */
+:root {
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f5f7fa;
+    --color-bg-night: #162338;
+    --color-text: #1b2430;
+    --color-text-alt: #334155;
+    --color-text-withbg: #e0ebfb;
+    --color-text-light: #cadffc;
+    --color-border: #dce2ea;
+    --color-accent: #2563eb;
+    --color-accent-hover: #2e7dfc;
+    --color-accent-decorate: #143285;
+    --color-danger: #dc2626;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .06);
+    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, .12);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --transition: .25s cubic-bezier(.4, .2, .2, 1);
+    --header--height: 64px;
+    --surface-bg: var(--color-bg);
+    --surface-bg-alt: var(--color-bg-alt);
+}
+
+html[data-theme="dark"] {
+    --color-bg: #0f172a;
+    --color-bg-alt: #1e293b;
+    --color-text: #f1f5f9;
+    --color-text-light: #94a3b8;
+    --color-text-alt: #b6c4d6;
+    --color-text-withbg: #e2ecf8;
+    --color-border: #334155;
+    --color-accent: #3b82f6;
+    --color-accent-hover: #60a5fa;
+    --color-accent-decorate: #143285;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+    --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, .55);
+    --surface-bg: var(--color-bg-night);
+    --surface-bg-alt: #243045;
+}

@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createHead } from '@vueuse/head'
-import './assets/css/style.css'
+import '@/assets/css/theme.css'
+import '@/assets/css/style.css'
 import App from './App.vue'
 import router from './router'
 

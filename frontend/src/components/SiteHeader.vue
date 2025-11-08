@@ -11,12 +11,18 @@
           @click="toggleMenu"
         >☰</button>
         <ul id="navMenu" class="nav-menu" :class="{ open: isMenuOpen }">
-          <li><RouterLink to="/" @click="closeMenu">首页</RouterLink></li>
-          <li><RouterLink to="/about" @click="closeMenu">关于我</RouterLink></li>
-          <li><RouterLink to="/interests" @click="closeMenu">我的兴趣</RouterLink></li>
-          <li><RouterLink to="/contact" @click="closeMenu">联系我</RouterLink></li>
-          <li><RouterLink to="/blog" @click="closeMenu">个人博客</RouterLink></li>
-          <li v-if="showAdminLink"><RouterLink to="/management" @click="closeMenu">管理页</RouterLink></li>
+          <li><RouterLink to="/" @click="closeMenu" exact>首页</RouterLink></li>
+          <li><RouterLink to="/about" @click="closeMenu" exact>关于我</RouterLink></li>
+          <li><RouterLink to="/interests" @click="closeMenu" exact>我的兴趣</RouterLink></li>
+          <li><RouterLink to="/contact" @click="closeMenu" exact>联系我</RouterLink></li>
+          <li>
+            <RouterLink to="/blog" @click="closeMenu" :class="{ active: isActive('/blog') }">
+              个人博客
+            </RouterLink>
+          </li>
+          <li v-if="showAdminLink">
+            <RouterLink to="/management" @click="closeMenu" >管理页</RouterLink>
+          </li>
           <li>
             <button
               id="themeSwitcher"
@@ -71,6 +77,10 @@ const handleClickOutside = (e) => {
   }
 }
 
+const isActive = (path) => {
+  return window.location.pathname.startsWith(path)
+}
+
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
   showAdminLink.value = await checkAuth()
@@ -82,10 +92,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Header样式已在全局CSS中定义 */
-.nav-menu a.router-link-active::after{
-    /* 鼠标悬停时，水平缩放到 1*/
+@import '@/assets/css/header.css';
+/* 进入一个菜单时，将其高亮 */
+.nav-menu a.router-link-active::after {
     transform: scaleX(1);
 }
 
+.nav-menu a.active::after {
+    transform: scaleX(1);
+}
 </style>

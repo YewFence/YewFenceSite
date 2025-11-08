@@ -113,6 +113,37 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* Blog */
+/* 文章列表样式(感觉都没有什么要整的) */
+
+.blog-list-item-artistic-character {
+    color: var(--color-accent);
+}
+
+.blog-meta {
+    margin-top: 2rem;
+    font-size: .85rem;
+    color: var(--color-text-alt);
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.blog-meta-item {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+}
+
+.blog-meta-item-icon {
+    font-size: 1.1rem;
+    color: var(--color-accent);
+}
+
+.blog-meta-item:hover .blog-meta-item-icon {
+    color: var(--color-accent-hover);
+}
+
 #logoutButton {
   margin-left: 0.5rem;
 }

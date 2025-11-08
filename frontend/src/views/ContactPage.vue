@@ -103,5 +103,37 @@ useHead({
 </script>
 
 <style scoped>
-/* 页面样式已在全局CSS中定义 */
+/* 提示信息 Prompt message */
+.title-wrapper {
+    display: flex;
+    gap:12px;
+    margin-bottom: 2rem;
+}
+
+#contact-title {
+    margin: 0;
+}
+
+#prompt-message {
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 2px 10px;
+    box-shadow: var(--shadow-md);
+    font-size: 14px;
+    color: var(--color-accent-hover);
+    font-weight: 1000;
+    white-space: nowrap;
+    /* 初始不可见 */
+    opacity: 0;
+    /* 不可点击 */
+    pointer-events: none; 
+    transition: opacity 0.4s ease-in-out, transform .4s ease-in-out;
+    transform: translateY(0);
+}
+
+#prompt-message.is-visible {
+    opacity: 1;
+    transform: translateY(-3px);
+}
 </style>

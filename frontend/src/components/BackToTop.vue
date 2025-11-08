@@ -33,5 +33,24 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* BackToTop样式已在全局CSS中定义 */
+/* 返回顶部按钮 Back to top */
+.back-to-top {
+    position: fixed;
+    right: 1rem;
+    bottom: 1.25rem;
+    padding: .55rem .7rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    opacity: .9;
+    transition: var(--transition);
+}
+
+.back-to-top:hover {
+    opacity: 1;
+}
+
 </style>
