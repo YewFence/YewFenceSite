@@ -21,13 +21,12 @@ services:
       - "5000:5000"
     volumes:
       # 挂载数据库目录（持久化数据）
-      - ./yewfence_site_data/instance:/app/instance
+      - ${DATA_MOUNT_DIR}/instance:/app/instance
       # 挂载文章目录（可选，方便编辑）
-      # - ./yewfence_site_data/posts:/app/posts
+      # - $DATA_MOUNT_DIR/posts:/app/posts
     environment:
       - FLASK_ENV=production
       - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key-in-production}
-      - DATABASE_URI=sqlite:////app/instance/data.db
       # 管理员账户配置（用于自动初始化）
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password}
