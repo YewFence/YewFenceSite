@@ -27,8 +27,21 @@ FROM nginx:alpine
 # 复制构建产物到 Nginx 目录
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 复制自定义的 Nginx 配置文件（如果有）
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+# 复制自定义的 Nginx 配置文件
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# 安装 logrotate 用于日志轮转
+RUN apk add --no-cache logrotate
+
+# 复制 logrotate 配置文件
+COPY ./docker/logrotate.conf /etc/logrotate.d/nginx
+
+# 设置 cron 任务（每天凌晨2点执行日志轮转）
+RUN echo "0 2 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/crontabs/root
+
+# 复制启动脚本
+COPY ./docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # 暴露端口 80
 EXPOSE 80
@@ -37,5 +50,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD wget -q --spider http://localhost/ || exit 1
 
-# 启动 Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# 使用启动脚本
+CMD ["/entrypoint.sh"]

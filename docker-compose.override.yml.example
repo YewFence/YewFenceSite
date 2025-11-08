@@ -9,54 +9,16 @@
 # 注意：docker-compose.override.yml 已被加入 .gitignore，不会提交到 Git
 
 services:
+  frontend:
+    networks:
+      - nginx-proxy-network
   backend:
-    # 示例：修改端口映射（如果 5000 端口被占用）
-    # ports:
-    #   - "8080:5000"
-
-    # 示例：添加额外的 volume 挂载
-    # volumes:
-    #   - ./custom_path:/app/custom_path
-
-    # 示例：覆盖或添加环境变量
-    # environment:
-    #   - DEBUG=true
-    #   - CUSTOM_VAR=value
-
     # 示例：连接到 Nginx 反向代理网络
     # 如果启用下方的 nginx_dev 服务，取消下面的注释
-    # networks:
-    #   - default
-    #   - nginx-proxy-network
+    networks:
+      - nginx-proxy-network
 
-  # ==========================================
-  # 前端开发环境配置（nginx_dev）
-  # ==========================================
-  # 使用方法：
-  # 1. 取消下方所有注释
-  # 2. 运行 docker compose up -d
-  # 3. 访问 http://localhost 查看前端页面
-  # ==========================================
-
-  # Nginx 开发服务
-  # nginx_dev:
-  #   build:
-  #     context: ./nginx
-  #     dockerfile: Dockerfile
-  #   container_name: yewfence-nginx-dev
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     # 从 frontend-build 服务读取构建产物
-  #     - frontend-dist-data:/usr/share/nginx/html:ro
-  #   depends_on:
-  #     - frontend-build
-  #     - web
-  #   networks:
-  #     - nginx-proxy-network
-  #   restart: unless-stopped
-
-# 定义网络（如果启用 nginx_dev 需要取消注释）
+# 定义外部nginx docker网络
 networks:
   nginx-proxy-network:
-    # external: true  # 如果使用外部网络，取消此行注释
+    external: true  # 如果使用外部网络，取消此行注释

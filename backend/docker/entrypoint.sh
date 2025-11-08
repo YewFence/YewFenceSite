@@ -2,7 +2,7 @@
 set -e
 
 echo "========================================="
-echo "YewFence Blog - Startup Script"
+echo "YewFence Site Backend - Startup Script"
 echo "========================================="
 
 # 1. 检查数据库连接
