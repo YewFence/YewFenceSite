@@ -5,13 +5,13 @@ services:
       context: ./frontend
     container_name: yewfence-frontend
     image: yewfence-frontend:latest
+    # 端口映射到8080，使用nginx反代
     ports:
       - "8080:80"
     restart: unless-stopped
     depends_on:
       - backend
-    networks:
-      - app-network
+    # healthcheck 由 Dockerfile 定义
 
   backend:
     build: ./backend
@@ -22,20 +22,12 @@ services:
     volumes:
       # 挂载数据库目录（持久化数据）
       - ${DATA_MOUNT_DIR}/instance:/app/instance
-      # 挂载文章目录（可选，方便编辑）
-      # - $DATA_MOUNT_DIR/posts:/app/posts
     environment:
+      # 使用docker时默认为生产环境
       - FLASK_ENV=production
       - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key-in-production}
       # 管理员账户配置（用于自动初始化）
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password}
     restart: unless-stopped
-    networks:
-      - app-network
     # healthcheck 由 Dockerfile 定义
-
-# 定义网络
-networks:
-  app-network:
-    driver: bridge
