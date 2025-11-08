@@ -1,0 +1,17 @@
+[project]
+name = "yewyard-backend"
+version = "v0.1.0"
+description = "yewfencesite backend"
+requires-python = ">=3.8"
+dependencies = [
+    "flask",
+    "flask-sqlalchemy",
+    "flask-migrate",
+    "flask-cors",
+    "python-dotenv",
+    "markdown",
+    "pygments",
+    "pymdown-extensions",
+    "pillow",
+    "pyyaml",
+]
