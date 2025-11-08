@@ -31,8 +31,8 @@ COPY . .
 COPY ./docker/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
-# 创建数据目录
-RUN mkdir -p /app/instance
+# 创建数据目录和日志目录
+RUN mkdir -p /app/instance /var/log/gunicorn
 
 # 暴露端口
 EXPOSE 5000

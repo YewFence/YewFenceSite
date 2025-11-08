@@ -7,8 +7,8 @@ threads = 2
 timeout = 60
 
 # 日志配置
-accesslog = "-"  # 输出到 stdout
-errorlog = "-"   # 输出到 stderr
+accesslog = "/var/log/gunicorn/access.log"
+errorlog = "/var/log/gunicorn/error.log"
 loglevel = "info"
 
 
@@ -40,6 +40,17 @@ logconfig_dict = {
         }
     },
     "handlers": {
+        "access_file": {
+            "class": "logging.FileHandler",
+            "formatter": "generic",
+            "filename": "/var/log/gunicorn/access.log",
+            "filters": ["health_check_filter"],
+        },
+        "error_file": {
+            "class": "logging.FileHandler",
+            "formatter": "generic",
+            "filename": "/var/log/gunicorn/error.log",
+        },
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "generic",
@@ -56,12 +67,12 @@ logconfig_dict = {
     "loggers": {
         "gunicorn.error": {
             "level": "INFO",
-            "handlers": ["error_console"],
+            "handlers": ["error_file", "error_console"],
             "propagate": False,
         },
         "gunicorn.access": {
             "level": "INFO",
-            "handlers": ["console"],
+            "handlers": ["access_file", "console"],
             "propagate": False,
         },
     },
