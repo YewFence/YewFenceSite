@@ -23,21 +23,21 @@ const router = createRouter({
       name: 'contact',
       component: () => import('../views/ContactPage.vue')
     },
+    // 废弃的博客路由 - 重定向到 404
     {
       path: '/blog',
       name: 'blog',
-      component: () => import('../views/BlogIndex.vue')
+      component: () => import('../views/NotFound.vue')
     },
     {
       path: '/blog/:id',
       name: 'post',
-      component: () => import('../views/SinglePost.vue')
+      component: () => import('../views/NotFound.vue')
     },
     {
       path: '/blog/:id/preview',
       name: 'post-preview',
-      component: () => import('../views/SinglePostPreview.vue'),
-      meta: { requiresAuth: true }
+      component: () => import('../views/NotFound.vue')
     },
     {
       path: '/login',
