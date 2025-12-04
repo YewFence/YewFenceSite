@@ -63,14 +63,17 @@ useHead({
 
 .timeline li {
     position: relative;
-    padding: .75rem 0 .75rem 1.25rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: .5rem 0 .5rem 1.25rem;
 }
 
 .timeline li:before {
     content: "";
     position: absolute;
     left: -6px;
-    top: 1.15rem;
+    top: 0.9rem;
     width: 10px;
     height: 10px;
     background: var(--color-accent);
@@ -80,12 +83,11 @@ useHead({
 
 .timeline .time {
     font-weight: 600;
-    display: inline-block;
-    min-width: 3.5rem;
+    flex-shrink: 0;
+    width: 5rem;
 }
 
 .timeline .event {
-    display: inline-block;
     color: var(--color-text);
 }
 
