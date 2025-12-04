@@ -1,16 +1,22 @@
 <template>
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© <span id="year">{{ currentYear }}</span> YewFence,保留所有权利。</p>
-      <p class="small">由 Vue 3 + Vite 构建。</p>
+      <p>{{ copyrightText }}</p>
+      <p class="small">{{ content.buildInfo }}</p>
     </div>
   </footer>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { components } from '@/utils/content'
 
+const content = components.footer
 const currentYear = ref(new Date().getFullYear())
+
+const copyrightText = computed(() => {
+  return content.copyright.replace('{year}', currentYear.value)
+})
 </script>
 
 <style scoped>

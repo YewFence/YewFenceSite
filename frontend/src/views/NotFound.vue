@@ -3,15 +3,15 @@
     <main class="error-container theme-transition">
       <section class="error-card">
         <div class="error-hero" aria-hidden="true">
-          <span class="d1">4</span>
-          <span class="d2">0</span>
-          <span class="d3">4</span>
+          <span class="d1">{{ content.errorCode[0] }}</span>
+          <span class="d2">{{ content.errorCode[1] }}</span>
+          <span class="d3">{{ content.errorCode[2] }}</span>
         </div>
-        <h1 class="error-title">页面不见了</h1>
-        <p class="error-desc">抱歉，你访问的页面不存在或已被移动。你可以返回上一页，或前往首页继续浏览。</p>
+        <h1 class="error-title">{{ content.title }}</h1>
+        <p class="error-desc">{{ content.description }}</p>
         <div class="error-actions">
-          <RouterLink class="btn primary" to="/">返回首页</RouterLink>
-          <button class="btn" type="button" @click="goBack">返回上一页</button>
+          <RouterLink class="btn primary" to="/">{{ content.buttons.home }}</RouterLink>
+          <button class="btn" type="button" @click="goBack">{{ content.buttons.back }}</button>
         </div>
       </section>
     </main>
@@ -22,13 +22,15 @@
 import { useRouter, RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head';
 import DefaultLayout from '../components/DefaultLayout.vue'
+import { pages } from '@/utils/content'
 
+const content = pages.notFound
 const router = useRouter()
 
 useHead ({
-  title: "404 页面未找到 - YewFenceSite",
+  title: content.meta.title,
   meta: [
-    { name: 'description', content: '抱歉，你访问的页面不存在或已被移动。你可以返回上一页，或前往首页继续浏览。' }
+    { name: 'description', content: content.meta.description }
   ]
 })
 

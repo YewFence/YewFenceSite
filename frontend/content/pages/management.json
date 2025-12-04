@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "管理页面 - YewFenceSite",
+    "description": "管理博客文章和账户设置",
+    "author": "YewFence"
+  },
+  "header": {
+    "title": "管理页面",
+    "welcomePrefix": "Welcome,",
+    "logoutButton": "退出登录",
+    "homeButton": "返回首页"
+  },
+  "password": {
+    "title": "密码修改",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "submitButton": "修改密码",
+    "resetButton": "重置"
+  },
+  "export": {
+    "title": "数据导出",
+    "jsonButton": "导出JSON",
+    "mdZipButton": "导出Markdown压缩包"
+  },
+  "posts": {
+    "title": "文章管理",
+    "newButton": "新建文章",
+    "loading": "加载中...",
+    "empty": "暂无文章",
+    "labels": {
+      "id": "ID",
+      "author": "作者",
+      "date": "日期",
+      "title": "标题",
+      "summary": "摘要",
+      "note": "备注"
+    },
+    "actions": {
+      "edit": "编辑",
+      "downloadMd": "下载MD",
+      "preview": "预览",
+      "delete": "删除"
+    }
+  },
+  "editModal": {
+    "editTitle": "编辑文章信息",
+    "createTitle": "新建文章",
+    "fields": {
+      "title": {
+        "label": "标题",
+        "hint": "可选，为空则自动检测"
+      },
+      "author": {
+        "label": "作者",
+        "hint": "可选，为空则默认为YewFence"
+      },
+      "date": {
+        "label": "日期"
+      },
+      "summary": {
+        "label": "摘要"
+      },
+      "note": {
+        "label": "备注",
+        "hint": "可选，不对外显示"
+      },
+      "status": {
+        "label": "状态",
+        "options": {
+          "published": "公开",
+          "hidden": "隐藏"
+        }
+      },
+      "upload": {
+        "label": "上传 Markdown",
+        "hint": "选择 .md 文件后，会在保存时覆盖文章内容"
+      }
+    },
+    "buttons": {
+      "cancel": "取消",
+      "save": "保存",
+      "saving": "保存中..."
+    }
+  },
+  "messages": {
+    "deleteConfirm": "确定要删除这篇文章吗？此操作不可恢复。",
+    "loadError": "加载文章失败",
+    "saveSuccess": "文章保存成功",
+    "deleteSuccess": "文章删除成功",
+    "passwordEmpty": "请输入新密码和确认密码",
+    "passwordMismatch": "两次输入的密码不一致",
+    "passwordSuccess": "密码修改成功，请重新登录",
+    "logoutSuccess": "已成功登出",
+    "loginRequired": "请先登录以访问管理页面"
+  }
+}

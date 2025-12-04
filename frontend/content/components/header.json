@@ -1,0 +1,18 @@
+{
+  "logo": {
+    "prefix": "YewFence's",
+    "suffix": "Site"
+  },
+  "nav": [
+    { "text": "首页", "to": "/", "exact": true },
+    { "text": "关于我", "to": "/about", "exact": true },
+    { "text": "我的兴趣", "to": "/interests", "exact": true },
+    { "text": "联系我", "to": "/contact", "exact": true },
+    { "text": "管理页", "to": "/management", "requiresAuth": true }
+  ],
+  "themeToggle": {
+    "ariaLabel": "切换主题",
+    "darkIcon": "☀️",
+    "lightIcon": "🌙"
+  }
+}

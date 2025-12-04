@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "title": "联系我 - YewFenceSite",
+    "description": "YewFence的联系信息"
+  },
+  "hero": {
+    "title": "联系我",
+    "subtitle": "欢迎交流 · 闲聊 · 学习"
+  },
+  "channels": {
+    "title": "联系渠道",
+    "prompt": {
+      "default": "点击以复制",
+      "success": "已复制到剪贴板",
+      "error": "复制失败，请手动复制"
+    },
+    "items": [
+      {
+        "name": "Email",
+        "value": "cloudmapleaf@outlook.com",
+        "ariaLabel": "copy my email"
+      },
+      {
+        "name": "GitHub",
+        "value": "https://github.com/YewFence",
+        "ariaLabel": "copy my github page"
+      },
+      {
+        "name": "Blog",
+        "value": "https://yewyard.cn/blog",
+        "ariaLabel": "copy my blog"
+      }
+    ]
+  }
+}

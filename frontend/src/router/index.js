@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+// 博客重定向地址
+const blogRedirectUrl = import.meta.env.VITE_BLOG_REDIRECT_URL
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -23,21 +26,39 @@ const router = createRouter({
       name: 'contact',
       component: () => import('../views/ContactPage.vue')
     },
+    // 废弃的博客路由 - 重定向到外部链接，如果环境变量为空则 404
     {
       path: '/blog',
       name: 'blog',
-      component: () => import('../views/BlogIndex.vue')
+      component: () => import('../views/NotFound.vue'),
+      beforeEnter: () => {
+        if (blogRedirectUrl) {
+          window.location.href = blogRedirectUrl
+          return false
+        }
+      }
     },
     {
       path: '/blog/:id',
       name: 'post',
-      component: () => import('../views/SinglePost.vue')
+      component: () => import('../views/NotFound.vue'),
+      beforeEnter: () => {
+        if (blogRedirectUrl) {
+          window.location.href = blogRedirectUrl
+          return false
+        }
+      }
     },
     {
       path: '/blog/:id/preview',
       name: 'post-preview',
-      component: () => import('../views/SinglePostPreview.vue'),
-      meta: { requiresAuth: true }
+      component: () => import('../views/NotFound.vue'),
+      beforeEnter: () => {
+        if (blogRedirectUrl) {
+          window.location.href = blogRedirectUrl
+          return false
+        }
+      }
     },
     {
       path: '/login',

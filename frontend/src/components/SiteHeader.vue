@@ -1,7 +1,7 @@
 <template>
   <header class="site-header">
     <div class="container nav-wrapper">
-      <RouterLink class="logo" to="/">YewFence's <span>Site</span></RouterLink>
+      <RouterLink class="logo" to="/">{{ content.logo.prefix }} <span>{{ content.logo.suffix }}</span></RouterLink>
       <nav id="mainNav" class="nav" aria-label="主导航">
         <button
           class="nav-toggle"
@@ -11,26 +11,26 @@
           @click="toggleMenu"
         >☰</button>
         <ul id="navMenu" class="nav-menu" :class="{ open: isMenuOpen }">
-          <li><RouterLink to="/" @click="closeMenu" exact>首页</RouterLink></li>
-          <li><RouterLink to="/about" @click="closeMenu" exact>关于我</RouterLink></li>
-          <li><RouterLink to="/interests" @click="closeMenu" exact>我的兴趣</RouterLink></li>
-          <li><RouterLink to="/contact" @click="closeMenu" exact>联系我</RouterLink></li>
-          <li>
-            <RouterLink to="/blog" @click="closeMenu" :class="{ active: isActive('/blog') }">
-              个人博客
+          <li v-for="item in navItems" :key="item.to">
+            <RouterLink
+              :to="item.to"
+              @click="closeMenu"
+              :class="{ active: !item.exact && isActive(item.to) }"
+            >
+              {{ item.text }}
             </RouterLink>
           </li>
           <li v-if="showAdminLink">
-            <RouterLink to="/management" @click="closeMenu" >管理页</RouterLink>
+            <RouterLink to="/management" @click="closeMenu">{{ adminNavText }}</RouterLink>
           </li>
           <li>
             <button
               id="themeSwitcher"
               class="theme-btn"
-              aria-label="切换主题"
+              :aria-label="content.themeToggle.ariaLabel"
               @click="toggleTheme"
             >
-              {{ themeStore.theme === 'dark' ? '☀️' : '🌙' }}
+              {{ themeStore.theme === 'dark' ? content.themeToggle.darkIcon : content.themeToggle.lightIcon }}
             </button>
           </li>
         </ul>
@@ -44,13 +44,20 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useThemeStore } from '../stores/theme'
 import { useAuthStore } from '../stores/auth'
+import { components } from '@/utils/content'
+
+const content = components.header
+
+// 过滤掉需要认证的导航项
+const navItems = computed(() => content.nav.filter(item => !item.requiresAuth))
+const adminNavText = computed(() => content.nav.find(item => item.requiresAuth)?.text || '管理页')
 
 const themeStore = useThemeStore()
 const isMenuOpen = ref(false)
 const showAdminLink = ref(false)
 
 const checkAuth = async () => {
-  // 只有在用户已认证时才显示“管理页”链接
+  // 只有在用户已认证时才显示"管理页"链接
   const authStore = useAuthStore()
   const isAuthenticated = await authStore.checkAuth()
   return isAuthenticated

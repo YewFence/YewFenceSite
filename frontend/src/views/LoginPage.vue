@@ -2,8 +2,8 @@
   <DefaultLayout>
     <main class="login-wrapper">
       <section class="login-card" aria-label="登录面板">
-        <h1>登录</h1>
-        <p class="muted">本页仅用于站点维护人员使用。</p>
+        <h1>{{ content.title }}</h1>
+        <p class="muted">{{ content.notice }}</p>
         <div v-if="alertMessage" class="alerts" aria-live="polite">
           <div
             :class="['alert', `alert-${alertType}`]"
@@ -14,30 +14,30 @@
         </div>
         <form @submit.prevent="handleLogin" novalidate>
           <div class="field">
-            <label for="username">用户名</label>
+            <label for="username">{{ content.form.username.label }}</label>
             <input
               id="username"
               v-model="username"
               type="text"
-              placeholder="输入用户名"
+              :placeholder="content.form.username.placeholder"
               autocomplete="username"
               required
               autofocus
             />
-            <label for="password">密码</label>
+            <label for="password">{{ content.form.password.label }}</label>
             <input
               id="password"
               v-model="password"
               type="password"
-              placeholder="输入密码"
+              :placeholder="content.form.password.placeholder"
               autocomplete="current-password"
               required
             />
           </div>
           <div class="actions">
-            <RouterLink class="btn" to="/">返回</RouterLink>
+            <RouterLink class="btn" to="/">{{ content.buttons.back }}</RouterLink>
             <button class="btn primary" type="submit" :disabled="loading">
-              {{ loading ? '登录中...' : '登录' }}
+              {{ loading ? content.buttons.loading : content.buttons.login }}
             </button>
           </div>
         </form>
@@ -54,12 +54,15 @@ import DefaultLayout from '../components/DefaultLayout.vue'
 import { useAuthStore } from '../stores/auth'
 import { loginAlertStore } from '../stores/loginAlert'
 import { login as apiLogin } from '../api/auth'
+import { pages } from '@/utils/content'
+
+const content = pages.login
 
 useHead({
-  title: '登录 - YewFenceSite',
+  title: content.meta.title,
   meta: [
-    { name: 'description', content: '登录以访问管理功能。' },
-    { name: 'author', content: 'YewFence' }
+    { name: 'description', content: content.meta.description },
+    { name: 'author', content: content.meta.author }
   ]
 })
 
@@ -88,7 +91,7 @@ const alertIcon = computed(() => {
 const handleLogin = async () => {
   if (!username.value || !password.value) {
     alertType.value = 'error'
-    alertMessage.value = '请输入用户名和密码'
+    alertMessage.value = content.messages.emptyFields
     return
   }
 
@@ -100,18 +103,18 @@ const handleLogin = async () => {
 
     if (response.success) {
       alertType.value = 'success'
-      alertMessage.value = '登录成功！正在跳转...'
+      alertMessage.value = content.messages.success
       authStore.login(username.value)
       setTimeout(() => {
       router.push('/management')
       }, 1000)
     } else {
       alertType.value = 'error'
-      alertMessage.value = response.error || '登录失败，请检查用户名和密码'
+      alertMessage.value = response.error || content.messages.error
     }
   } catch (error) {
     alertType.value = 'error'
-    alertMessage.value = error?.response?.data?.error || error?.message || '登录失败，请检查用户名和密码'
+    alertMessage.value = error?.response?.data?.error || error?.message || content.messages.error
   } finally {
     loading.value = false
   }

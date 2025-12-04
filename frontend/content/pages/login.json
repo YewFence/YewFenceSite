@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "登录 - YewFenceSite",
+    "description": "登录以访问管理功能。",
+    "author": "YewFence"
+  },
+  "title": "登录",
+  "notice": "本页仅用于站点维护人员使用。",
+  "form": {
+    "username": {
+      "label": "用户名",
+      "placeholder": "输入用户名"
+    },
+    "password": {
+      "label": "密码",
+      "placeholder": "输入密码"
+    }
+  },
+  "buttons": {
+    "back": "返回",
+    "login": "登录",
+    "loading": "登录中..."
+  },
+  "messages": {
+    "emptyFields": "请输入用户名和密码",
+    "success": "登录成功！正在跳转...",
+    "error": "登录失败，请检查用户名和密码"
+  }
+}
