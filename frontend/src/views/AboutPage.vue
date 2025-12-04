@@ -21,6 +21,11 @@
         <ul class="tag-list large">
           <li v-for="tag in content.skills.tags" :key="tag">{{ tag }}</li>
         </ul>
+        <div class="blog-cta mt">
+          <h3>{{ content.blogCta.title }}</h3>
+          <p>{{ content.blogCta.description }}</p>
+          <RouterLink :to="content.blogCta.buttonLink" class="btn">{{ content.blogCta.buttonText }}</RouterLink>
+        </div>
         <h2>{{ timelineData.title }}</h2>
         <ul class="timeline">
           <li v-for="event in timelineData.events" :key="event.date">
@@ -91,4 +96,19 @@ useHead({
     color: var(--color-text);
 }
 
+.blog-cta {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.blog-cta h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.blog-cta p {
+  margin-bottom: 1rem;
+  color: var(--color-text-alt);
+}
 </style>
