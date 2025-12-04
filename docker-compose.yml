@@ -34,5 +34,6 @@ services:
       # 管理员账户配置（用于自动初始化）
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-password}
+      - VITE_BLOG_REDIRECT_URL=${VITE_BLOG_REDIRECT_URL:-http://localhost:8080/blog}
     restart: unless-stopped
     # healthcheck 由 Dockerfile 定义
