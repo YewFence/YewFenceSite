@@ -3,7 +3,7 @@ services:
   frontend:
     build:
       context: ./frontend
-    container_name: yewfence-frontend
+    container_name: yewfence-site-frontend
     image: yewfence-frontend:latest
     # 端口映射到8080，使用nginx反代
     ports:
@@ -18,7 +18,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: yewfence-backend
+    container_name: yewfence-site-backend
     image: yewfence-backend:latest
     ports:
       - "5000:5000"
