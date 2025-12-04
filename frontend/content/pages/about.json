@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "title": "关于我 - YewFenceSite",
+    "description": "了解YewFence的背景、技能、成分和时间线"
+  },
+  "hero": {
+    "title": "关于我",
+    "subtitle": "一点背景 · 一些技能 · 一点展望"
+  },
+  "intro": {
+    "title": "简介",
+    "content": "特别鸣谢：Gemini 2.5pro，GPT 5。即使我没HTML+CSS+JavaScript基础也能写出自己的个人网站。<br>懂一些Python，也是重新捡起来了。<s>虽然不知道能干嘛</s><br>慢悠悠开始学cpp，也是接触了新世界啊（指相对于Python而言。<br>回头就去学Typescripts<br>研究AI画图ing，以后想画啥画啥<br>正在严肃学习Vue<br>所以谁来和我玩<link to='/interests#p1'>游戏</link>啊！那我问你!<br>"
+  },
+  "skills": {
+    "title": "技能图谱",
+    "tags": [
+      "宅家大王，死不出门",
+      "抱着电脑不松手",
+      "刷一天短视频(下次一定戒掉)",
+      "想多做少",
+      "AI绘图",
+      "AI api调用怎么整啊谁教教",
+      "前端开发",
+      "买一大堆史低游戏来吃灰"
+    ]
+  }
+}

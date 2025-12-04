@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "title": "YewFenceSite",
+    "description": "YewFenceSite主页",
+    "author": "YewFence"
+  },
+  "hero": {
+    "greeting": "你好，我是",
+    "name": "YewFence",
+    "subtitle": "一名前端初学者",
+    "scrollIndicator": "↓ Scroll"
+  },
+  "about": {
+    "title": "关于我",
+    "intro": "这里是YewFence，华南师范大学的2025级学生<br>热爱编程与游戏<br>爱刷b站但是不常更新<br>爱看github，但也不常push代码<br>偶尔看看番和轻小说，是个浓度不算高的二次元<br>超绝死宅<br>想要了解与计算机有关的一切<br>很高兴认识你",
+    "tags": ["编程", "游戏", "二次元"]
+  },
+  "projects": {
+    "title": "个人成分",
+    "cards": [
+      {
+        "title": "游戏成分",
+        "description": "啥都玩点，来者不拒",
+        "link": "/interests#p1"
+      },
+      {
+        "title": "兴趣编程",
+        "description": "想研究一堆AI",
+        "link": "/interests#p2"
+      },
+      {
+        "title": "二次元",
+        "description": "不知不觉也是看了很多番和小说了，虽然不多，但是也很多了<s>废话</s>",
+        "link": "/interests#p3"
+      }
+    ],
+    "buttonText": "查询成分",
+    "buttonLink": "/interests"
+  },
+  "contact": {
+    "title": "个人账号",
+    "description": "想找我聊天？欢迎联系我",
+    "buttonText": "前往联系页面",
+    "buttonLink": "/contact"
+  }
+}

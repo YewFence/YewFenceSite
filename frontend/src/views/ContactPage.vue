@@ -2,49 +2,27 @@
   <DefaultLayout>
     <section class="page-hero mini">
       <div class="container">
-        <h1>联系我</h1>
-        <p class="subtitle">欢迎交流 · 闲聊 · 学习</p>
+        <h1>{{ content.hero.title }}</h1>
+        <p class="subtitle">{{ content.hero.subtitle }}</p>
       </div>
     </section>
     <section class="section">
       <div class="container">
         <div class="title-wrapper">
-          <h2 class="section-title" id="contact-title">联系渠道</h2>
+          <h2 class="section-title" id="contact-title">{{ content.channels.title }}</h2>
           <!-- 提示信息仅在需要时显示 -->
           <div id="prompt-message" :class="{ 'is-visible': promptVisible }">
             <p>{{ promptText }}</p>
           </div>
         </div>
         <div class="grid projects-grid">
-          <article class="card">
-            <h3>Email</h3>
-            <p class="text-to-copy">cloudmapleaf@outlook.com</p>
+          <article v-for="(channel, index) in content.channels.items" :key="channel.name" class="card">
+            <h3>{{ channel.name }}</h3>
+            <p class="text-to-copy">{{ channel.value }}</p>
             <button
               class="copy-btn"
-              aria-label="copy my email"
-              @click="copyText('cloudmapleaf@outlook.com', 0)"
-              @mouseenter="showPrompt"
-              @mouseleave="hidePrompt"
-            ></button>
-          </article>
-          <article class="card">
-            <h3>GitHub</h3>
-            <p class="text-to-copy">https://github.com/YewFence</p>
-            <button
-              class="copy-btn"
-              aria-label="copy my github page"
-              @click="copyText('https://github.com/YewFence', 1)"
-              @mouseenter="showPrompt"
-              @mouseleave="hidePrompt"
-            ></button>
-          </article>
-          <article class="card">
-            <h3>Blog</h3>
-            <p class="text-to-copy">https://yewyard.cn/blog</p>
-            <button
-              class="copy-btn"
-              aria-label="copy my blog"
-              @click="copyText('https://yewyard.cn/blog', 2)"
+              :aria-label="channel.ariaLabel"
+              @click="copyText(channel.value, index)"
               @mouseenter="showPrompt"
               @mouseleave="hidePrompt"
             ></button>
@@ -59,16 +37,19 @@
 import { ref } from 'vue'
 import { useHead } from '@vueuse/head'
 import DefaultLayout from '../components/DefaultLayout.vue'
+import { pages } from '@/utils/content'
+
+const content = pages.contact
 
 const promptVisible = ref(false)
-const promptText = ref('点击以复制')
+const promptText = ref(content.channels.prompt.default)
 
 const showPrompt = () => {
   promptVisible.value = true
 }
 
 const hidePrompt = () => {
-  if (promptText.value === '点击以复制') {
+  if (promptText.value === content.channels.prompt.default) {
     promptVisible.value = false
   }
 }
@@ -76,18 +57,18 @@ const hidePrompt = () => {
 const copyText = async (text, index) => {
   try {
     await navigator.clipboard.writeText(text)
-    promptText.value = '已复制到剪贴板'
+    promptText.value = content.channels.prompt.success
     promptVisible.value = true
     setTimeout(() => {
-      promptText.value = '点击以复制'
+      promptText.value = content.channels.prompt.default
       promptVisible.value = false
     }, 2000)
   } catch (err) {
     console.error('复制失败: ', err)
-    promptText.value = '复制失败，请手动复制'
+    promptText.value = content.channels.prompt.error
     promptVisible.value = true
     setTimeout(() => {
-      promptText.value = '点击以复制'
+      promptText.value = content.channels.prompt.default
       promptVisible.value = false
     }, 2000)
   }
@@ -95,9 +76,9 @@ const copyText = async (text, index) => {
 
 // 设置页面标题和描述
 useHead({
-  title: '联系我 - YewFenceSite',
+  title: content.meta.title,
   meta: [
-    { name: 'description', content: 'YewFence的联系信息' }
+    { name: 'description', content: content.meta.description }
   ]
 })
 </script>
@@ -127,7 +108,7 @@ useHead({
     /* 初始不可见 */
     opacity: 0;
     /* 不可点击 */
-    pointer-events: none; 
+    pointer-events: none;
     transition: opacity 0.4s ease-in-out, transform .4s ease-in-out;
     transform: translateY(0);
 }

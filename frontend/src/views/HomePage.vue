@@ -3,75 +3,57 @@
     <!-- section分隔网页滚动的吸附点 -->
     <section class="hero scroller" id="hero">
       <div class="container hero-inner">
-        <h1 id="main-title">你好，我是 <span class="accent" @click="handleSecretClick">YewFence</span></h1>
-        <p class="subtitle">一名前端初学者</p>
+        <h1 id="main-title">{{ content.hero.greeting }} <span class="accent" @click="handleSecretClick">{{ content.hero.name }}</span></h1>
+        <p class="subtitle">{{ content.hero.subtitle }}</p>
         <div class="hero-actions">
         </div>
       </div>
-      <div class="scroll-indicator" aria-hidden="true">↓ Scroll</div>
+      <div class="scroll-indicator" aria-hidden="true">{{ content.hero.scrollIndicator }}</div>
     </section>
 
     <section class="section scroller about-preview" id="about">
       <div class="container">
-        <h2 class="section-title">关于我</h2>
-        <p>这里是YewFence，华南师范大学的2025级学生<br>
-            热爱编程与游戏<br>
-            爱刷b站但是不常更新<br>
-            爱看github，但也不常push代码<br>
-            偶尔看看番和轻小说，是个浓度不算高的二次元<br>
-            超绝死宅<br>
-            想要了解与计算机有关的一切<br>
-            很高兴认识你</p>
+        <h2 class="section-title">{{ content.about.title }}</h2>
+        <p v-html="content.about.intro"></p>
         <ul class="tag-list">
-          <li>编程</li>
-          <li>游戏</li>
-          <li>二次元</li>
+          <li v-for="tag in content.about.tags" :key="tag">{{ tag }}</li>
         </ul>
       </div>
     </section>
 
     <section class="section scroller projects-preview" id="projects">
       <div class="container">
-        <h2 class="section-title">个人成分</h2>
+        <h2 class="section-title">{{ content.projects.title }}</h2>
         <div class="grid projects-grid">
-          <article class="card">
-            <h3>游戏成分</h3>
-            <p>啥都玩点，来者不拒</p>
-            <RouterLink class="card-link" to="/interests#p1"></RouterLink>
-          </article>
-          <article class="card">
-            <h3>兴趣编程</h3>
-            <p>想研究一堆AI</p>
-            <RouterLink class="card-link" to="/interests#p2"></RouterLink>
-          </article>
-          <article class="card">
-            <h3>二次元</h3>
-            <p>不知不觉也是看了很多番和小说了，虽然不多，但是也很多了<s>废话</s></p>
-            <RouterLink class="card-link" to="/interests#p3"></RouterLink>
+          <article v-for="card in content.projects.cards" :key="card.title" class="card">
+            <h3>{{ card.title }}</h3>
+            <p v-html="card.description"></p>
+            <RouterLink class="card-link" :to="card.link"></RouterLink>
           </article>
         </div>
         <div class="center mt">
-          <RouterLink to="/interests" class="btn small">查询成分</RouterLink>
+          <RouterLink :to="content.projects.buttonLink" class="btn small">{{ content.projects.buttonText }}</RouterLink>
         </div>
       </div>
     </section>
 
     <section class="section scroller contact-cta" id="contact">
       <div class="container narrow">
-        <h2 class="section-title">个人账号</h2>
-        <p>想找我聊天？欢迎联系我</p>
-        <RouterLink to="/contact" class="btn primary">前往联系页面</RouterLink>
+        <h2 class="section-title">{{ content.contact.title }}</h2>
+        <p>{{ content.contact.description }}</p>
+        <RouterLink :to="content.contact.buttonLink" class="btn primary">{{ content.contact.buttonText }}</RouterLink>
       </div>
     </section>
   </DefaultLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
+import { pages } from '@/utils/content'
 
+const content = pages.home
 const router = useRouter()
 
 // 隐藏入口：快速点击 YewFence 五次跳转登录
@@ -98,10 +80,10 @@ const handleSecretClick = () => {
 }
 
 useHead ({
-  title: "YewFenceSite",
+  title: content.meta.title,
   meta: [
-    { name: 'description', content: 'YewFenceSite主页' },
-    { name: 'author', content: 'YewFence' }
+    { name: 'description', content: content.meta.description },
+    { name: 'author', content: content.meta.author }
   ]
 })
 

@@ -3,9 +3,9 @@
     <main class="blog-container">
       <article v-if="loading" id="blog-content">
         <div id="blog-markdown">
-          <h1>加载中...</h1>
+          <h1>{{ content.loading.title }}</h1>
           <div class="blog-body">
-            <p>正在加载文章内容，请稍候...</p>
+            <p>{{ content.loading.message }}</p>
           </div>
         </div>
       </article>
@@ -20,14 +20,14 @@
       </article>
       <article v-else id="blog-content">
         <div id="blog-markdown">
-          <h1>文章不存在</h1>
+          <h1>{{ content.notFound.title }}</h1>
           <div class="blog-body">
-            <p>抱歉，您访问的文章不存在或已被删除。</p>
+            <p>{{ content.notFound.message }}</p>
           </div>
         </div>
       </article>
     </main>
-    <RouterLink class="btn primary blog-back" to="/blog">返回</RouterLink>
+    <RouterLink class="btn primary blog-back" to="/blog">{{ content.buttons.back }}</RouterLink>
   </DefaultLayout>
 </template>
 
@@ -37,6 +37,9 @@ import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import { getPost } from '../api/blog'
+import { pages } from '@/utils/content'
+
+const content = pages.singlePost
 
 const route = useRoute()
 const loading = ref(true)
@@ -63,8 +66,8 @@ const loadPost = async () => {
   } catch (error) {
     console.error('加载文章失败:', error)
     post.value = null
-    postTitle.value = '文章不存在 - YewFenceSite'
-    metaContent.value = '抱歉，您访问的文章不存在或已被删除。'
+    postTitle.value = content.notFound.title + ' - YewFenceSite'
+    metaContent.value = content.notFound.message
   } finally {
     loading.value = false
   }

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "我的兴趣 - YewFenceSite",
+    "description": "了解YewFence的兴趣爱好",
+    "author": "YewFence"
+  },
+  "hero": {
+    "title": "兴趣",
+    "subtitle": "爱打游戏 · 喜欢编程 · 二次元"
+  },
+  "sections": [
+    {
+      "id": "p1",
+      "title": "游戏成分",
+      "description": "包括但不限于Steam单机游戏和二次元手游",
+      "items": [
+        "鸣潮",
+        "战双",
+        "卡拉彼丘",
+        "第五人格",
+        "星露谷物语",
+        "剑星",
+        "地平线4",
+        "主播女孩重度依赖",
+        "Far：LoneSail",
+        "饥荒",
+        "异形工厂",
+        "人类一败涂地"
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "兴趣编程",
+      "description": "前端，后端，运维，算法，AI",
+      "items": [
+        {
+          "category": "前端",
+          "current": "HTML CSS JavaScript",
+          "future": "Vue Typescripts"
+        },
+        {
+          "category": "后端",
+          "current": "flask SQLite",
+          "future": "MySQL Node.js"
+        },
+        {
+          "category": "运维",
+          "current": "Linux，Docker，Nginx",
+          "future": "CI/CD"
+        },
+        {
+          "category": "算法",
+          "current": "",
+          "future": "C++"
+        },
+        {
+          "category": "AI",
+          "current": "Stable Diffusion , Claude Code, Github Copilot",
+          "future": "SillyTavern, ComfyUI"
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "title": "二次元",
+      "description": "番剧，轻小说",
+      "items": [
+        "鬼灭之刃",
+        "刀剑神域",
+        "Re:从零开始的异世界生活",
+        "间谍过家家",
+        "86",
+        "青之箱",
+        "我推的孩子",
+        "义妹生活",
+        "游戏人生"
+      ]
+    }
+  ]
+}

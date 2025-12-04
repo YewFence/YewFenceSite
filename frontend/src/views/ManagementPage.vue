@@ -3,84 +3,84 @@
     <main class="mgmt-wrapper">
       <div class="container" id="mgmtRoot">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem;">
-          <h1 style="margin:0;">管理页面</h1>
-          <span class="logo">Welcome, {{ user_name }}!</span>
+          <h1 style="margin:0;">{{ content.header.title }}</h1>
+          <span class="logo">{{ content.header.welcomePrefix }} {{ user_name }}!</span>
           <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-            <button class="btn" @click="handleLogout">退出登录</button>
-            <RouterLink class="btn" to="/">返回首页</RouterLink>
+            <button class="btn" @click="handleLogout">{{ content.header.logoutButton }}</button>
+            <RouterLink class="btn" to="/">{{ content.header.homeButton }}</RouterLink>
           </div>
         </div>
         <div class="large-card" aria-label="账户与安全">
           <div class="title-wrapper">
-            <h2>密码修改</h2>
+            <h2>{{ content.password.title }}</h2>
           </div>
           <form id="changePwdForm" class="change-password" @submit.prevent="changePassword" novalidate>
             <div class="grid">
-              <label>新密码
+              <label>{{ content.password.newPassword }}
                 <input type="password" v-model="new_password" autocomplete="new-password">
               </label>
-              <label>确认新密码
+              <label>{{ content.password.confirmPassword }}
                 <input type="password" v-model="confirm_password" autocomplete="new-password">
               </label>
             </div>
             <div class="form-actions">
-              <button class="btn primary" type="submit" @click="changePassword">修改密码</button>
-              <button class="btn" type="reset">重置</button>
+              <button class="btn primary" type="submit" @click="changePassword">{{ content.password.submitButton }}</button>
+              <button class="btn" type="reset">{{ content.password.resetButton }}</button>
             </div>
           </form>
         </div>
 
         <!-- 导出按钮 -->
         <div class="export-section">
-          <h2>数据导出</h2>
+          <h2>{{ content.export.title }}</h2>
           <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-            <button class="btn" @click="exportJson">导出JSON</button>
-            <button class="btn" @click="exportMdZip">导出Markdown压缩包</button>
+            <button class="btn" @click="exportJson">{{ content.export.jsonButton }}</button>
+            <button class="btn" @click="exportMdZip">{{ content.export.mdZipButton }}</button>
           </div>
         </div>
 
         <!-- 文章列表 -->
         <div class="posts-section">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-            <h2>文章管理</h2>
-            <button class="btn primary" @click="openCreateModal">新建文章</button>
+            <h2>{{ content.posts.title }}</h2>
+            <button class="btn primary" @click="openCreateModal">{{ content.posts.newButton }}</button>
           </div>
 
-          <div v-if="loading" class="loading">加载中...</div>
-          <div v-else-if="posts.length === 0" class="empty">暂无文章</div>
+          <div v-if="loading" class="loading">{{ content.posts.loading }}</div>
+          <div v-else-if="posts.length === 0" class="empty">{{ content.posts.empty }}</div>
           <div v-else class="post-list">
             <div v-for="post in posts" :key="post.id" class="post-item large-card" :id="`post-${post.id}`">
               <div class="post-meta">
                 <div class="post-kv">
-                  <span class="k">ID</span>
+                  <span class="k">{{ content.posts.labels.id }}</span>
                   <span class="v v-id future">{{ post.id }}</span>
                 </div>
                 <div class="post-kv">
-                  <span class="k">作者</span>
+                  <span class="k">{{ content.posts.labels.author }}</span>
                   <span class="v v-author">{{ post.author_name }}</span>
                 </div>
                 <div class="post-kv">
-                  <span class="k">日期</span>
+                  <span class="k">{{ content.posts.labels.date }}</span>
                   <span class="v v-date">{{ formatDate(post.date_posted) }}</span>
                 </div>
                 <div class="post-kv" style="grid-column:1/-1;">
-                  <span class="k">标题</span>
+                  <span class="k">{{ content.posts.labels.title }}</span>
                   <span class="v v-title">{{ post.title }}</span>
                 </div>
                 <div class="post-kv" style="grid-column:1/-1;">
-                  <span class="k">摘要</span>
+                  <span class="k">{{ content.posts.labels.summary }}</span>
                   <span class="v v-summary">{{ post.brief_summary }}</span>
                 </div>
                 <div class="post-kv" style="grid-column:1/-1;">
-                  <span class="k">备注</span>
+                  <span class="k">{{ content.posts.labels.note }}</span>
                   <span class="v v-note">{{ post.note }}</span>
                 </div>
               </div>
               <div class="post-actions">
-                <button class="btn small" @click="editPost(post)">编辑</button>
-                <button class="btn small" @click="downloadMarkdown(post.id)">下载MD</button>
-                <a :href="`/blog/${post.id}/preview`" target="_blank" class="btn small">预览</a>
-                <button class="btn small danger" @click="deletePost(post.id)">删除</button>
+                <button class="btn small" @click="editPost(post)">{{ content.posts.actions.edit }}</button>
+                <button class="btn small" @click="downloadMarkdown(post.id)">{{ content.posts.actions.downloadMd }}</button>
+                <a :href="`/blog/${post.id}/preview`" target="_blank" class="btn small">{{ content.posts.actions.preview }}</a>
+                <button class="btn small danger" @click="deletePost(post.id)">{{ content.posts.actions.delete }}</button>
               </div>
             </div>
           </div>
@@ -90,54 +90,54 @@
         <div v-if="showEditModal" class="edit-mask" @click.self="closeEditModal">
           <div class="edit-panel">
             <div class="edit-head">
-              <strong>{{ editingPost ? '编辑文章信息' : '新建文章' }}</strong>
+              <strong>{{ editingPost ? content.editModal.editTitle : content.editModal.createTitle }}</strong>
               <button class="close-x" @click="closeEditModal">×</button>
             </div>
             <div class="edit-body">
               <form class="edit-grid" @submit.prevent="savePost">
                 <label class="field">
-                  标题
+                  {{ content.editModal.fields.title.label }}
                   <input v-model="formData.title" type="text" />
-                  <span class="hint">可选，为空则自动检测</span>
+                  <span class="hint">{{ content.editModal.fields.title.hint }}</span>
                 </label>
                 <label class="field">
-                  作者
+                  {{ content.editModal.fields.author.label }}
                   <input v-model="formData.author" type="text" />
-                  <span class="hint">可选，为空则默认为YewFence</span>
+                  <span class="hint">{{ content.editModal.fields.author.hint }}</span>
                 </label>
                 <label class="field">
-                  日期
+                  {{ content.editModal.fields.date.label }}
                   <input v-model="formData.date" type="date" />
                 </label>
                 <label class="field" style="grid-column:1/-1;">
-                  摘要
+                  {{ content.editModal.fields.summary.label }}
                   <textarea v-model="formData.summary" rows="3"></textarea>
                 </label>
                 <label class="field" style="grid-column:1/-1;">
-                  备注
+                  {{ content.editModal.fields.note.label }}
                   <textarea v-model="formData.note" rows="2"></textarea>
-                  <span class="hint">可选，不对外显示</span>
+                  <span class="hint">{{ content.editModal.fields.note.hint }}</span>
                 </label>
                 <label class="field">
-                  状态
-                  <select v-model="formData.status" 
-                  :class='formData.status + "-select"' 
+                  {{ content.editModal.fields.status.label }}
+                  <select v-model="formData.status"
+                  :class='formData.status + "-select"'
                   class="edit-panel">
-                    <option value="published" id="published-select">公开</option>
-                    <option value="hidden" id="hidden-select">隐藏</option>
+                    <option value="published" id="published-select">{{ content.editModal.fields.status.options.published }}</option>
+                    <option value="hidden" id="hidden-select">{{ content.editModal.fields.status.options.hidden }}</option>
                   </select>
                 </label>
                 <label class="field" style="grid-column:1/-1;">
-                  上传 Markdown
+                  {{ content.editModal.fields.upload.label }}
                   <input type="file" accept=".md" @change="handleFileUpload" id="fMdFile"/>
-                  <span class="hint">选择 .md 文件后，会在保存时覆盖文章内容</span>
+                  <span class="hint">{{ content.editModal.fields.upload.hint }}</span>
                 </label>
               </form>
             </div>
             <div class="edit-foot">
-              <button class="btn" @click="closeEditModal">取消</button>
+              <button class="btn" @click="closeEditModal">{{ content.editModal.buttons.cancel }}</button>
               <button class="btn primary" @click="savePost" :disabled="saving">
-                {{ saving ? '保存中...' : '保存' }}
+                {{ saving ? content.editModal.buttons.saving : content.editModal.buttons.save }}
               </button>
             </div>
           </div>
@@ -164,6 +164,9 @@ import {
   exportPostsMdZip
 } from '../api/blog'
 import { logout as apiLogout, updatePassword as apiUpdatePassword } from '../api/auth'
+import { pages } from '@/utils/content'
+
+const content = pages.management
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -201,7 +204,7 @@ const loadPosts = async () => {
     posts.value = data.posts || []
   } catch (error) {
     console.error('加载文章失败:', error)
-    alert('加载文章失败')
+    alert(content.messages.loadError)
   } finally {
     loading.value = false
   }
@@ -214,11 +217,11 @@ const changePassword = async () => {
   const confirmPassword = confirm_password.value?.trim()
 
   if (!newPassword || !confirmPassword) {
-    alert('请输入新密码和确认密码')
+    alert(content.messages.passwordEmpty)
     return
   }
   if (newPassword !== confirmPassword) {
-    alert('两次输入的密码不一致')
+    alert(content.messages.passwordMismatch)
     return
   }
 
@@ -234,7 +237,7 @@ const changePassword = async () => {
     }
     await apiLogout()
     authStore.logout()
-    store.setInfoForLoginPage('success', '密码修改成功，请重新登录')
+    store.setInfoForLoginPage('success', content.messages.passwordSuccess)
     router.push('/login')
   } catch (error) {
     const msg = error?.response?.data?.error || error?.message || '未知错误'
@@ -285,8 +288,8 @@ const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (file) {
     uploadedFile.value = file
-    const content = await file.text()
-    formData.value.content = content
+    const fileContent = await file.text()
+    formData.value.content = fileContent
   }
 }
 
@@ -326,13 +329,13 @@ const savePost = async () => {
 
 // 删除文章
 const deletePost = async (id) => {
-  if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) {
+  if (!confirm(content.messages.deleteConfirm)) {
     return
   }
 
   try {
     await apiDeletePost(id)
-    alert('文章删除成功')
+    alert(content.messages.deleteSuccess)
     loadPosts()
   } catch (error) {
     console.error('删除失败:', error)
@@ -393,8 +396,8 @@ const handleLogout = async () => {
   try {
     await apiLogout()
     authStore.logout()
-    const store = loginAlertStore()
-    store.setInfoForLoginPage('info', '已成功登出')
+    const alertStore = loginAlertStore()
+    alertStore.setInfoForLoginPage('info', content.messages.logoutSuccess)
     router.push('/login')
   } catch (error) {
     console.error('登出失败:', error)
@@ -402,17 +405,17 @@ const handleLogout = async () => {
 }
 
 useHead({
-  title: '管理页面 - YewFenceSite',
+  title: content.meta.title,
   meta: [
-    { name: 'description', content: '管理博客文章和账户设置' },
-    { name: 'author', content: 'YewFence' }
+    { name: 'description', content: content.meta.description },
+    { name: 'author', content: content.meta.author }
   ]
 })
 
 onMounted(async () => {
   const isAuth = await authStore.checkAuth()
   if (!isAuth) {
-    store.setInfoForLoginPage('info', '请先登录以访问管理页面')
+    store.setInfoForLoginPage('info', content.messages.loginRequired)
     router.push('/login')
   } else {
     user_name.value = localStorage.getItem('username') || ''
