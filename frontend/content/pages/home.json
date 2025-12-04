@@ -38,9 +38,17 @@
     "buttonLink": "/interests"
   },
   "contact": {
-    "title": "个人账号",
-    "description": "想找我聊天？欢迎联系我",
-    "buttonText": "前往联系页面",
-    "buttonLink": "/contact"
+    "left_column": {
+      "title": "个人账号",
+      "description": "想找我聊天？欢迎联系我",
+      "buttonText": "前往联系页面",
+      "buttonLink": "/contact"
+    },
+    "right_column": {
+      "title": "我的个人博客",
+      "description": "记录一些学习笔记和想法。",
+      "buttonText": "前往博客",
+      "buttonLink": "/blog"
+    }
   }
 }

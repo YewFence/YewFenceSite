@@ -37,11 +37,20 @@
       </div>
     </section>
 
-    <section class="section scroller contact-cta" id="contact">
-      <div class="container narrow">
-        <h2 class="section-title">{{ content.contact.title }}</h2>
-        <p>{{ content.contact.description }}</p>
-        <RouterLink :to="content.contact.buttonLink" class="btn primary">{{ content.contact.buttonText }}</RouterLink>
+    <section class="section scroller" id="contact">
+      <div class="container">
+        <div class="grid two-col-grid">
+          <div class="col-item">
+            <h2 class="section-title">{{ content.contact.left_column.title }}</h2>
+            <p>{{ content.contact.left_column.description }}</p>
+            <RouterLink :to="content.contact.left_column.buttonLink" class="btn primary">{{ content.contact.left_column.buttonText }}</RouterLink>
+          </div>
+          <div class="col-item">
+            <h2 class="section-title">{{ content.contact.right_column.title }}</h2>
+            <p>{{ content.contact.right_column.description }}</p>
+            <RouterLink :to="content.contact.right_column.buttonLink" class="btn primary">{{ content.contact.right_column.buttonText }}</RouterLink>
+          </div>
+        </div>
       </div>
     </section>
   </DefaultLayout>
@@ -113,5 +122,20 @@ setInterval(() => {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.col-item {
+  text-align: left;
+}
+
+.col-item p {
+  margin-bottom: 1.5rem;
 }
 </style>
