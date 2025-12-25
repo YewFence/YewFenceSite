@@ -16,6 +16,10 @@ RUN pnpm install --frozen-lockfile
 # 复制源代码
 COPY . .
 
+# 构建时环境变量
+ARG VITE_BLOG_REDIRECT_URL
+ENV VITE_BLOG_REDIRECT_URL=$VITE_BLOG_REDIRECT_URL
+
 # 构建生产版本
 RUN pnpm build
 
